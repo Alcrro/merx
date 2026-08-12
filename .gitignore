@@ -1,0 +1,75 @@
+# ─── Docs (private) ──────────────────────────────────────────────────────────
+docs/
+
+# ─── Environment & Secrets ──────────────────────────────────────────────────
+.env
+.env.local
+.env.development
+.env.production
+.env.staging
+.env.test
+*.pem
+*.key
+*.cert
+*.p12
+*.pfx
+
+# ─── Dependencies ────────────────────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+
+# ─── Build outputs ───────────────────────────────────────────────────────────
+dist/
+build/
+out/
+.next/
+.nuxt/
+.cache/
+
+# ─── Turborepo ───────────────────────────────────────────────────────────────
+.turbo/
+
+# ─── Prisma ──────────────────────────────────────────────────────────────────
+prisma/migrations/dev.db
+prisma/dev.db
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# ─── Logs ────────────────────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ─── Testing ─────────────────────────────────────────────────────────────────
+coverage/
+.nyc_output/
+
+# ─── OS ──────────────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+desktop.ini
+
+# ─── IDE ─────────────────────────────────────────────────────────────────────
+.idea/
+.vscode/settings.json
+*.swp
+*.swo
+*.suo
+*.user
+
+# ─── Vercel ──────────────────────────────────────────────────────────────────
+.vercel/
+
+# ─── Misc ────────────────────────────────────────────────────────────────────
+*.tsbuildinfo
+.eslintcache
