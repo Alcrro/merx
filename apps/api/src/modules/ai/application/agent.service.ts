@@ -15,11 +15,21 @@ export class AIError extends Error {
   }
 }
 
-function buildSystemPrompt(storeCurrency: string): string {
+export interface StoreContext {
+  name: string
+  currency: string
+  totalCustomers: number
+  totalOrders: number
+  pendingOrders: number
+  revenueLast30d: number
+  ordersLastMonth: number
+}
+
+function buildSystemPrompt(ctx: StoreContext): string {
   const today = new Date().toISOString().split('T')[0]
   return `You are an AI business analyst for Merx, an e-commerce platform. You help store owners understand their business data and make informed decisions.
 
-You have access to tools that read live store data: analytics, inventory, and orders. Always fetch data before making claims — never guess numbers.
+You have access to tools that read live store data: analytics, inventory, orders, and customers. Always fetch data before making claims — never guess numbers.
 
 Guidelines:
 - Explain what the data means in plain language, not just raw numbers.
@@ -27,9 +37,18 @@ Guidelines:
 - When you spot an issue (e.g., out-of-stock products, declining revenue), say it clearly.
 - Suggest concrete next steps when relevant.
 - Be direct and concise. The merchant's time is valuable.
+- To look up a specific customer, use get_customer_summary with their email or ID.
 
-Store currency: ${storeCurrency}
-Today's date: ${today}`
+Store: ${ctx.name}
+Currency: ${ctx.currency}
+Today: ${today}
+
+Store snapshot (live):
+- Total customers: ${ctx.totalCustomers}
+- Total orders (all time): ${ctx.totalOrders}
+- Orders last 30 days: ${ctx.ordersLastMonth}
+- Revenue last 30 days: ${ctx.revenueLast30d.toFixed(2)} ${ctx.currency}
+- Pending orders (unfulfilled): ${ctx.pendingOrders}`
 }
 
 export class AgentService {
@@ -61,7 +80,7 @@ export class AgentService {
   async chat(
     sessionId: string,
     storeId: string,
-    storeCurrency: string,
+    storeContext: StoreContext,
     userContent: string
   ): Promise<string> {
     const session = await this.repo.getSession(sessionId, storeId)
@@ -71,7 +90,7 @@ export class AgentService {
     const userMessage: Message = { role: 'user', content: userContent }
     const newMessages: Message[] = [userMessage]
 
-    const systemPrompt = buildSystemPrompt(storeCurrency)
+    const systemPrompt = buildSystemPrompt(storeContext)
     let conversationTail = [...history, userMessage]
 
     let finalContent = ''
@@ -121,7 +140,7 @@ export class AgentService {
   async *stream(
     sessionId: string,
     storeId: string,
-    storeCurrency: string,
+    storeContext: StoreContext,
     userContent: string
   ): AsyncGenerator<{ type: 'tool_call'; name: string } | { type: 'text'; content: string } | { type: 'done' }> {
     const session = await this.repo.getSession(sessionId, storeId)
@@ -131,7 +150,7 @@ export class AgentService {
     const userMessage: Message = { role: 'user', content: userContent }
     const newMessages: Message[] = [userMessage]
 
-    const systemPrompt = buildSystemPrompt(storeCurrency)
+    const systemPrompt = buildSystemPrompt(storeContext)
     let conversationTail = [...history, userMessage]
 
     // Resolve all tool calls first (non-streaming), then stream the final text

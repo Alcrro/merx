@@ -2,6 +2,7 @@ import type { Tool } from '@merx/llm-provider'
 import { analyticsTools, executeGetAnalyticsOverview, executeGetTopProducts } from './tools/analytics.tool'
 import { inventoryTools, executeGetInventoryStatus } from './tools/inventory.tool'
 import { ordersTools, executeGetRecentOrders, executeGetOrderDetails } from './tools/orders.tool'
+import { customersTools, executeGetCustomerSummary } from './tools/customers.tool'
 
 type ToolExecutor = (storeId: string, args: Record<string, unknown>) => Promise<unknown>
 
@@ -11,9 +12,10 @@ const executors: Record<string, ToolExecutor> = {
   get_inventory_status: executeGetInventoryStatus,
   get_recent_orders: executeGetRecentOrders,
   get_order_details: executeGetOrderDetails,
+  get_customer_summary: executeGetCustomerSummary,
 }
 
-export const allTools: Tool[] = [...analyticsTools, ...inventoryTools, ...ordersTools]
+export const allTools: Tool[] = [...analyticsTools, ...inventoryTools, ...ordersTools, ...customersTools]
 
 export async function executeTool(
   name: string,

@@ -1,6 +1,6 @@
 import type { Response } from 'express'
 import type { AuthenticatedRequest } from '../../../middleware/authenticate'
-import { AgentService, AIError } from '../application/agent.service'
+import { AgentService, AIError, StoreContext } from '../application/agent.service'
 import { aiRepository } from '../infrastructure/ai.repository'
 import { OpenAIProvider } from '@merx/llm-provider'
 import { prisma } from '../../../lib/prisma'
@@ -9,9 +9,32 @@ import { createSessionSchema, chatMessageSchema, restockSchema } from './ai.sche
 
 const agentService = new AgentService(aiRepository, new OpenAIProvider())
 
-async function getStoreCurrency(storeId: string): Promise<string> {
-  const store = await prisma.store.findUnique({ where: { id: storeId }, select: { currency: true } })
-  return store?.currency ?? 'EUR'
+async function getStoreContext(storeId: string): Promise<StoreContext> {
+  const thirtyDaysAgo = new Date()
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+
+  const [store, totalCustomers, totalOrders, pendingOrders, recentOrders] = await Promise.all([
+    prisma.store.findUnique({ where: { id: storeId }, select: { name: true, currency: true } }),
+    prisma.customer.count({ where: { storeId } }),
+    prisma.order.count({ where: { storeId } }),
+    prisma.order.count({ where: { storeId, fulfillmentStatus: 'unfulfilled', paymentStatus: 'paid' } }),
+    prisma.order.findMany({
+      where: { storeId, paymentStatus: 'paid', createdAt: { gte: thirtyDaysAgo } },
+      select: { total: true },
+    }),
+  ])
+
+  const revenueLast30d = recentOrders.reduce((sum, o) => sum + Number(o.total), 0)
+
+  return {
+    name: store?.name ?? 'Store',
+    currency: store?.currency ?? 'EUR',
+    totalCustomers,
+    totalOrders,
+    pendingOrders,
+    revenueLast30d: Math.round(revenueLast30d * 100) / 100,
+    ordersLastMonth: recentOrders.length,
+  }
 }
 
 export const aiController = {
@@ -55,11 +78,11 @@ export const aiController = {
   chat: async (req: AuthenticatedRequest, res: Response): Promise<void> => {
     const body = chatMessageSchema.parse(req.body)
     try {
-      const currency = await getStoreCurrency(req.user.storeId)
+      const ctx = await getStoreContext(req.user.storeId)
       const reply = await agentService.chat(
         req.params.id!,
         req.user.storeId,
-        currency,
+        ctx,
         body.message
       )
       res.json({ reply })
@@ -178,8 +201,8 @@ export const aiController = {
     const send = (data: unknown) => res.write(`data: ${JSON.stringify(data)}\n\n`)
 
     try {
-      const currency = await getStoreCurrency(req.user.storeId)
-      const generator = agentService.stream(req.params.id!, req.user.storeId, currency, body.message)
+      const ctx = await getStoreContext(req.user.storeId)
+      const generator = agentService.stream(req.params.id!, req.user.storeId, ctx, body.message)
       for await (const chunk of generator) {
         send(chunk)
       }
