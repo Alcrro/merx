@@ -3,7 +3,8 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react'
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
   isLoading?: boolean
-  variant?: 'primary' | 'ghost'
+  variant?: 'primary' | 'ghost' | 'outline'
+  size?: 'sm' | 'md'
   fullWidth?: boolean
 }
 
@@ -11,24 +12,30 @@ export function Button({
   children,
   isLoading,
   variant = 'primary',
+  size = 'md',
   fullWidth,
   disabled,
   className,
   ...props
 }: ButtonProps) {
+  const sizes = {
+    md: 'px-4 py-2 text-sm',
+    sm: 'px-3.5 py-1.5 text-xs',
+  }
+
   const base =
-    'inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 dark:focus:ring-offset-gray-900 disabled:cursor-not-allowed disabled:opacity-50'
+    'inline-flex items-center justify-center gap-1.5 rounded-lg font-medium whitespace-nowrap transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 dark:focus:ring-offset-gray-900 disabled:cursor-not-allowed disabled:opacity-50'
 
   const variants = {
-    primary: 'bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800',
-    ghost:
-      'bg-transparent text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 active:bg-gray-200 dark:active:bg-gray-700',
+    primary: 'bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 shadow-sm',
+    ghost: 'bg-transparent text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 active:bg-gray-200 dark:active:bg-gray-700',
+    outline: 'border border-indigo-300 dark:border-indigo-700 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/40',
   }
 
   return (
     <button
       disabled={disabled === true || isLoading === true}
-      className={[base, variants[variant], fullWidth ? 'w-full' : '', className]
+      className={[base, sizes[size], variants[variant], fullWidth ? 'w-full' : '', className]
         .filter(Boolean)
         .join(' ')}
       {...props}
