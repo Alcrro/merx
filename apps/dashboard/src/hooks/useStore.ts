@@ -21,3 +21,9 @@ export function useUpdateStore() {
     },
   })
 }
+
+export function useDeleteStore() {
+  return useMutation({
+    mutationFn: storeApi.deleteCurrent,
+  })
+}

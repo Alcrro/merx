@@ -1,11 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { productApi } from '@merx/api-client'
 import type { ListProductsParams, CreateProductInput } from '@merx/api-client'
+import type { ProductAnalytics } from '@merx/types'
 
 export const productKeys = {
   all: ['products'] as const,
   list: (params?: ListProductsParams) => ['products', 'list', params] as const,
   detail: (id: string) => ['products', 'detail', id] as const,
+  analytics: (id: string) => ['products', 'analytics', id] as const,
   categories: ['product-categories'] as const,
 }
 
@@ -20,6 +22,14 @@ export function useProduct(id: string) {
   return useQuery({
     queryKey: productKeys.detail(id),
     queryFn: () => productApi.get(id),
+    enabled: !!id,
+  })
+}
+
+export function useProductAnalytics(id: string) {
+  return useQuery<ProductAnalytics>({
+    queryKey: productKeys.analytics(id),
+    queryFn: () => productApi.getAnalytics(id),
     enabled: !!id,
   })
 }
