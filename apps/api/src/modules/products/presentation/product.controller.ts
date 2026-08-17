@@ -2,6 +2,7 @@ import type { Response, NextFunction } from 'express'
 import type { AuthenticatedRequest } from '../../../middleware/authenticate'
 import { ProductService, ProductError } from '../application/product.service'
 import { ProductRepository } from '../infrastructure/product.repository'
+import { getProductAnalytics } from '../application/product-analytics.service'
 import {
   createProductSchema,
   updateProductSchema,
@@ -37,6 +38,16 @@ export const productController = {
     try {
       const product = await service.get(req.params.id, req.user.storeId)
       res.json(product)
+    } catch (err) {
+      if (err instanceof ProductError) handleError(err, res); else next(err)
+    }
+  },
+
+  getAnalytics: async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      const product = await service.get(req.params.id, req.user.storeId)
+      const analytics = await getProductAnalytics(product.id, req.user.storeId)
+      res.json(analytics)
     } catch (err) {
       if (err instanceof ProductError) handleError(err, res); else next(err)
     }
@@ -111,8 +122,8 @@ export const productController = {
 
   createCategory: async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
-      const { name } = createCategorySchema.parse(req.body)
-      const category = await service.createCategory(req.user.storeId, name)
+      const { name, parentId } = createCategorySchema.parse(req.body)
+      const category = await service.createCategory(req.user.storeId, name, parentId)
       res.status(201).json(category)
     } catch (err) {
       if (err instanceof ProductError) handleError(err, res); else next(err)

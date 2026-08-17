@@ -1,7 +1,25 @@
 import type { Prisma } from '@prisma/client'
 import { prisma } from '../../../lib/prisma'
-import type { IProductRepository, CreateProductData, UpdateProductData, CreateVariantData, UpdateVariantData } from '../domain/ports'
-import type { ProductEntity, ProductVariantEntity, ProductCategoryEntity, ListProductsParams, PaginatedProducts } from '../domain/entities'
+import type {
+  IProductRepository,
+  CreateProductData,
+  UpdateProductData,
+  CreateVariantData,
+  UpdateVariantData,
+  CreateCategoryData,
+  CreateBrandData,
+  UpdateBrandData,
+  CreateTagData,
+} from '../domain/ports'
+import type {
+  ProductEntity,
+  ProductVariantEntity,
+  ProductCategoryEntity,
+  BrandEntity,
+  TagEntity,
+  ListProductsParams,
+  PaginatedProducts,
+} from '../domain/entities'
 
 function toVariant(v: Prisma.ProductVariantGetPayload<object>): ProductVariantEntity {
   return {
@@ -13,13 +31,23 @@ function toVariant(v: Prisma.ProductVariantGetPayload<object>): ProductVariantEn
   }
 }
 
-function toProduct(p: Prisma.ProductGetPayload<{ include: { variants: true; category: true } }>): ProductEntity {
-  const { metadata: _m, ...rest } = p
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function toProduct(p: any): ProductEntity {
   return {
-    ...rest,
+    id: p.id,
+    storeId: p.storeId,
+    categoryId: p.categoryId ?? null,
+    brandId: p.brandId ?? null,
+    title: p.title,
+    description: p.description ?? null,
     status: p.status as ProductEntity['status'],
-    variants: p.variants.map(toVariant),
+    productType: p.productType ?? null,
+    createdAt: p.createdAt,
+    updatedAt: p.updatedAt,
+    variants: p.variants?.map(toVariant) ?? [],
     category: p.category ?? null,
+    brand: p.brand ?? null,
+    tags: p.tags ?? [],
   }
 }
 
@@ -56,17 +84,26 @@ export class ProductRepository implements IProductRepository {
   }
 
   async create(storeId: string, data: CreateProductData): Promise<ProductEntity> {
+    const { tagIds, ...rest } = data
     const p = await prisma.product.create({
-      data: { storeId, ...data },
+      data: {
+        storeId,
+        ...rest,
+        ...(tagIds?.length && { tags: { connect: tagIds.map((id) => ({ id })) } }),
+      },
       include: { variants: true, category: true },
     })
     return toProduct(p)
   }
 
-  async update(id: string, storeId: string, data: UpdateProductData): Promise<ProductEntity> {
+  async update(id: string, _storeId: string, data: UpdateProductData): Promise<ProductEntity> {
+    const { tagIds, ...rest } = data
     const p = await prisma.product.update({
       where: { id },
-      data,
+      data: {
+        ...rest,
+        ...(tagIds !== undefined && { tags: { set: tagIds.map((tid) => ({ id: tid })) } }),
+      },
       include: { variants: true, category: true },
     })
     return toProduct(p)
@@ -105,14 +142,68 @@ export class ProductRepository implements IProductRepository {
     return prisma.productVariant.count({ where: { productId } })
   }
 
+  // ─── Categories ──────────────────────────────────────────────────────────────
+
   async listCategories(storeId: string): Promise<ProductCategoryEntity[]> {
-    return prisma.productCategory.findMany({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const rows = await (prisma.productCategory as any).findMany({
       where: { storeId },
+      orderBy: { name: 'asc' },
+    })
+    return rows.map((r: any) => ({ ...r, parentId: r.parentId ?? null })) // eslint-disable-line @typescript-eslint/no-explicit-any
+  }
+
+  async createCategory(storeId: string, data: CreateCategoryData): Promise<ProductCategoryEntity> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const row = await (prisma.productCategory as any).create({
+      data: { storeId, name: data.name, slug: data.slug, parentId: data.parentId ?? null },
+    })
+    return { ...row, parentId: row.parentId ?? null }
+  }
+
+  async deleteCategory(id: string, _storeId: string): Promise<void> {
+    await prisma.productCategory.delete({ where: { id } })
+  }
+
+  // ─── Brands ──────────────────────────────────────────────────────────────────
+
+  async listBrands(storeId: string): Promise<BrandEntity[]> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (prisma as any).brand.findMany({ where: { storeId }, orderBy: { name: 'asc' } })
+  }
+
+  async createBrand(storeId: string, data: CreateBrandData): Promise<BrandEntity> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (prisma as any).brand.create({ data: { storeId, ...data } })
+  }
+
+  async updateBrand(id: string, _storeId: string, data: UpdateBrandData): Promise<BrandEntity> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (prisma as any).brand.update({ where: { id }, data })
+  }
+
+  async deleteBrand(id: string, _storeId: string): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (prisma as any).brand.delete({ where: { id } })
+  }
+
+  // ─── Tags ────────────────────────────────────────────────────────────────────
+
+  async listTags(storeId: string, type?: string): Promise<TagEntity[]> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (prisma as any).tag.findMany({
+      where: { storeId, ...(type && { type }) },
       orderBy: { name: 'asc' },
     })
   }
 
-  async createCategory(storeId: string, name: string, slug: string): Promise<ProductCategoryEntity> {
-    return prisma.productCategory.create({ data: { storeId, name, slug } })
+  async createTag(storeId: string, data: CreateTagData): Promise<TagEntity> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (prisma as any).tag.create({ data: { storeId, ...data } })
+  }
+
+  async deleteTag(id: string, _storeId: string): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (prisma as any).tag.delete({ where: { id } })
   }
 }

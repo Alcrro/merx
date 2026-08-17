@@ -85,8 +85,8 @@ export class ProductService {
     return this.repo.listCategories(storeId)
   }
 
-  async createCategory(storeId: string, name: string): Promise<ProductCategoryEntity> {
+  async createCategory(storeId: string, name: string, parentId?: string | null): Promise<ProductCategoryEntity> {
     const slug = slugify(name)
-    return this.repo.createCategory(storeId, name, slug)
+    return this.repo.createCategory(storeId, { name, slug, parentId })
   }
 }
