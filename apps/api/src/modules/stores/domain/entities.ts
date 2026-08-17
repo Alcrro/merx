@@ -1,3 +1,20 @@
+export interface StoreSettings {
+  business?: {
+    companyName?: string
+    vatNumber?: string
+    contactEmail?: string
+    phone?: string
+    address?: string
+    city?: string
+    country?: string
+  }
+  notifications?: {
+    orderCreated?: boolean
+    lowStock?: boolean
+    orderDelivered?: boolean
+  }
+}
+
 export interface StoreEntity {
   id: string
   ownerId: string
@@ -6,7 +23,8 @@ export interface StoreEntity {
   currency: string
   locale: string
   timezone: string
-  settings: Record<string, unknown>
+  settings: StoreSettings
+  deletedAt: Date | null
   createdAt: Date
   updatedAt: Date
 }
@@ -16,4 +34,5 @@ export interface UpdateStoreData {
   currency?: string
   locale?: string
   timezone?: string
+  settings?: StoreSettings
 }

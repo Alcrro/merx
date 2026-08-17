@@ -4,7 +4,7 @@ import type { StoreEntity, UpdateStoreData } from '../domain/entities'
 export class StoreError extends Error {
   constructor(
     message: string,
-    public readonly code: 'NOT_FOUND' | 'INVALID_CURRENCY' | 'INVALID_TIMEZONE'
+    public readonly code: 'NOT_FOUND' | 'INVALID_CURRENCY' | 'INVALID_TIMEZONE' | 'FORBIDDEN'
   ) {
     super(message)
     this.name = 'StoreError'
@@ -43,6 +43,17 @@ export class StoreService {
       throw new StoreError('Invalid IANA timezone', 'INVALID_TIMEZONE')
     }
 
-    return this.repo.update(storeId, data)
+    const mergedSettings = data.settings
+      ? { ...store.settings, ...data.settings, business: { ...store.settings.business, ...data.settings.business }, notifications: { ...store.settings.notifications, ...data.settings.notifications } }
+      : undefined
+
+    return this.repo.update(storeId, { ...data, ...(mergedSettings ? { settings: mergedSettings } : {}) })
+  }
+
+  async delete(storeId: string, requestingUserId: string): Promise<void> {
+    const store = await this.repo.findById(storeId)
+    if (!store) throw new StoreError('Store not found', 'NOT_FOUND')
+    if (store.ownerId !== requestingUserId) throw new StoreError('Forbidden', 'FORBIDDEN')
+    await this.repo.delete(storeId)
   }
 }
