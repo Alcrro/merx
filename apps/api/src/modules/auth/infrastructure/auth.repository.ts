@@ -6,27 +6,27 @@ export class AuthRepository implements IAuthRepository {
   async findUserByEmail(email: string): Promise<(AuthUser & { password: string }) | null> {
     return prisma.user.findUnique({
       where: { email },
-      select: { id: true, email: true, name: true, createdAt: true, password: true },
+      select: { id: true, email: true, name: true, role: true, createdAt: true, password: true },
     })
   }
 
   async findUserById(id: string): Promise<AuthUser | null> {
     return prisma.user.findUnique({
       where: { id },
-      select: { id: true, email: true, name: true, createdAt: true },
+      select: { id: true, email: true, name: true, role: true, createdAt: true },
     })
   }
 
   async createUser(data: { email: string; password: string; name?: string }): Promise<AuthUser> {
     return prisma.user.create({
       data,
-      select: { id: true, email: true, name: true, createdAt: true },
+      select: { id: true, email: true, name: true, role: true, createdAt: true },
     })
   }
 
   async findStoreByOwnerId(ownerId: string): Promise<AuthStore | null> {
     return prisma.store.findFirst({
-      where: { ownerId },
+      where: { ownerId, deletedAt: null },
       select: { id: true, name: true, slug: true, currency: true },
     })
   }
