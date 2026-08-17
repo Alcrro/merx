@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type { OrderStatus, PaymentStatus, FulfillmentStatus } from '@merx/types'
 import {
   useOrder,
@@ -5,10 +6,10 @@ import {
   useUpdatePaymentStatus,
   useUpdateFulfillmentStatus,
   useCancelOrder,
-} from '../../hooks/useOrders'
-import { Select } from '../atoms/Select'
-import { Button } from '../atoms/Button'
-import { OrderStatusBadge } from '../molecules/OrderStatusBadge'
+} from '../../../hooks/useOrders'
+import { Select } from '../../atoms/Select'
+import { Button } from '../../atoms/Button'
+import { OrderStatusBadge } from '../../molecules/orders/OrderStatusBadge'
 
 const ORDER_STATUS_OPTIONS: { value: OrderStatus; label: string }[] = [
   { value: 'pending', label: 'În așteptare' },
@@ -108,8 +109,14 @@ export function OrderDetail({ orderId, onBack }: Props) {
         {order.customer && (
           <div className="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6">
             <h2 className="mb-3 text-sm font-semibold text-gray-700 dark:text-gray-300">Client</h2>
-            <p className="text-sm text-gray-800 dark:text-gray-200">{customerName}</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">{order.customer.email}</p>
+            {customerName && <p className="text-sm text-gray-800 dark:text-gray-200">{customerName}</p>}
+            <Link
+              to={`/customers/${order.customer.id}`}
+              className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {order.customer.email}
+            </Link>
           </div>
         )}
 

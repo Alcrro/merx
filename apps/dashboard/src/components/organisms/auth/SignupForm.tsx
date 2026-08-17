@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Input } from '../atoms/Input'
-import { Button } from '../atoms/Button'
-import { useAuth } from '../../hooks/useAuth'
+import { Input } from '../../atoms/Input'
+import { Button } from '../../atoms/Button'
+import { useAuth } from '../../../hooks/useAuth'
 
 interface FormErrors {
   name?: string

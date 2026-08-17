@@ -8,7 +8,7 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import type { RevenueChartPoint } from '@merx/types'
-import { useTheme } from '../../hooks/useTheme'
+import { useTheme } from '../../../hooks/useTheme'
 
 interface Props {
   data?: RevenueChartPoint[]

@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import type { ProductVariant } from '@merx/types'
 import type { CreateVariantInput } from '@merx/api-client'
-import { Input } from '../atoms/Input'
-import { Button } from '../atoms/Button'
+import { Input } from '../../atoms/Input'
+import { Button } from '../../atoms/Button'
 
 interface VariantFormProps {
   initial?: ProductVariant

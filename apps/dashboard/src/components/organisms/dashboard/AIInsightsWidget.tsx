@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { AIInsight } from '@merx/api-client'
-import { useInsights, useRunInsights, useRestockInsight, useInsightsHistory } from '../../hooks/useInsights'
+import { useInsights, useRunInsights, useRestockInsight, useInsightsHistory } from '../../../hooks/useInsights'
 
 const severityConfig = {
   critical: {
@@ -119,7 +119,7 @@ export function AIInsightsWidget() {
 }
 
 function InsightCard({ insight, onRestock }: { insight: AIInsight; onRestock: () => void }) {
-  const cfg = severityConfig[insight.severity] ?? severityConfig.info
+  const cfg = severityConfig[insight.severity]
   const canRestock = insight.type === 'trending_stockout' || insight.type === 'trending_low_stock'
 
   return (
@@ -171,7 +171,7 @@ const typeLabel: Record<string, string> = {
 }
 
 function HistoryRow({ insight }: { insight: AIInsight }) {
-  const cfg = severityConfig[insight.severity] ?? severityConfig.info
+  const cfg = severityConfig[insight.severity]
   const date = insight.resolvedAt
     ? new Date(insight.resolvedAt).toLocaleDateString('ro-RO', { day: '2-digit', month: 'short' })
     : new Date(insight.createdAt).toLocaleDateString('ro-RO', { day: '2-digit', month: 'short' })

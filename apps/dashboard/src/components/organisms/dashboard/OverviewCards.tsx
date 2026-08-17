@@ -1,5 +1,5 @@
 import type { AnalyticsOverview } from '@merx/types'
-import { MetricCard, MetricCardSkeleton } from '../atoms/MetricCard'
+import { MetricCard, MetricCardSkeleton } from '../../atoms/MetricCard'
 
 interface Props {
   data?: AnalyticsOverview

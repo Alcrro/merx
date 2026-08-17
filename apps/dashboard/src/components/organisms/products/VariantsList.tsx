@@ -2,8 +2,8 @@ import { useState } from 'react'
 import type { ProductVariant } from '@merx/types'
 import type { CreateVariantInput } from '@merx/api-client'
 import { VariantForm } from './VariantForm'
-import { ConfirmDialog } from '../molecules/ConfirmDialog'
-import { Button } from '../atoms/Button'
+import { ConfirmDialog } from '../../molecules/shared/ConfirmDialog'
+import { Button } from '../../atoms/Button'
 
 interface VariantsListProps {
   productId: string

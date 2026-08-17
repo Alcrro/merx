@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import type { Product, ProductCategory, ProductStatus } from '@merx/types'
 import type { CreateProductInput } from '@merx/api-client'
-import { Input } from '../atoms/Input'
-import { Select } from '../atoms/Select'
-import { Button } from '../atoms/Button'
+import { Input } from '../../atoms/Input'
+import { Select } from '../../atoms/Select'
+import { Button } from '../../atoms/Button'
 
 interface ProductFormProps {
   initial?: Product
@@ -23,7 +23,6 @@ export function ProductForm({ initial, categories, onSave, isLoading }: ProductF
   const [description, setDescription] = useState(initial?.description ?? '')
   const [status, setStatus] = useState<ProductStatus>(initial?.status ?? 'draft')
   const [categoryId, setCategoryId] = useState(initial?.categoryId ?? '')
-  const [vendor, setVendor] = useState(initial?.vendor ?? '')
   const [productType, setProductType] = useState(initial?.productType ?? '')
   const [error, setError] = useState('')
 
@@ -33,7 +32,6 @@ export function ProductForm({ initial, categories, onSave, isLoading }: ProductF
       setDescription(initial.description ?? '')
       setStatus(initial.status)
       setCategoryId(initial.categoryId ?? '')
-      setVendor(initial.vendor ?? '')
       setProductType(initial.productType ?? '')
     }
   // intentional: sync only when a different product is loaded, not on reference equality
@@ -49,7 +47,6 @@ export function ProductForm({ initial, categories, onSave, isLoading }: ProductF
       description: description || null,
       status,
       categoryId: categoryId || null,
-      vendor: vendor || null,
       productType: productType || null,
     })
   }
@@ -92,7 +89,6 @@ export function ProductForm({ initial, categories, onSave, isLoading }: ProductF
           onChange={(e) => setCategoryId(e.target.value)}
           options={categoryOptions}
         />
-        <Input label="Vendor" value={vendor} onChange={(e) => setVendor(e.target.value)} />
       </div>
 
       <Input label="Tip produs" value={productType} onChange={(e) => setProductType(e.target.value)} />

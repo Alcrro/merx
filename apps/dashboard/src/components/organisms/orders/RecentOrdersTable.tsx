@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import type { Order } from '@merx/types'
-import { OrderStatusBadge } from '../molecules/OrderStatusBadge'
+import { OrderStatusBadge } from '../../molecules/orders/OrderStatusBadge'
 
 interface Props {
   orders?: Order[]

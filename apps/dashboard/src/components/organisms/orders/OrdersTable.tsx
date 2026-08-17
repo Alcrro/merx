@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { OrderStatus, PaymentStatus, FulfillmentStatus } from '@merx/types'
-import { useOrders } from '../../hooks/useOrders'
-import { Button } from '../atoms/Button'
-import { OrderStatusBadge } from '../molecules/OrderStatusBadge'
-import { PaymentStatusBadge } from '../molecules/PaymentStatusBadge'
-import { FulfillmentStatusBadge } from '../molecules/FulfillmentStatusBadge'
+import { useOrders } from '../../../hooks/useOrders'
+import { Button } from '../../atoms/Button'
+import { OrderStatusBadge } from '../../molecules/orders/OrderStatusBadge'
+import { PaymentStatusBadge } from '../../molecules/orders/PaymentStatusBadge'
+import { FulfillmentStatusBadge } from '../../molecules/orders/FulfillmentStatusBadge'
 
 const STATUS_TABS: { label: string; value: OrderStatus | undefined }[] = [
   { label: 'Toate', value: undefined },
