@@ -1,4 +1,4 @@
-import { Button } from '../atoms/Button'
+import { Button } from '../../atoms/Button'
 
 interface ConfirmDialogProps {
   title: string

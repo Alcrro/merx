@@ -43,7 +43,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
         {isUser ? (
           <p className="whitespace-pre-wrap">{message.content}</p>
         ) : (
-          <MarkdownContent content={message.content ?? ''} />
+          <MarkdownContent content={message.content} />
         )}
       </div>
     </div>
