@@ -11,6 +11,7 @@
     "lint": "eslint src --ext .ts,.tsx"
   },
   "dependencies": {
+    "@measured/puck": "^0.20.2",
     "@merx/api-client": "*",
     "@merx/types": "*",
     "@tanstack/react-query": "^5.51.23",
@@ -19,7 +20,8 @@
     "react-dom": "^18.3.1",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^6.26.1",
-    "recharts": "^3.10.1"
+    "recharts": "^3.10.1",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@types/react": "^18.3.4",
