@@ -19,6 +19,7 @@ export const checkoutSchema = z.object({
     country: z.string().min(2).max(2),
     postalCode: z.string().min(1),
   }),
+  discountCode: z.string().trim().toUpperCase().optional(),
 })
 
 export type CheckoutInput = z.infer<typeof checkoutSchema>

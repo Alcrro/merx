@@ -83,6 +83,33 @@ export const storefrontController = {
     }
   },
 
+  async getStoreMeta(req: Request, res: Response) {
+    try {
+      const meta = await storefrontService.getStoreMeta(req.params.storeSlug)
+      res.json(meta)
+    } catch (err) {
+      handleError(err, res)
+    }
+  },
+
+  async getPublishedTheme(req: Request, res: Response) {
+    try {
+      const previewId = typeof req.query.previewId === 'string' ? req.query.previewId : null
+
+      const config = previewId
+        ? await storefrontService.getPreviewTheme(req.params.storeSlug, previewId)
+        : await storefrontService.getPublishedTheme(req.params.storeSlug)
+
+      if (!config) {
+        res.status(404).json({ error: 'No published theme' })
+        return
+      }
+      res.json({ config })
+    } catch (err) {
+      handleError(err, res)
+    }
+  },
+
   async stripeWebhook(req: Request, res: Response) {
     try {
       const signature = req.headers['stripe-signature'] as string
