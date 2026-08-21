@@ -44,7 +44,14 @@ export class StoreService {
     }
 
     const mergedSettings = data.settings
-      ? { ...store.settings, ...data.settings, business: { ...store.settings.business, ...data.settings.business }, notifications: { ...store.settings.notifications, ...data.settings.notifications } }
+      ? {
+          ...store.settings,
+          ...data.settings,
+          business:      { ...store.settings.business,      ...data.settings.business },
+          notifications: { ...store.settings.notifications, ...data.settings.notifications },
+          shipping:      { ...store.settings.shipping,      ...data.settings.shipping },
+          tax:           { ...store.settings.tax,           ...data.settings.tax },
+        }
       : undefined
 
     return this.repo.update(storeId, { ...data, ...(mergedSettings ? { settings: mergedSettings } : {}) })

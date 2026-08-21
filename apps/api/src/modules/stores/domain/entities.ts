@@ -13,6 +13,14 @@ export interface StoreSettings {
     lowStock?: boolean
     orderDelivered?: boolean
   }
+  shipping?: {
+    flatRate?: number
+    freeShippingThreshold?: number | null
+  }
+  tax?: {
+    rate?: number
+    includedInPrice?: boolean
+  }
 }
 
 export interface StoreEntity {
