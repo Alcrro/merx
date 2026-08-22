@@ -1,5 +1,15 @@
 export type ProductStatus = 'active' | 'draft' | 'archived'
 
+export interface ProductImageEntity {
+  id: string
+  productId: string
+  url: string
+  altText: string | null
+  position: number
+  isPrimary: boolean
+  createdAt: Date
+}
+
 export interface ProductVariantEntity {
   id: string
   productId: string
@@ -25,6 +35,7 @@ export interface ProductEntity {
   createdAt: Date
   updatedAt: Date
   variants?: ProductVariantEntity[]
+  images?: ProductImageEntity[]
   category?: ProductCategoryEntity | null
   brand?: BrandEntity | null
   tags?: TagEntity[]

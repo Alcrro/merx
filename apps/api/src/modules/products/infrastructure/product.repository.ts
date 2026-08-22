@@ -45,6 +45,7 @@ function toProduct(p: any): ProductEntity {
     createdAt: p.createdAt,
     updatedAt: p.updatedAt,
     variants: p.variants?.map(toVariant) ?? [],
+    images: p.images ?? undefined,
     category: p.category ?? null,
     brand: p.brand ?? null,
     tags: p.tags ?? [],
@@ -77,7 +78,7 @@ export class ProductRepository implements IProductRepository {
   async findById(id: string, storeId: string): Promise<ProductEntity | null> {
     const p = await prisma.product.findFirst({
       where: { id, storeId },
-      include: { variants: true, category: true },
+      include: { variants: true, category: true, images: { orderBy: { position: 'asc' } } },
     })
     if (!p) return null
     return toProduct(p)

@@ -1,5 +1,6 @@
 import type {
   ProductEntity,
+  ProductImageEntity,
   ProductVariantEntity,
   ProductCategoryEntity,
   BrandEntity,
@@ -78,6 +79,24 @@ export interface CreateTagData {
   name: string
   slug: string
   type?: string
+}
+
+export interface IProductImageRepository {
+  findByProductId(productId: string): Promise<ProductImageEntity[]>
+  findById(id: string): Promise<ProductImageEntity | null>
+  countByProductId(productId: string): Promise<number>
+  create(data: CreateProductImageData): Promise<ProductImageEntity>
+  delete(id: string): Promise<void>
+  updatePositions(updates: { id: string; position: number }[]): Promise<void>
+  promoteFirstRemaining(productId: string): Promise<void>
+}
+
+export interface CreateProductImageData {
+  productId: string
+  url: string
+  altText?: string | null
+  position: number
+  isPrimary: boolean
 }
 
 export interface CreateVariantData {

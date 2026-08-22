@@ -1,7 +1,11 @@
 import type { Response, NextFunction } from 'express'
 import type { AuthenticatedRequest } from '../../../middleware/authenticate'
 import { ProductService, ProductError } from '../application/product.service'
+import { ProductImageService } from '../application/product-image.service'
 import { ProductRepository } from '../infrastructure/product.repository'
+import { ProductImageRepository } from '../infrastructure/product-image.repository'
+import { storageProvider } from '../../../lib/storage'
+import { config } from '../../../config'
 import { getProductAnalytics } from '../application/product-analytics.service'
 import {
   createProductSchema,
@@ -10,9 +14,15 @@ import {
   updateVariantSchema,
   listProductsSchema,
   createCategorySchema,
+  reorderImagesSchema,
 } from './product.schema'
 
 const service = new ProductService(new ProductRepository())
+const imageService = new ProductImageService(
+  new ProductImageRepository(),
+  storageProvider,
+  config.storage.publicUrl,
+)
 
 function handleError(err: unknown, res: Response): void {
   if (err instanceof ProductError) {
@@ -106,6 +116,38 @@ export const productController = {
     try {
       await service.deleteVariant(req.params.variantId, req.params.id, req.user.storeId)
       res.sendStatus(204)
+    } catch (err) {
+      if (err instanceof ProductError) handleError(err, res); else next(err)
+    }
+  },
+
+  uploadImage: async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      if (!req.file) {
+        res.status(400).json({ error: 'No image file provided' })
+        return
+      }
+      const image = await imageService.uploadImage(req.params.id, req.user.storeId, req.file)
+      res.status(201).json(image)
+    } catch (err) {
+      if (err instanceof ProductError) handleError(err, res); else next(err)
+    }
+  },
+
+  deleteImage: async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      await imageService.deleteImage(req.params.id, req.params.imageId, req.user.storeId)
+      res.sendStatus(204)
+    } catch (err) {
+      if (err instanceof ProductError) handleError(err, res); else next(err)
+    }
+  },
+
+  reorderImages: async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+      const { ids } = reorderImagesSchema.parse(req.body)
+      await imageService.reorderImages(req.params.id, req.user.storeId, ids)
+      res.sendStatus(200)
     } catch (err) {
       if (err instanceof ProductError) handleError(err, res); else next(err)
     }

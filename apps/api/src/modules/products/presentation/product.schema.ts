@@ -48,3 +48,7 @@ export const createTagSchema = z.object({
   name: z.string().min(1).max(100),
   type: z.string().max(50).default('custom'),
 })
+
+export const reorderImagesSchema = z.object({
+  ids: z.array(z.string().uuid()).min(1),
+})
