@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useCreateProduct, useCategories } from '../../hooks/useProducts'
-import { ProductForm } from '../../components/organisms/ProductForm'
+import { ProductForm } from '../../components/organisms/products/ProductForm'
 
 export function NewProductPage() {
   const navigate = useNavigate()

@@ -93,3 +93,27 @@ export function useDeleteVariant(productId: string) {
     onSuccess: () => qc.invalidateQueries({ queryKey: productKeys.detail(productId) }),
   })
 }
+
+export function useUploadImage(productId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (file: File) => productApi.uploadImage(productId, file),
+    onSuccess: () => qc.invalidateQueries({ queryKey: productKeys.detail(productId) }),
+  })
+}
+
+export function useDeleteImage(productId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (imageId: string) => productApi.deleteImage(productId, imageId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: productKeys.detail(productId) }),
+  })
+}
+
+export function useReorderImages(productId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (ids: string[]) => productApi.reorderImages(productId, ids),
+    onSuccess: () => qc.invalidateQueries({ queryKey: productKeys.detail(productId) }),
+  })
+}
