@@ -65,7 +65,8 @@ function PriceDisplay({ price, currency }: { price: number; currency: string }) 
   )
 }
 
-function ActionButton({ item, onClick }: { item: FeedItem; onClick: () => void }) {
+function ActionButton({ item, isOwn, onClick }: { item: FeedItem; isOwn: boolean; onClick: () => void }) {
+  if (isOwn) return <Button size="sm" variant="outline" onClick={onClick}>Gestionează</Button>
   if (item.negotiable) return <Button size="sm" variant="outline" onClick={onClick}>Cere ofertă</Button>
   if (item.price > 0) return <Button size="sm" onClick={onClick}>Alege</Button>
   return (
@@ -78,7 +79,7 @@ function ActionButton({ item, onClick }: { item: FeedItem; onClick: () => void }
   )
 }
 
-export function MarketplaceProductRow({ item, onNavigate }: { item: FeedItem; onNavigate: (variantId?: string) => void }) {
+export function MarketplaceProductRow({ item, isOwn = false, onNavigate }: { item: FeedItem; isOwn?: boolean; onNavigate: (variantId?: string) => void }) {
   const [expanded, setExpanded] = useState(false)
   const hasVariants = item.variants.length > 1
 
@@ -116,11 +117,25 @@ export function MarketplaceProductRow({ item, onNavigate }: { item: FeedItem; on
               {item.title}
             </button>
             <div className="mt-1 flex items-center gap-2 flex-wrap">
+              {isOwn && (
+                <span className="inline-flex items-center rounded-full bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800/50 px-2 py-0.5 text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wide">
+                  Al meu
+                </span>
+              )}
               <PricingBadge price={item.price} negotiable={item.negotiable} />
               <ConditionBadge condition={item.condition} />
               <MetaDot />
               <span className="text-[11px] text-gray-400 dark:text-gray-500 font-medium">
                 {CATEGORY_LABELS[item.category] ?? item.category}
+              </span>
+              <MetaDot />
+              <span className="inline-flex items-center gap-1 text-[11px] text-gray-400 dark:text-gray-500">
+                <svg className="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+                </svg>
+                {item.shippingCost > 0
+                  ? `+${item.shippingCost.toLocaleString('ro-RO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${item.currency}`
+                  : 'Livrare gratuită'}
               </span>
               {item.deliveryDays != null && (
                 <>
@@ -154,7 +169,7 @@ export function MarketplaceProductRow({ item, onNavigate }: { item: FeedItem; on
 
         <PriceDisplay price={item.price} currency={item.currency} />
         <div className="flex justify-center"><RiskBadge severity={item.severity} /></div>
-        <div className="flex justify-end"><ActionButton item={item} onClick={() => onNavigate()} /></div>
+        <div className="flex justify-end"><ActionButton item={item} isOwn={isOwn} onClick={() => onNavigate()} /></div>
       </div>
 
       {expanded && hasVariants && (
@@ -183,7 +198,10 @@ export function MarketplaceProductRow({ item, onNavigate }: { item: FeedItem; on
               </div>
               <span />
               <div className="flex justify-end">
-                <Button size="sm" onClick={() => onNavigate(v.id)}>Alege</Button>
+                {isOwn
+                  ? <Button size="sm" variant="outline" onClick={() => onNavigate(v.id)}>Gestionează</Button>
+                  : <Button size="sm" onClick={() => onNavigate(v.id)}>Alege</Button>
+                }
               </div>
             </div>
           ))}

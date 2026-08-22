@@ -16,6 +16,7 @@ export function MarketplaceFeedFilters() {
     categorySlug, setCategorySlug,
     minPriceRaw, setMinPriceRaw,
     maxPriceRaw, setMaxPriceRaw,
+    excludeOwn, setExcludeOwn,
     clearAll,
   } = useMarketplaceFeedStore()
 
@@ -81,6 +82,20 @@ export function MarketplaceFeedFilters() {
             <span className={['h-1.5 w-1.5 rounded-full shrink-0 transition-colors', negotiable ? 'bg-indigo-500' : 'bg-gray-300 dark:bg-gray-600'].join(' ')} />
             Negociabil
           </button>
+
+          <button
+            onClick={() => setExcludeOwn(!excludeOwn)}
+            className={[
+              'flex items-center gap-2 px-3.5 h-full text-xs font-medium transition-colors whitespace-nowrap',
+              excludeOwn
+                ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/50',
+            ].join(' ')}
+          >
+            <span className={['h-1.5 w-1.5 rounded-full shrink-0 transition-colors', excludeOwn ? 'bg-indigo-500' : 'bg-gray-300 dark:bg-gray-600'].join(' ')} />
+            Browsează piața
+          </button>
+
         </div>
 
         {hasFilters && (

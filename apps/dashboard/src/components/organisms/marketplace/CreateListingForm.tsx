@@ -18,6 +18,7 @@ export function CreateListingForm() {
     title: '',
     description: '',
     price: '',
+    shippingCost: '',
     currency: 'EUR',
     negotiable: false,
     quantity: '1',
@@ -52,6 +53,7 @@ export function CreateListingForm() {
         title: form.title,
         description: form.description || undefined,
         price,
+        shippingCost: form.shippingCost ? parseFloat(form.shippingCost) : 0,
         currency: form.currency,
         negotiable: form.negotiable,
         quantity: parseInt(form.quantity) || 1,
@@ -129,6 +131,16 @@ export function CreateListingForm() {
             options={CURRENCY_OPTIONS}
           />
         </div>
+
+        <Input
+          label="Cost livrare (opțional)"
+          type="number"
+          min="0"
+          step="0.01"
+          value={form.shippingCost}
+          onChange={(e) => set('shippingCost', e.target.value)}
+          placeholder="0.00 — lasă gol pentru livrare gratuită"
+        />
 
         <div className="grid grid-cols-2 gap-4">
           <Input

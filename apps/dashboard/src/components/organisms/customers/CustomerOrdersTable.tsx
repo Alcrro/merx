@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import type { CustomerOrder } from '@merx/types'
+import { orderSlug } from '../../../lib/orderSlug'
 import { OrderStatusBadge } from '../../molecules/orders/OrderStatusBadge'
 import { PaymentStatusBadge } from '../../molecules/orders/PaymentStatusBadge'
 import { FulfillmentStatusBadge } from '../../molecules/orders/FulfillmentStatusBadge'
@@ -41,7 +42,7 @@ export function CustomerOrdersTable({ orders, fmt }: Props) {
                 <tr
                   key={order.id}
                   className="hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer"
-                  onClick={() => navigate(`/orders/${order.id}`)}
+                  onClick={() => navigate(`/orders/${orderSlug(order.orderNumber, order.createdAt)}`)}
                 >
                   <td className="px-4 py-3 font-mono text-gray-700 dark:text-gray-300">#{order.orderNumber}</td>
                   <td className="px-4 py-3 text-gray-500 dark:text-gray-400">{order.items.length}</td>

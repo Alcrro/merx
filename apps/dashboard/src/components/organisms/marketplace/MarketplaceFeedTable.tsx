@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useMarketplaceFeedStore, hasFiltersSelector } from '../../../stores/marketplaceFeed.store'
 import { useListings } from '../../../hooks/useMarketplace'
 import { useDebounce } from '../../../hooks/useDebounce'
+import { useAuth } from '../../../hooks/useAuth'
 import { MarketplaceProductRow } from '../../molecules/marketplace/MarketplaceProductRow'
 import { Spinner } from '../../atoms/Spinner'
 
@@ -9,11 +10,12 @@ const COL_GRID = 'minmax(0,1fr) 180px 90px 120px'
 
 export function MarketplaceFeedTable() {
   const navigate = useNavigate()
+  const { store } = useAuth()
 
   const {
     search, category, country, negotiable,
     sortBy, maxDeliveryDays, categorySlug,
-    minPriceRaw, maxPriceRaw,
+    minPriceRaw, maxPriceRaw, excludeOwn,
     page, setPage, clearAll,
   } = useMarketplaceFeedStore()
 
@@ -30,6 +32,7 @@ export function MarketplaceFeedTable() {
     sortBy,
     maxDeliveryDays,
     categorySlug: categorySlug || undefined,
+    excludeStoreId: excludeOwn ? (store?.id ?? undefined) : undefined,
     minPrice: minPrice !== '' ? Number(minPrice) : undefined,
     maxPrice: maxPrice !== '' ? Number(maxPrice) : undefined,
     page,
@@ -83,6 +86,7 @@ export function MarketplaceFeedTable() {
           <MarketplaceProductRow
             key={item.id}
             item={item}
+            isOwn={item.storeId === store?.id}
             onNavigate={(variantId) => {
               const url = `/marketplace/listings/${item.id}`
               navigate(variantId ? `${url}?variantId=${variantId}` : url)
