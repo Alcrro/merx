@@ -14,3 +14,12 @@ export const adjustSchema = z.object({
 export const reorderPointSchema = z.object({
   reorderPoint: z.number().int().nonnegative(),
 })
+
+export const setStockSchema = z.object({
+  type: z.enum(['in', 'out', 'adjustment']),
+  quantity: z.number().int().nonnegative(),
+})
+
+export const setStatusSchema = z.object({
+  isActive: z.boolean(),
+})

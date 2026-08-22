@@ -5,7 +5,14 @@ import type {
   InventoryMovementEntity,
   ListInventoryParams,
   PaginatedInventory,
+  StoreInventoryEntity,
+  PaginatedStoreInventory,
 } from '../domain/entities'
+import { NotificationService } from '../../notifications/application/notification.service'
+import { NotificationRepository } from '../../notifications/infrastructure/notification.repository'
+
+const notificationService = new NotificationService(new NotificationRepository())
+
 
 export class InventoryError extends Error {
   constructor(
@@ -88,5 +95,38 @@ export class InventoryService {
 
   release(variantId: string, storeId: string, qty: number): Promise<void> {
     return this.repo.release(variantId, storeId, qty)
+  }
+
+  listStore(storeId: string, page: number, limit: number): Promise<PaginatedStoreInventory> {
+    return this.repo.listStore(storeId, page, limit)
+  }
+
+  async setStock(storeProductVariantId: string, storeId: string, type: 'in' | 'out' | 'adjustment', quantity: number): Promise<StoreInventoryEntity> {
+    if (quantity < 0) throw new InventoryError('Quantity cannot be negative', 'INVALID')
+    const result = await this.repo.upsertStock(storeId, storeProductVariantId, type, quantity)
+
+    const notifType = type === 'in' ? 'STOCK_IN' : type === 'out' ? 'STOCK_REMOVAL' : 'STOCK_ADJUSTMENT'
+    const movementLabel = type === 'in' ? 'Recepție' : type === 'out' ? 'Eliminare' : 'Corecție'
+
+    void notificationService.create({
+      storeId,
+      type: notifType,
+      severity: 'INFO',
+      title: `${movementLabel}: ${result.productTitle}`,
+      message: `${result.variantTitle} — ${result.quantity} unități.`,
+      metadata: {
+        storeProductVariantId,
+        productTitle: result.productTitle,
+        variantTitle: result.variantTitle,
+        quantity: result.quantity,
+        movementType: type,
+      },
+    })
+
+    return result
+  }
+
+  setVariantStatus(storeProductVariantId: string, storeId: string, isActive: boolean): Promise<StoreInventoryEntity> {
+    return this.repo.setVariantStatus(storeId, storeProductVariantId, isActive)
   }
 }

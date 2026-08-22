@@ -4,6 +4,8 @@ import type {
   MovementType,
   ListInventoryParams,
   PaginatedInventory,
+  StoreInventoryEntity,
+  PaginatedStoreInventory,
 } from './entities'
 
 export interface AdjustInventoryData {
@@ -16,12 +18,14 @@ export interface AdjustInventoryData {
 export interface IInventoryRepository {
   list(params: ListInventoryParams): Promise<PaginatedInventory>
   findByVariantId(variantId: string, storeId: string): Promise<InventoryItemEntity | null>
-  // delta: signed number applied to quantity (+add, -remove)
   applyDelta(variantId: string, storeId: string, delta: number, type: MovementType, note?: string): Promise<InventoryItemEntity>
   updateReorderPoint(variantId: string, storeId: string, reorderPoint: number): Promise<InventoryItemEntity>
   listMovements(variantId: string, storeId: string, limit: number): Promise<InventoryMovementEntity[]>
-  // atomic: increases reservedQuantity — throws if insufficient available stock
   reserve(variantId: string, storeId: string, qty: number): Promise<void>
-  // atomic: decreases both reservedQuantity and quantity (on fulfillment)
   release(variantId: string, storeId: string, qty: number): Promise<void>
+  listStore(storeId: string, page: number, limit: number): Promise<PaginatedStoreInventory>
+  upsertStock(storeId: string, storeProductVariantId: string, type: 'in' | 'out' | 'adjustment', qty: number): Promise<StoreInventoryEntity>
+  setVariantStatus(storeId: string, storeProductVariantId: string, isActive: boolean): Promise<StoreInventoryEntity>
 }
+
+export type { StoreInventoryEntity, PaginatedStoreInventory }

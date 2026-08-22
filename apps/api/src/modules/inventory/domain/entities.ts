@@ -44,3 +44,20 @@ export interface PaginatedInventory {
   page: number
   limit: number
 }
+
+export interface StoreInventoryEntity {
+  storeProductVariantId: string
+  productTitle: string
+  variantTitle: string
+  sku: string
+  isActive: boolean
+  quantity: number
+  lastMovementType: 'in' | 'out' | 'adjustment' | null
+}
+
+export interface PaginatedStoreInventory {
+  data: StoreInventoryEntity[]
+  total: number
+  page: number
+  limit: number
+}

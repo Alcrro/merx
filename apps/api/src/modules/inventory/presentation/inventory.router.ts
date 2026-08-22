@@ -5,6 +5,10 @@ import { inventoryController } from './inventory.controller'
 const router = Router()
 router.use(authenticate)
 
+router.get('/store', withAuth(inventoryController.listStore))
+router.patch('/store/:variantId/stock', withAuth(inventoryController.setStock))
+router.patch('/store/:variantId/status', withAuth(inventoryController.setVariantStatus))
+
 router.get('/', withAuth(inventoryController.list))
 router.get('/:variantId', withAuth(inventoryController.get))
 router.post('/:variantId/adjust', withAuth(inventoryController.adjust))

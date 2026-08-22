@@ -7,6 +7,8 @@ import type {
   MovementType,
   ListInventoryParams,
   PaginatedInventory,
+  StoreInventoryEntity,
+  PaginatedStoreInventory,
 } from '../domain/entities'
 
 type ItemWithVariant = Prisma.InventoryItemGetPayload<{
@@ -50,6 +52,27 @@ function toItem(i: ItemWithVariant): InventoryItemEntity {
 
 function toMovement(m: Prisma.InventoryMovementGetPayload<object>): InventoryMovementEntity {
   return { ...m, type: m.type as MovementType }
+}
+
+type StoreVariantWithRelations = Prisma.StoreProductVariantGetPayload<{
+  include: {
+    catalogVariant: { include: { catalogProduct: { select: { title: true } } } }
+    stock: true
+  }
+}>
+
+function toStoreInventory(v: StoreVariantWithRelations): StoreInventoryEntity {
+  const raw = v.stock?.lastMovementType
+  const lastMovementType = raw === 'in' || raw === 'out' || raw === 'adjustment' ? raw : null
+  return {
+    storeProductVariantId: v.id,
+    productTitle: v.catalogVariant.catalogProduct.title,
+    variantTitle: v.catalogVariant.title,
+    sku: v.catalogVariant.sku,
+    isActive: v.isActive,
+    quantity: v.stock?.quantity ?? 0,
+    lastMovementType,
+  }
 }
 
 export class InventoryRepository implements IInventoryRepository {
@@ -136,5 +159,64 @@ export class InventoryRepository implements IInventoryRepository {
         data: { storeId, variantId, type: 'release', quantity: -qty, actorType: 'system' },
       })
     })
+  }
+
+  async listStore(storeId: string, page: number, limit: number): Promise<PaginatedStoreInventory> {
+    const inc = {
+      catalogVariant: { include: { catalogProduct: { select: { title: true } } } },
+      stock: true,
+    }
+    const where = { storeProduct: { storeId } }
+    const [variants, total] = await Promise.all([
+      prisma.storeProductVariant.findMany({
+        where, include: inc,
+        orderBy: { catalogVariant: { catalogProduct: { title: 'asc' } } },
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+      prisma.storeProductVariant.count({ where }),
+    ])
+    return { data: variants.map(toStoreInventory), total, page, limit }
+  }
+
+  async upsertStock(storeId: string, storeProductVariantId: string, type: 'in' | 'out' | 'adjustment', qty: number): Promise<StoreInventoryEntity> {
+    const v = await prisma.storeProductVariant.findFirst({
+      where: { id: storeProductVariantId, storeProduct: { storeId } },
+    })
+    if (!v) throw new Error('Variant not found or not owned by store')
+
+    await prisma.$transaction(async (tx) => {
+      const existing = await tx.storeVariantStock.findUnique({ where: { storeProductVariantId } })
+      const current = existing?.quantity ?? 0
+      let newQty: number
+      if (type === 'in') newQty = current + qty
+      else if (type === 'out') newQty = Math.max(0, current - qty)
+      else newQty = qty
+
+      await tx.storeVariantStock.upsert({
+        where: { storeProductVariantId },
+        create: { storeId, storeProductVariantId, quantity: newQty, heldQuantity: 0, lastMovementType: type },
+        update: { quantity: newQty, lastMovementType: type },
+      })
+    })
+
+    const updated = await prisma.storeProductVariant.findUniqueOrThrow({
+      where: { id: storeProductVariantId },
+      include: { catalogVariant: { include: { catalogProduct: { select: { title: true } } } }, stock: true },
+    })
+    return toStoreInventory(updated)
+  }
+
+  async setVariantStatus(storeId: string, storeProductVariantId: string, isActive: boolean): Promise<StoreInventoryEntity> {
+    const v = await prisma.storeProductVariant.findFirst({
+      where: { id: storeProductVariantId, storeProduct: { storeId } },
+    })
+    if (!v) throw new Error('Variant not found or not owned by store')
+    const updated = await prisma.storeProductVariant.update({
+      where: { id: storeProductVariantId },
+      data: { isActive },
+      include: { catalogVariant: { include: { catalogProduct: { select: { title: true } } } }, stock: true },
+    })
+    return toStoreInventory(updated)
   }
 }
