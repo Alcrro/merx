@@ -1,15 +1,18 @@
 import { useMemo } from 'react'
+import { Navigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { useAnalyticsOverview } from '../../hooks/useAnalytics'
 import { useOrders } from '../../hooks/useOrders'
 import { useInventory } from '../../hooks/useInventory'
-import { OverviewCards } from '../../components/organisms/OverviewCards'
-import { RecentOrdersTable } from '../../components/organisms/RecentOrdersTable'
-import { LowStockAlerts } from '../../components/organisms/LowStockAlerts'
-import { AIInsightsWidget } from '../../components/organisms/AIInsightsWidget'
+import { OverviewCards } from '../../components/organisms/dashboard/OverviewCards'
+import { RecentOrdersTable } from '../../components/organisms/orders/RecentOrdersTable'
+import { LowStockAlerts } from '../../components/organisms/dashboard/LowStockAlerts'
+import { AIInsightsWidget } from '../../components/organisms/dashboard/AIInsightsWidget'
 
 export function DashboardPage() {
   const { user, store } = useAuth()
+
+  if (!store) return <Navigate to="/marketplace" replace />
   const fmt = useMemo(
     () => new Intl.NumberFormat('ro-RO', { style: 'currency', currency: store?.currency ?? 'EUR', maximumFractionDigits: 0 }),
     [store?.currency]

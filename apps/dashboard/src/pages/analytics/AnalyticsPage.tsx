@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { useAnalyticsOverview, useRevenueChart, useTopProducts } from '../../hooks/useAnalytics'
-import { OverviewCards } from '../../components/organisms/OverviewCards'
-import { RevenueChart } from '../../components/organisms/RevenueChart'
-import { TopProductsTable } from '../../components/organisms/TopProductsTable'
+import { OverviewCards } from '../../components/organisms/dashboard/OverviewCards'
+import { RevenueChart } from '../../components/organisms/dashboard/RevenueChart'
+import { TopProductsTable } from '../../components/organisms/products/TopProductsTable'
 
 const DAY_OPTIONS = [7, 14, 30, 90]
 
