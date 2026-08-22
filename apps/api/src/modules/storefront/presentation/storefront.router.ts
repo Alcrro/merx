@@ -1,9 +1,11 @@
 import { Router } from 'express'
 import { storefrontController } from './storefront.controller'
 import { discountValidateRouter } from '../../discounts/presentation/discount.router'
+import { shippingController } from '../../shipping/presentation/shipping.controller'
 
 export const storefrontRouter = Router()
 
+storefrontRouter.get('/:slug/shipping-methods', shippingController.getActiveMethodsPublic)
 storefrontRouter.get('/:storeSlug/meta', storefrontController.getStoreMeta)
 storefrontRouter.get('/:storeSlug/theme', storefrontController.getPublishedTheme)
 storefrontRouter.get('/:storeSlug', storefrontController.getStore)
