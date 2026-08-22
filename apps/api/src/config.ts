@@ -7,7 +7,6 @@ function requireEnv(key: string): string {
 export const config = {
   auth: {
     jwtSecret: requireEnv('JWT_SECRET'),
-    jwtRefreshSecret: requireEnv('JWT_REFRESH_SECRET'),
   },
   server: {
     port: process.env.PORT ?? '3001',
@@ -24,6 +23,7 @@ export const config = {
     secretKey: requireEnv('STRIPE_SECRET_KEY'),
     webhookSecret: requireEnv('STRIPE_WEBHOOK_SECRET'),
     connectWebhookSecret: process.env.STRIPE_CONNECT_WEBHOOK_SECRET ?? requireEnv('STRIPE_WEBHOOK_SECRET'),
+    publishableKey: process.env.STRIPE_PUBLISHABLE_KEY ?? '',
   },
   storage: {
     endpoint: process.env.STORAGE_ENDPOINT ?? '',
@@ -32,5 +32,16 @@ export const config = {
     bucket: process.env.STORAGE_BUCKET ?? 'merx-assets',
     publicUrl: process.env.STORAGE_PUBLIC_URL ?? '',
     region: process.env.STORAGE_REGION ?? 'auto',
+  },
+  openai: {
+    apiKey: process.env.OPENAI_API_KEY ?? '',
+  },
+  pexels: {
+    apiKey: process.env.PEXELS_API_KEY ?? '',
+  },
+  email: {
+    apiKey: process.env.RESEND_API_KEY ?? '',
+    from: process.env.EMAIL_FROM ?? 'noreply@merx.com',
+    appUrl: process.env.APP_URL ?? 'http://localhost:3000',
   },
 } as const

@@ -1,10 +1,10 @@
 import type { Request, Response, NextFunction, RequestHandler } from 'express'
-import { tokenService } from '../modules/auth/application/token.service'
+import { jwtTokenService } from '../modules/auth/infrastructure/adapters/jwt.token-service'
 
 export interface AuthUser {
   userId: string
   storeId: string
-  role: 'owner' | 'member'
+  role: string
 }
 
 // req.user is always set on routes behind the authenticate middleware
@@ -19,7 +19,7 @@ export const authenticate: RequestHandler = (req, res, next) => {
 
   const token = header.slice(7)
   try {
-    const payload = tokenService.verifyAccessToken(token)
+    const payload = jwtTokenService.verifyAccessToken(token)
     ;(req as AuthenticatedRequest).user = {
       userId: payload.sub,
       storeId: payload.storeId,
