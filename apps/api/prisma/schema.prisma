@@ -21,8 +21,21 @@ model User {
   stores        Store[]
   refreshTokens RefreshToken[]
   aiSessions    AISession[]
+  intro         UserIntro?
 
   @@map("users")
+}
+
+model UserIntro {
+  id          String    @id @default(uuid())
+  userId      String    @unique @map("user_id")
+  completed   Boolean   @default(false)
+  completedAt DateTime? @map("completed_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_intros")
 }
 
 model RefreshToken {
