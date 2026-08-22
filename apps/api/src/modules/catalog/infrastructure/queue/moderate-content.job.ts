@@ -1,10 +1,25 @@
 import { Queue, Worker } from 'bullmq'
-import { createRedisConnection } from '../../../lib/redis'
-import { moderateCatalogProduct } from '../application/content-moderation.service'
+import { createRedisConnection } from '../../../../lib/redis'
+import { ContentModerationService } from '../../application/services/content-moderation.service'
+import { OpenAIProvider } from '@merx/llm-provider'
+import { aiToolCriteriaRepository } from '../db/ai-tool-criteria.repository'
+import { moderationRepository } from '../db/moderation.repository'
 
 const QUEUE_NAME = 'moderate-content'
 
 let moderateQueue: Queue | null = null
+let moderationService: ContentModerationService | null = null
+
+function getModerationService(): ContentModerationService {
+  if (!moderationService) {
+    moderationService = new ContentModerationService(
+      new OpenAIProvider(),
+      aiToolCriteriaRepository,
+      moderationRepository,
+    )
+  }
+  return moderationService
+}
 
 export function getModerateQueue(): Queue {
   if (!moderateQueue) {
@@ -25,7 +40,7 @@ export function startModerateContentWorker(): void {
     QUEUE_NAME,
     async (job) => {
       const { catalogProductId } = job.data as { catalogProductId: string }
-      await moderateCatalogProduct(catalogProductId)
+      await getModerationService().moderateProduct(catalogProductId)
       return { catalogProductId }
     },
     { connection: createRedisConnection() }

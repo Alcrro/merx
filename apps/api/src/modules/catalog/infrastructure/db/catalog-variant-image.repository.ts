@@ -1,26 +1,7 @@
-import { prisma } from '../../../lib/prisma'
-import type { ICatalogVariantImageRepository, CreateCatalogVariantImageData } from '../domain/ports'
-import type { CatalogVariantImageEntity } from '../domain/entities'
-
-function toImage(r: {
-  id: string
-  catalogVariantId: string
-  url: string
-  altText: string | null
-  position: number
-  isPrimary: boolean
-  createdAt: Date
-}): CatalogVariantImageEntity {
-  return {
-    id: r.id,
-    catalogVariantId: r.catalogVariantId,
-    url: r.url,
-    altText: r.altText ?? null,
-    position: r.position,
-    isPrimary: r.isPrimary,
-    createdAt: r.createdAt,
-  }
-}
+import { prisma } from '../../../../lib/prisma'
+import type { ICatalogVariantImageRepository, CreateCatalogVariantImageData } from '../../domain/ports'
+import type { CatalogVariantImageEntity } from '../../domain/entities'
+import { toVariantImage } from './mappers/catalog.mapper'
 
 export class CatalogVariantImageRepository implements ICatalogVariantImageRepository {
   async findByVariantId(variantId: string): Promise<CatalogVariantImageEntity[]> {
@@ -28,12 +9,12 @@ export class CatalogVariantImageRepository implements ICatalogVariantImageReposi
       where: { catalogVariantId: variantId },
       orderBy: { position: 'asc' },
     })
-    return rows.map(toImage)
+    return rows.map(toVariantImage)
   }
 
   async findById(id: string): Promise<CatalogVariantImageEntity | null> {
     const row = await prisma.catalogVariantImage.findUnique({ where: { id } })
-    return row ? toImage(row) : null
+    return row ? toVariantImage(row) : null
   }
 
   async countByVariantId(variantId: string): Promise<number> {
@@ -42,7 +23,7 @@ export class CatalogVariantImageRepository implements ICatalogVariantImageReposi
 
   async create(data: CreateCatalogVariantImageData): Promise<CatalogVariantImageEntity> {
     const row = await prisma.catalogVariantImage.create({ data })
-    return toImage(row)
+    return toVariantImage(row)
   }
 
   async delete(id: string): Promise<void> {
