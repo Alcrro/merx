@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { inventoryApi } from '@merx/api-client'
+import { inventoryApi, storeInventoryApi } from '@merx/api-client'
 import type { AdjustInventoryInput, ListInventoryParams } from '@merx/api-client'
 
 export const inventoryKeys = {
@@ -52,5 +52,34 @@ export function useUpdateReorderPoint(variantId: string) {
       qc.setQueryData(inventoryKeys.detail(variantId), updated)
       void qc.invalidateQueries({ queryKey: inventoryKeys.list() })
     },
+  })
+}
+
+const storeInventoryKeys = {
+  all: ['store-inventory'] as const,
+  list: (params?: object) => ['store-inventory', 'list', params] as const,
+}
+
+export function useStoreInventory(params?: { page?: number; limit?: number }) {
+  return useQuery({
+    queryKey: storeInventoryKeys.list(params),
+    queryFn: () => storeInventoryApi.list(params),
+  })
+}
+
+export function useSetStoreStock(variantId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ type, quantity }: { type: 'in' | 'out' | 'adjustment'; quantity: number }) =>
+      storeInventoryApi.setStock(variantId, type, quantity),
+    onSuccess: () => void qc.invalidateQueries({ queryKey: storeInventoryKeys.all }),
+  })
+}
+
+export function useSetStoreVariantStatus(variantId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (isActive: boolean) => storeInventoryApi.setStatus(variantId, isActive),
+    onSuccess: () => void qc.invalidateQueries({ queryKey: storeInventoryKeys.all }),
   })
 }
