@@ -1,7 +1,9 @@
 import { useRef, useState, useEffect } from 'react'
-import { NavLink, Outlet, Link, useLocation, useMatch } from 'react-router-dom'
+import { NavLink, Outlet, Link, useLocation, useMatch, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { useTheme } from '../../hooks/useTheme'
+import { NotificationBell } from '../organisms/notifications/NotificationBell'
+import { useNotificationsStore } from '../../stores/notificationsStore'
 
 const navItems = [
   { to: '/orders', label: 'Comenzi' },
@@ -108,6 +110,7 @@ function SettingsDropdown() {
   const { theme, toggle } = useTheme()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -227,6 +230,17 @@ function SettingsDropdown() {
                   </svg>
                   Setări magazin
                 </Link>
+                {store && (
+                  <button
+                    onClick={() => { setOpen(false); navigate('/settings/store?tab=general&tour=1') }}
+                    className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                  >
+                    <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={1.75} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+                    </svg>
+                    Tour setări magazin
+                  </button>
+                )}
                 <button
                   onClick={() => { setOpen(false); logout() }}
                   className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 transition"
@@ -302,8 +316,9 @@ function AdminDropdown() {
 }
 
 export function DashboardLayout() {
-  const { user } = useAuth()
+  const { user, store } = useAuth()
   const isThemeBuilder = !!useMatch('/theme')
+  const unreadCount = useNotificationsStore((s) => s.unreadCount)
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col">
@@ -325,7 +340,23 @@ export function DashboardLayout() {
               Marketplace
             </NavLink>
 
-            {user && (
+            {user && !store && (
+              <NavLink
+                to="/subscribe"
+                className={({ isActive }) =>
+                  [
+                    'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition',
+                    isActive
+                      ? 'bg-amber-500 text-white shadow-sm'
+                      : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-900/40',
+                  ].join(' ')
+                }
+              >
+                Devino Vânzător
+              </NavLink>
+            )}
+
+            {user && store && (
               <>
                 <NavLink
                   to="/dashboard"
@@ -371,6 +402,18 @@ export function DashboardLayout() {
                   Temă
                 </NavLink>
 
+                <NavLink
+                  to="/notifications"
+                  className={({ isActive }) => [baseLinkClass, 'flex items-center gap-1.5', isActive ? activeClass : inactiveClass].join(' ')}
+                >
+                  Notificări
+                  {unreadCount > 0 && (
+                    <span className="flex items-center justify-center min-w-[18px] h-4 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold leading-none">
+                      {unreadCount > 99 ? '99+' : unreadCount}
+                    </span>
+                  )}
+                </NavLink>
+
                 {user.role === 'admin' && (
                   <>
                     <div className="mx-1 h-4 w-px bg-gray-200 dark:bg-gray-700" />
@@ -382,7 +425,10 @@ export function DashboardLayout() {
           </nav>
         </div>
 
-        <SettingsDropdown />
+        <div className="flex items-center gap-1">
+          {user && <NotificationBell />}
+          <SettingsDropdown />
+        </div>
       </header>
 
       <main className={isThemeBuilder ? 'flex-1 flex flex-col overflow-hidden' : 'flex-1 p-6'}>

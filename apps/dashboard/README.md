@@ -43,7 +43,7 @@ src/pages/
 ├── auth/            → Login, Signup
 ├── dashboard/       → Overview (revenue, AI insights, low stock alerts)
 ├── products/        → List, Detail, New, Edit, Variants
-├── inventory/       → Adjust stock, reorder points
+├── inventory/       → StoreVariantStock: mode selector (Default/Fizic/Ambele), StockUpdateModal, status toggle
 ├── orders/          → List, Detail (cu discount display)
 ├── customers/       → List, Detail (RFM segment, spend chart, top products)
 ├── analytics/       → Metrici zilnice, trend-uri
@@ -79,10 +79,11 @@ src/components/
 
 ```
 src/hooks/
-├── useAuth.ts         → login, logout, token refresh
-├── useStore.ts        → store context curent (id, name, settings)
-├── useAIStream.ts     → SSE streaming pentru răspunsuri AI
-└── use{Domain}.ts     → câte un hook per domeniu (useProducts, useOrders etc.)
+├── useAuth.ts           → login, logout, token refresh
+├── useStore.ts          → store context curent (id, name, settings)
+├── useAIChat.ts         → SSE streaming, session management, tool call handling
+├── useNotifications.ts  → polling 30s, markRead, markAllRead (wraps Zustand store)
+└── use{Domain}.ts       → câte un hook per domeniu (useProducts, useOrders, useInventory etc.)
 ```
 
 ---
@@ -98,14 +99,15 @@ src/hooks/
 
 ## Status MVP
 
-**Verdict:** Intermediate (~77%). Pagini core complete.
+**Verdict:** Intermediate (~85%). Tier 0 rezolvat; pagini core complete.
 
 | Tier | Feature | Status |
 |---|---|---|
-| 0 | Product image upload UI | ❌ fără ImageUploader component |
-| 0 | Order refund modal | ❌ doar cancel order; fără modal refund cu sumă parțială/totală |
-| 0 | Shipping settings în StoreSettings | ❌ lipsă — doar currency/locale/timezone |
-| 0 | Tax settings în StoreSettings | ❌ lipsă — fără câmp taxRate |
-| 1 | Search produse server-side | ⚠️ există client-side pe titlu; la 100+ produse inutilizabil |
+| 0 | Product image upload UI | ✅ `ImageUploader` wired în `ProductDetailPage` (upload/delete/drag) |
+| 0 | Order refund modal | ✅ `RefundModal` în `OrderDetail` — radio full/parțial, validare, hook `useRefundOrder` |
+| 0 | Shipping + Tax în StoreSettings | ✅ secțiune "Livrare & TVA" — cost fix, prag gratuit, rată TVA%, toggle inclus în preț |
+| 1 | Inventory StoreVariantStock | ✅ mode selector, StockUpdateModal, MovementBadge, lastMovementType, notificări STOCK_IN/REMOVAL/ADJUSTMENT |
+| 1 | Notificări in-app | ✅ bell + dropdown + pagină completă, polling 30s, resolveHref per tip |
+| 1 | Search produse server-side | ⚠️ client-side pe titlu/SKU; la 100+ produse inutilizabil |
 | 1 | Bulk actions produse | ❌ fără checkbox-uri sau dropdown acțiuni |
 | 2 | ActionApprovalCard + ActionsPage | ❌ AI write actions UI lipsă complet |

@@ -1,3 +1,105 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ── driver.js tour overrides ─────────────────────────────────────────────── */
+.merx-tour.driver-popover {
+  border-radius: 14px;
+  padding: 18px 20px 16px;
+  box-shadow: 0 20px 60px -10px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.08);
+  max-width: 300px;
+}
+.merx-tour.driver-popover-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.merx-tour.driver-popover-description {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #6b7280;
+}
+.merx-tour.driver-popover-footer {
+  margin-top: 14px;
+}
+.merx-tour .driver-popover-progress-text {
+  font-size: 11px;
+  color: #9ca3af;
+}
+.merx-tour .driver-popover-next-btn,
+.merx-tour .driver-popover-done-btn {
+  background: #4f46e5 !important;
+  border-color: #4f46e5 !important;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 12px;
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+.merx-tour .driver-popover-next-btn:hover,
+.merx-tour .driver-popover-done-btn:hover {
+  background: #4338ca !important;
+  border-color: #4338ca !important;
+  color: #ffffff !important;
+}
+.merx-tour .driver-popover-prev-btn {
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-color: #e5e7eb !important;
+  color: #374151 !important;
+  background: transparent !important;
+  text-shadow: none !important;
+}
+.merx-tour .driver-popover-prev-btn:hover {
+  background: #f9fafb !important;
+  color: #111827 !important;
+}
+
+/* dark mode */
+.merx-tour-dark.driver-popover {
+  background: #111827;
+  border-color: rgba(255,255,255,0.1);
+  color: #f9fafb;
+}
+.merx-tour-dark.driver-popover-title {
+  color: #f9fafb;
+}
+.merx-tour-dark.driver-popover-description {
+  color: #9ca3af;
+}
+.merx-tour-dark .driver-popover-progress-text {
+  color: #6b7280;
+}
+.merx-tour-dark .driver-popover-close-btn {
+  color: #6b7280;
+}
+.merx-tour-dark .driver-popover-close-btn:hover {
+  color: #d1d5db;
+  background: rgba(255,255,255,0.08);
+}
+.merx-tour-dark .driver-popover-prev-btn {
+  border-color: #374151 !important;
+  color: #d1d5db !important;
+  background: rgba(255,255,255,0.06) !important;
+  text-shadow: none !important;
+}
+.merx-tour-dark .driver-popover-prev-btn:hover {
+  background: rgba(255,255,255,0.12) !important;
+  color: #f9fafb !important;
+}
+.merx-tour-dark .driver-popover-arrow-side-left.driver-popover-arrow {
+  border-left-color: #111827;
+}
+.merx-tour-dark .driver-popover-arrow-side-right.driver-popover-arrow {
+  border-right-color: #111827;
+}
+.merx-tour-dark .driver-popover-arrow-side-top.driver-popover-arrow {
+  border-top-color: #111827;
+}
+.merx-tour-dark .driver-popover-arrow-side-bottom.driver-popover-arrow {
+  border-bottom-color: #111827;
+}

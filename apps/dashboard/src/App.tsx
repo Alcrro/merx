@@ -3,6 +3,7 @@ import { AuthProvider } from './contexts/AuthContext'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { ProtectedRoute } from './components/molecules/auth/ProtectedRoute'
 import { GuestRoute } from './components/molecules/auth/GuestRoute'
+import { IntroRoute } from './components/molecules/auth/IntroRoute'
 import { DashboardLayout } from './components/templates/DashboardLayout'
 import { LoginPage } from './pages/auth/LoginPage'
 import { SignupPage } from './pages/auth/SignupPage'
@@ -34,6 +35,9 @@ import { AdminProductRequestsPage } from './pages/admin/AdminProductRequestsPage
 import { AdminArchiveCriteriaPage } from './pages/admin/AdminArchiveCriteriaPage'
 import { AdminAIToolCriteriaPage } from './pages/admin/AdminAIToolCriteriaPage'
 import { ThemeBuilderPage } from './pages/theme/ThemeBuilderPage'
+import { NotificationsPage } from './pages/notifications/NotificationsPage'
+import { SubscribePage } from './pages/subscribe/SubscribePage'
+import { IntroPage } from './pages/intro/IntroPage'
 
 export default function App() {
   return (
@@ -59,10 +63,20 @@ export default function App() {
             }
           />
 
-          {/* Public marketplace routes — no auth required */}
+          <Route
+            path="/intro"
+            element={
+              <IntroRoute>
+                <IntroPage />
+              </IntroRoute>
+            }
+          />
+
+          {/* Public routes — no auth required */}
           <Route element={<DashboardLayout />}>
             <Route path="/marketplace" element={<MarketplaceFeedPage />} />
             <Route path="/marketplace/listings/:id" element={<ListingDetailPage />} />
+            <Route path="/subscribe" element={<SubscribePage />} />
           </Route>
 
           {/* Protected routes */}
@@ -99,6 +113,7 @@ export default function App() {
             <Route path="/admin/archive-criteria" element={<AdminArchiveCriteriaPage />} />
             <Route path="/admin/ai-criteria" element={<AdminAIToolCriteriaPage />} />
             <Route path="/theme" element={<ThemeBuilderPage />} />
+            <Route path="/notifications" element={<NotificationsPage />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />
