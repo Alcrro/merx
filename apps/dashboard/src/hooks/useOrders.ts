@@ -36,10 +36,7 @@ export function useUpdateOrderStatus(id: string) {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: (status: OrderStatus) => orderApi.updateStatus(id, status),
-    onSuccess: (updated) => {
-      qc.setQueryData(orderKeys.detail(id), updated)
-      void qc.invalidateQueries({ queryKey: orderKeys.list() })
-    },
+    onSuccess: () => { void qc.invalidateQueries({ queryKey: orderKeys.all }) },
   })
 }
 
@@ -47,10 +44,7 @@ export function useUpdatePaymentStatus(id: string) {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: (paymentStatus: PaymentStatus) => orderApi.updatePaymentStatus(id, paymentStatus),
-    onSuccess: (updated) => {
-      qc.setQueryData(orderKeys.detail(id), updated)
-      void qc.invalidateQueries({ queryKey: orderKeys.list() })
-    },
+    onSuccess: () => { void qc.invalidateQueries({ queryKey: orderKeys.all }) },
   })
 }
 
@@ -58,10 +52,7 @@ export function useUpdateFulfillmentStatus(id: string) {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: (fulfillmentStatus: FulfillmentStatus) => orderApi.updateFulfillmentStatus(id, fulfillmentStatus),
-    onSuccess: (updated) => {
-      qc.setQueryData(orderKeys.detail(id), updated)
-      void qc.invalidateQueries({ queryKey: orderKeys.list() })
-    },
+    onSuccess: () => { void qc.invalidateQueries({ queryKey: orderKeys.all }) },
   })
 }
 
@@ -69,9 +60,14 @@ export function useCancelOrder(id: string) {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: () => orderApi.cancel(id),
-    onSuccess: (updated) => {
-      qc.setQueryData(orderKeys.detail(id), updated)
-      void qc.invalidateQueries({ queryKey: orderKeys.list() })
-    },
+    onSuccess: () => { void qc.invalidateQueries({ queryKey: orderKeys.all }) },
+  })
+}
+
+export function useRefundOrder(id: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (amount?: number) => orderApi.refund(id, amount),
+    onSuccess: () => { void qc.invalidateQueries({ queryKey: orderKeys.all }) },
   })
 }

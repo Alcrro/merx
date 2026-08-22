@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import type { Order } from '@merx/types'
 import { OrderStatusBadge } from '../../molecules/orders/OrderStatusBadge'
+import { orderSlug } from '../../../lib/orderSlug'
 
 interface Props {
   orders?: Order[]
@@ -31,7 +32,7 @@ export function RecentOrdersTable({ orders, fmt, isLoading }: Props) {
             {items.map((order) => (
               <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
                 <td className="px-5 py-3">
-                  <Link to={`/orders/${order.id}`} className="font-medium text-gray-800 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400">
+                  <Link to={`/orders/${orderSlug(order.orderNumber, order.createdAt)}`} className="font-medium text-gray-800 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400">
                     #{order.orderNumber}
                   </Link>
                   <p className="text-xs text-gray-400 dark:text-gray-500">

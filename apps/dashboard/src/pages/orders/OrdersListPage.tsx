@@ -1,4 +1,4 @@
-import { OrdersTable } from '../../components/organisms/OrdersTable'
+import { OrdersTable } from '../../components/organisms/orders/OrdersTable'
 
 export function OrdersListPage() {
   return (
