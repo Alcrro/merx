@@ -2,8 +2,8 @@ import { Navigate } from 'react-router-dom'
 import type { ReactNode } from 'react'
 import { useAuth } from '../../../hooks/useAuth'
 
-export function ProtectedRoute({ children }: { children: ReactNode }) {
-  const { user, store, introCompleted, isLoading } = useAuth()
+export function IntroRoute({ children }: { children: ReactNode }) {
+  const { user, introCompleted, isLoading } = useAuth()
 
   if (isLoading) {
     return (
@@ -18,7 +18,8 @@ export function ProtectedRoute({ children }: { children: ReactNode }) {
 
   if (!user) return <Navigate to="/login" replace />
 
-  if (store && introCompleted === false) return <Navigate to="/intro" replace />
+  // Already completed or not applicable (no store) → dashboard
+  if (introCompleted !== false) return <Navigate to="/dashboard" replace />
 
   return <>{children}</>
 }

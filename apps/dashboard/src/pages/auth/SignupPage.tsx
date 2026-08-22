@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { AuthLayout } from '../../components/templates/AuthLayout'
-import { SignupForm } from '../../components/organisms/SignupForm'
+import { SignupForm } from '../../components/organisms/auth/SignupForm'
 
 export function SignupPage() {
   return (

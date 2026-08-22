@@ -5,15 +5,13 @@ import { Button } from '../../atoms/Button'
 import { useAuth } from '../../../hooks/useAuth'
 
 interface FormErrors {
-  name?: string
   email?: string
   password?: string
   server?: string
 }
 
-function validate(name: string, email: string, password: string): FormErrors {
+function validate(email: string, password: string): FormErrors {
   const errors: FormErrors = {}
-  if (!name.trim()) errors.name = 'Numele este obligatoriu'
   if (!email) errors.email = 'Email obligatoriu'
   else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.email = 'Email invalid'
   if (!password) errors.password = 'Parola obligatorie'
@@ -25,7 +23,6 @@ export function SignupForm() {
   const { signup } = useAuth()
   const navigate = useNavigate()
 
-  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errors, setErrors] = useState<FormErrors>({})
@@ -33,7 +30,7 @@ export function SignupForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const errs = validate(name, email, password)
+    const errs = validate(email, password)
     if (Object.keys(errs).length) {
       setErrors(errs)
       return
@@ -42,8 +39,8 @@ export function SignupForm() {
     setIsLoading(true)
     setErrors({})
     try {
-      await signup(email, password, name)
-      navigate('/dashboard', { replace: true })
+      await signup(email, password)
+      navigate('/marketplace', { replace: true })
     } catch (err: unknown) {
       const status = (err as { response?: { status?: number } }).response?.status
       if (status === 409) {
@@ -61,21 +58,13 @@ export function SignupForm() {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
       <Input
-        label="Nume"
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        error={errors.name}
-        autoComplete="name"
-        autoFocus
-      />
-      <Input
         label="Email"
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         error={errors.email}
         autoComplete="email"
+        autoFocus
       />
       <Input
         label="Parolă"
