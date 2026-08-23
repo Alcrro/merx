@@ -1,0 +1,124 @@
+name: Project Board Automation
+
+on:
+  issues:
+    types: [assigned]
+  pull_request:
+    types: [opened, reopened, closed]
+
+env:
+  PROJECT_ID: PVT_kwHOBcYL5M4BhNDG
+  STATUS_FIELD_ID: PVTSSF_lAHOBcYL5M4BhNDGzhgJqh4
+  STATUS_IN_PROGRESS: bd86763b
+  STATUS_NEEDS_TESTING: 5be3d41a
+  STATUS_DONE: 619d7bd8
+
+jobs:
+  automate:
+    runs-on: ubuntu-latest
+    steps:
+
+      # ── Issue assigned → In Progress ──────────────────────────────────────
+      - name: Issue assigned → In Progress
+        if: github.event_name == 'issues' && github.event.action == 'assigned'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PROJECT_TOKEN }}
+        run: |
+          ISSUE_ID=$(gh api repos/${{ github.repository }}/issues/${{ github.event.issue.number }} --jq '.node_id')
+
+          ITEM_ID=$(gh api graphql -f query='
+            mutation($pid: ID!, $cid: ID!) {
+              addProjectV2ItemById(input: { projectId: $pid, contentId: $cid }) {
+                item { id }
+              }
+            }' \
+            -f pid="${{ env.PROJECT_ID }}" \
+            -f cid="$ISSUE_ID" \
+            --jq '.data.addProjectV2ItemById.item.id')
+
+          gh api graphql -f query='
+            mutation($pid: ID!, $iid: ID!, $fid: ID!, $val: String!) {
+              updateProjectV2ItemFieldValue(input: {
+                projectId: $pid, itemId: $iid, fieldId: $fid,
+                value: { singleSelectOptionId: $val }
+              }) { projectV2Item { id } }
+            }' \
+            -f pid="${{ env.PROJECT_ID }}" \
+            -f iid="$ITEM_ID" \
+            -f fid="${{ env.STATUS_FIELD_ID }}" \
+            -f val="${{ env.STATUS_IN_PROGRESS }}"
+
+      # ── PR opened → linked issues to Needs Testing ────────────────────────
+      - name: PR opened → Needs Testing
+        if: >
+          github.event_name == 'pull_request' &&
+          (github.event.action == 'opened' || github.event.action == 'reopened')
+        env:
+          GH_TOKEN: ${{ secrets.GH_PROJECT_TOKEN }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          NUMBERS=$(echo "$PR_BODY" | grep -oiE '(closes|fixes|resolves) #[0-9]+' | grep -oE '[0-9]+' || true)
+
+          for NUMBER in $NUMBERS; do
+            ISSUE_ID=$(gh api repos/${{ github.repository }}/issues/$NUMBER --jq '.node_id')
+
+            ITEM_ID=$(gh api graphql -f query='
+              mutation($pid: ID!, $cid: ID!) {
+                addProjectV2ItemById(input: { projectId: $pid, contentId: $cid }) {
+                  item { id }
+                }
+              }' \
+              -f pid="${{ env.PROJECT_ID }}" \
+              -f cid="$ISSUE_ID" \
+              --jq '.data.addProjectV2ItemById.item.id')
+
+            gh api graphql -f query='
+              mutation($pid: ID!, $iid: ID!, $fid: ID!, $val: String!) {
+                updateProjectV2ItemFieldValue(input: {
+                  projectId: $pid, itemId: $iid, fieldId: $fid,
+                  value: { singleSelectOptionId: $val }
+                }) { projectV2Item { id } }
+              }' \
+              -f pid="${{ env.PROJECT_ID }}" \
+              -f iid="$ITEM_ID" \
+              -f fid="${{ env.STATUS_FIELD_ID }}" \
+              -f val="${{ env.STATUS_NEEDS_TESTING }}"
+          done
+
+      # ── PR merged → linked issues to Done ────────────────────────────────
+      - name: PR merged → Done
+        if: >
+          github.event_name == 'pull_request' &&
+          github.event.action == 'closed' &&
+          github.event.pull_request.merged == true
+        env:
+          GH_TOKEN: ${{ secrets.GH_PROJECT_TOKEN }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          NUMBERS=$(echo "$PR_BODY" | grep -oiE '(closes|fixes|resolves) #[0-9]+' | grep -oE '[0-9]+' || true)
+
+          for NUMBER in $NUMBERS; do
+            ISSUE_ID=$(gh api repos/${{ github.repository }}/issues/$NUMBER --jq '.node_id')
+
+            ITEM_ID=$(gh api graphql -f query='
+              mutation($pid: ID!, $cid: ID!) {
+                addProjectV2ItemById(input: { projectId: $pid, contentId: $cid }) {
+                  item { id }
+                }
+              }' \
+              -f pid="${{ env.PROJECT_ID }}" \
+              -f cid="$ISSUE_ID" \
+              --jq '.data.addProjectV2ItemById.item.id')
+
+            gh api graphql -f query='
+              mutation($pid: ID!, $iid: ID!, $fid: ID!, $val: String!) {
+                updateProjectV2ItemFieldValue(input: {
+                  projectId: $pid, itemId: $iid, fieldId: $fid,
+                  value: { singleSelectOptionId: $val }
+                }) { projectV2Item { id } }
+              }' \
+              -f pid="${{ env.PROJECT_ID }}" \
+              -f iid="$ITEM_ID" \
+              -f fid="${{ env.STATUS_FIELD_ID }}" \
+              -f val="${{ env.STATUS_DONE }}"
+          done
