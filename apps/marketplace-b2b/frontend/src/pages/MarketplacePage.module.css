@@ -1,0 +1,27 @@
+.header { display: flex; align-items: center; gap: 12px; }
+
+.title { font-family: var(--font-title); font-size: 16px; font-weight: 700; color: var(--gold-mid); text-shadow: 0 0 20px rgba(200,150,42,0.3); }
+.count { font-size: 13px; color: var(--text-muted); }
+
+.sort {
+  margin-left: auto; background: rgba(0,0,0,0.5);
+  border: 1px solid var(--gold-dark); color: var(--text-dim);
+  font-size: 13px; padding: 5px 10px; outline: none; cursor: pointer;
+}
+
+.ornament { display: flex; align-items: center; gap: 12px; }
+.line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-dark)); }
+.line.rev { background: linear-gradient(90deg, var(--gold-dark), transparent); }
+.diamond { font-size: 8px; color: var(--gold-dark); }
+.ornText { font-family: var(--font-title); font-size: 10px; letter-spacing: 0.15em; color: var(--text-muted); text-transform: uppercase; }
+
+.pagination { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 4px 0; }
+.pageBtn {
+  width: 28px; height: 28px; background: rgba(0,0,0,0.4);
+  border: 1px solid var(--gold-dark); color: var(--text-dim);
+  font-family: var(--font-title); font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.pageBtn:hover { border-color: var(--gold); color: var(--gold-lite); }
+.pageBtn.active { background: rgba(200,150,42,0.15); border-color: var(--gold); color: var(--gold-mid); }

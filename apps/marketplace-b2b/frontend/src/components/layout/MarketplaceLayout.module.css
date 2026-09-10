@@ -1,0 +1,17 @@
+.root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-image: radial-gradient(ellipse at 50% 0%, rgba(80,40,0,0.1) 0%, transparent 60%);
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 220px 1fr 280px;
+  gap: 16px;
+  padding: 20px 24px;
+  flex: 1;
+  align-items: start;
+}
+
+.main { display: flex; flex-direction: column; gap: 14px; }

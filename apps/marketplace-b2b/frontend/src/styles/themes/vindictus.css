@@ -1,0 +1,37 @@
+:root {
+  --font-title: 'Cinzel', Georgia, serif;
+  --font-body:  'Crimson Text', Georgia, serif;
+
+  --bg:        #08070a;
+  --bg-panel:  #0d0b0f;
+  --bg-card:   #110e14;
+  --bg-hover:  #181320;
+
+  --gold-dark: #6b4c10;
+  --gold:      #c8962a;
+  --gold-mid:  #e0b840;
+  --gold-lite: #f5d870;
+  --gold-glow: rgba(200, 150, 42, 0.25);
+
+  --text:       #e8dcc8;
+  --text-dim:   #9a8870;
+  --text-muted: #5a4a35;
+
+  --red:   #cc3a2a;
+  --green: #4aaa50;
+
+  --border-gold:  #2a1e08;
+  --border-inner: #1a1408;
+
+  --r-common:    #8a8a8a;
+  --r-uncommon:  #4aaa50;
+  --r-rare:      #4488ee;
+  --r-epic:      #aa44cc;
+  --r-legendary: #ee8820;
+
+  --panel-border: 1px solid var(--gold-dark);
+  --panel-shadow:
+    0 0 0 1px var(--border-gold),
+    inset 0 0 0 1px var(--border-inner),
+    0 8px 40px rgba(0,0,0,0.9);
+}
