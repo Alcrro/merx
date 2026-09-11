@@ -1,0 +1,103 @@
+:root {
+  /* Brand */
+  --brand:              theme('colors.indigo.600');
+  --brand-hover:        theme('colors.indigo.700');
+  --brand-active:       theme('colors.indigo.800');
+  --brand-subtle:       theme('colors.indigo.50');
+  --brand-subtle-hover: theme('colors.indigo.100');
+  --brand-text:         theme('colors.indigo.700');
+  --brand-focus:        theme('colors.indigo.500');
+  --brand-border:       theme('colors.indigo.300');
+
+  /* Surface */
+  --surface:            theme('colors.white');
+  --surface-elevated:   theme('colors.white');
+  --surface-page:       theme('colors.gray.50');
+  --surface-hover:      rgb(0 0 0 / 0.04);
+
+  /* Border */
+  --border:             theme('colors.gray.200');
+  --border-strong:      theme('colors.gray.300');
+  --border-subtle:      theme('colors.gray.100');
+
+  /* Foreground (text) */
+  --fg-primary:         theme('colors.gray.900');
+  --fg-secondary:       theme('colors.gray.600');
+  --fg-muted:           theme('colors.gray.400');
+
+  /* Danger */
+  --danger:             theme('colors.red.600');
+  --danger-hover:       theme('colors.red.700');
+  --danger-subtle:      theme('colors.red.50');
+  --danger-text:        theme('colors.red.500');
+
+  /* Accent */
+  --accent:             theme('colors.amber.500');
+  --accent-subtle:      theme('colors.amber.50');
+  --accent-text:        theme('colors.amber.700');
+
+  /* Warning */
+  --warning:            theme('colors.yellow.600');
+  --warning-subtle:     theme('colors.yellow.100');
+  --warning-text:       theme('colors.yellow.700');
+
+  /* Success */
+  --success:            theme('colors.green.600');
+  --success-subtle:     theme('colors.green.100');
+  --success-text:       theme('colors.green.700');
+
+  /* Skeleton */
+  --skeleton:           theme('colors.gray.200');
+}
+
+.dark {
+  /* Brand */
+  --brand:              theme('colors.indigo.500');
+  --brand-hover:        theme('colors.indigo.400');
+  --brand-active:       theme('colors.indigo.300');
+  --brand-subtle:       theme('colors.indigo.950');
+  --brand-subtle-hover: theme('colors.indigo.900');
+  --brand-text:         theme('colors.indigo.400');
+  --brand-focus:        theme('colors.indigo.500');
+  --brand-border:       theme('colors.indigo.700');
+
+  /* Surface */
+  --surface:            theme('colors.gray.900');
+  --surface-elevated:   theme('colors.gray.800');
+  --surface-page:       theme('colors.gray.950');
+  --surface-hover:      rgb(255 255 255 / 0.06);
+
+  /* Border */
+  --border:             theme('colors.gray.700');
+  --border-strong:      theme('colors.gray.600');
+  --border-subtle:      theme('colors.gray.800');
+
+  /* Foreground (text) */
+  --fg-primary:         theme('colors.gray.100');
+  --fg-secondary:       theme('colors.gray.300');
+  --fg-muted:           theme('colors.gray.500');
+
+  /* Danger */
+  --danger:             theme('colors.red.500');
+  --danger-hover:       theme('colors.red.400');
+  --danger-subtle:      color-mix(in srgb, theme('colors.red.950') 40%, transparent);
+  --danger-text:        theme('colors.red.400');
+
+  /* Accent */
+  --accent:             theme('colors.amber.400');
+  --accent-subtle:      color-mix(in srgb, theme('colors.amber.950') 40%, transparent);
+  --accent-text:        theme('colors.amber.400');
+
+  /* Warning */
+  --warning:            theme('colors.yellow.400');
+  --warning-subtle:     theme('colors.yellow.950');
+  --warning-text:       theme('colors.yellow.400');
+
+  /* Success */
+  --success:            theme('colors.green.400');
+  --success-subtle:     theme('colors.green.950');
+  --success-text:       theme('colors.green.400');
+
+  /* Skeleton */
+  --skeleton:           theme('colors.gray.700');
+}

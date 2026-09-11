@@ -1,0 +1,159 @@
+@layer components {
+  /* ── Layout ──────────────────────────────────────────────────────────── */
+
+  .page-section {
+    @apply flex flex-col gap-6;
+  }
+
+  .stats-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4;
+  }
+
+  /* ── Cards ───────────────────────────────────────────────────────────── */
+
+  .card {
+    @apply bg-surface border border-border rounded-card;
+  }
+
+  .card-padded {
+    @apply card px-5 py-4;
+  }
+
+  /* ── Dropdowns ───────────────────────────────────────────────────────── */
+
+  .dropdown-panel {
+    @apply absolute z-50 bg-surface-elevated border border-border rounded-xl shadow-lg
+           ring-1 ring-black/5 dark:ring-white/[0.08] overflow-hidden;
+  }
+
+  .dropdown-search {
+    @apply p-2 border-b border-border bg-surface;
+  }
+
+  .dropdown-item {
+    @apply block w-full px-3 py-2 rounded-lg text-sm text-fg-secondary transition
+           hover:bg-surface-hover hover:text-fg-primary;
+  }
+
+  .dropdown-item-danger {
+    @apply dropdown-item text-danger-text hover:bg-danger-subtle hover:text-danger;
+  }
+
+  /* ── Typography ──────────────────────────────────────────────────────── */
+
+  .page-title {
+    @apply text-xl font-semibold text-fg-primary;
+  }
+
+  .page-subtitle {
+    @apply text-sm text-fg-muted mt-0.5;
+  }
+
+  .section-title {
+    @apply text-sm font-semibold text-fg-primary;
+  }
+
+  .field-label {
+    @apply text-sm font-medium text-fg-secondary;
+  }
+
+  /* ── Badges ──────────────────────────────────────────────────────────── */
+
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .badge-success {
+    @apply badge bg-success-subtle text-success-text;
+  }
+
+  .badge-danger {
+    @apply badge bg-danger-subtle text-danger-text;
+  }
+
+  .badge-neutral {
+    @apply badge bg-surface-hover text-fg-secondary;
+  }
+
+  .badge-warning {
+    @apply badge bg-warning-subtle text-warning-text;
+  }
+
+  .badge-info {
+    @apply badge bg-brand-subtle text-brand-text;
+  }
+
+  .badge-purple {
+    @apply badge bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-400;
+  }
+
+  /* ── Section labels ──────────────────────────────────────────────────── */
+
+  .section-label {
+    @apply text-xs font-semibold uppercase tracking-wide text-fg-muted mb-4;
+  }
+
+  /* ── Form inputs ─────────────────────────────────────────────────────── */
+
+  .input-base {
+    @apply w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-fg-primary
+           outline-none transition placeholder:text-fg-muted
+           focus:ring-2 focus:ring-brand-focus focus:border-transparent;
+  }
+
+  .input-compact {
+    @apply rounded-lg border border-border bg-surface px-3 py-1.5 text-sm text-fg-secondary
+           outline-none placeholder:text-fg-muted
+           focus:ring-2 focus:ring-brand-focus focus:border-transparent transition;
+  }
+
+  .input-error {
+    @apply border-danger bg-danger-subtle;
+  }
+
+  .input-label {
+    @apply field-label mb-1;
+  }
+
+  /* ── Tables ──────────────────────────────────────────────────────────── */
+
+  .table-base {
+    @apply w-full text-sm;
+  }
+
+  .table-head {
+    @apply border-b border-border bg-surface-page text-left;
+  }
+
+  .table-th {
+    @apply px-4 py-3 font-medium text-fg-muted whitespace-nowrap;
+  }
+
+  .table-header {
+    @apply text-xs font-semibold uppercase tracking-wide text-fg-muted;
+  }
+
+  .table-body {
+    @apply divide-y divide-border;
+  }
+
+  .table-row {
+    @apply transition-colors hover:bg-surface-hover;
+  }
+
+  .table-row-clickable {
+    @apply table-row cursor-pointer;
+  }
+
+  .table-td {
+    @apply px-4 py-3 text-fg-secondary;
+  }
+
+  .table-td-primary {
+    @apply table-td font-medium text-fg-primary;
+  }
+
+  .table-td-muted {
+    @apply table-td text-fg-muted;
+  }
+}
