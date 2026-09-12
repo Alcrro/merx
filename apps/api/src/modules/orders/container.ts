@@ -1,18 +1,32 @@
 import Stripe from 'stripe'
 import { config } from '../../config'
 import { OrderRepository } from './infrastructure/db/order.repository'
+import { OrderEventRepository } from './infrastructure/db/order-event.repository'
+import { InventoryReservationRepository } from './infrastructure/db/inventory-reservation.repository'
+import { ProcessedWebhookRepository } from './infrastructure/db/processed-webhook.repository'
 import { NotificationService } from '../notifications/application/notification.service'
 import { NotificationRepository } from '../notifications/infrastructure/notification.repository'
 import { OrderQuery } from './application/queries/order.query'
 import { OrderService } from './application/services/order.service'
+import { OrderEventService } from './application/services/order-event.service'
+import { InventoryReservationService } from './application/services/inventory-reservation.service'
+import { OrderWebhookService } from './application/services/webhook.service'
 import { CancelOrderUseCase } from './application/use-cases/cancel-order.use-case'
 import { RefundOrderUseCase } from './application/use-cases/refund-order.use-case'
+import { sendOrderConfirmationUseCase } from './application/use-cases/send-order-confirmation.use-case'
 import { OrderError } from './domain/errors'
 import type { Order } from './domain/entities/order.entity'
 
 const orderRepository = new OrderRepository()
+export const orderEventRepo = new OrderEventRepository()
+const inventoryReservationRepo = new InventoryReservationRepository()
+const processedWebhookRepo = new ProcessedWebhookRepository()
+
 const notificationService = new NotificationService(new NotificationRepository())
 const stripe = new Stripe(config.stripe.secretKey)
+
+const orderEventService = new OrderEventService(orderEventRepo)
+const inventoryReservationService = new InventoryReservationService(inventoryReservationRepo)
 
 async function notifyCancel(order: Order): Promise<void> {
   notificationService.create({
@@ -73,7 +87,16 @@ async function processRefund(orderId: string, storeId: string, amount: number, i
   }
 }
 
+export const orderWebhookService = new OrderWebhookService(
+  processedWebhookRepo,
+  orderEventRepo,
+  inventoryReservationService,
+  (orderId) => sendOrderConfirmationUseCase.execute(orderId),
+)
+
 export const orderQuery = new OrderQuery(orderRepository)
 export const orderService = new OrderService(orderRepository, orderRepository)
 export const cancelOrderUseCase = new CancelOrderUseCase(orderRepository, orderRepository, notifyCancel)
 export const refundOrderUseCase = new RefundOrderUseCase(orderRepository, orderRepository, processRefund, notifyRefund)
+
+export { orderEventService, inventoryReservationService }

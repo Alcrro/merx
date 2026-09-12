@@ -5,5 +5,6 @@ export interface IOrderQueryRepository {
   list(params: ListOrdersParams): Promise<PaginatedOrders>
   findById(id: string, storeId: string): Promise<Order | null>
   findByOrderNumber(orderNumber: number, storeId: string): Promise<Order | null>
+  findByStripePaymentIntentId(paymentIntentId: string): Promise<Order | null>
   findStripeSessionId(id: string, storeId: string): Promise<string | null>
 }

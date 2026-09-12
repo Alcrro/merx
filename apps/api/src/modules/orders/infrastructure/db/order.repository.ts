@@ -51,10 +51,14 @@ export class OrderRepository implements IOrderQueryRepository, IOrderCommandRepo
     return o ? toOrder(o) : null
   }
 
+  async findByStripePaymentIntentId(paymentIntentId: string): Promise<Order | null> {
+    const o = await prisma.order.findUnique({ where: { stripePaymentIntentId: paymentIntentId }, include })
+    return o ? toOrder(o) : null
+  }
+
   async findStripeSessionId(id: string, storeId: string): Promise<string | null> {
-    const raw = await prisma.order.findFirst({ where: { id, storeId }, select: { metadata: true } })
-    const meta = (raw?.metadata ?? {}) as Record<string, unknown>
-    return typeof meta.stripeSessionId === 'string' ? meta.stripeSessionId : null
+    const raw = await prisma.order.findFirst({ where: { id, storeId }, select: { stripeSessionId: true } })
+    return raw?.stripeSessionId ?? null
   }
 
   async create(storeId: string, data: CreateOrderData): Promise<Order> {
@@ -84,6 +88,7 @@ export class OrderRepository implements IOrderQueryRepository, IOrderCommandRepo
             quantity: item.quantity,
             unitPrice: item.unitPrice,
             total: item.unitPrice * item.quantity,
+            productSnapshot: (item.productSnapshot as Prisma.InputJsonValue | undefined) ?? Prisma.DbNull,
           })),
         },
       },

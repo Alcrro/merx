@@ -10,9 +10,9 @@ const orderItemSchema = z.object({
 
 export const orderValidator = {
   list: z.object({
-    status: z.enum(['pending', 'confirmed', 'cancelled', 'completed']).optional(),
-    paymentStatus: z.enum(['pending', 'paid', 'refunded', 'partially_refunded']).optional(),
-    fulfillmentStatus: z.enum(['unfulfilled', 'partially_fulfilled', 'fulfilled']).optional(),
+    status: z.enum(['DRAFT', 'ACTIVE', 'COMPLETED', 'CANCELLED']).optional(),
+    paymentStatus: z.enum(['PENDING', 'AUTHORIZED', 'PAID', 'PAYMENT_FAILED', 'VOID', 'REFUND_PENDING', 'PARTIALLY_REFUNDED', 'REFUNDED']).optional(),
+    fulfillmentStatus: z.enum(['UNFULFILLED', 'PROCESSING', 'SHIPPED', 'LOST_IN_TRANSIT', 'DELIVERED', 'FULFILLED', 'RETURN_IN_TRANSIT', 'RETURNED']).optional(),
     startDate: z.string().date().optional(),
     endDate: z.string().date().optional(),
     page: z.coerce.number().int().min(1).default(1),
@@ -30,15 +30,15 @@ export const orderValidator = {
   }),
 
   updateStatus: z.object({
-    status: z.enum(['pending', 'confirmed', 'cancelled', 'completed']),
+    status: z.enum(['DRAFT', 'ACTIVE', 'COMPLETED', 'CANCELLED']),
   }),
 
   updatePaymentStatus: z.object({
-    paymentStatus: z.enum(['pending', 'paid', 'refunded', 'partially_refunded']),
+    paymentStatus: z.enum(['PENDING', 'AUTHORIZED', 'PAID', 'PAYMENT_FAILED', 'VOID', 'REFUND_PENDING', 'PARTIALLY_REFUNDED', 'REFUNDED']),
   }),
 
   updateFulfillmentStatus: z.object({
-    fulfillmentStatus: z.enum(['unfulfilled', 'partially_fulfilled', 'fulfilled']),
+    fulfillmentStatus: z.enum(['UNFULFILLED', 'PROCESSING', 'SHIPPED', 'LOST_IN_TRANSIT', 'DELIVERED', 'FULFILLED', 'RETURN_IN_TRANSIT', 'RETURNED']),
   }),
 
   refund: z.object({

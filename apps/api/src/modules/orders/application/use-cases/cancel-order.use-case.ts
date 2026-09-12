@@ -16,7 +16,7 @@ export class CancelOrderUseCase {
     const order = await this.queryRepo.findById(id, storeId)
     if (!order) throw OrderError.notFound('Order not found')
     order.guardCanCancel()
-    const cancelled = await this.commandRepo.updateStatus(id, storeId, 'cancelled')
+    const cancelled = await this.commandRepo.updateStatus(id, storeId, 'CANCELLED')
     void this.notifyCancel(order)
     return cancelled
   }

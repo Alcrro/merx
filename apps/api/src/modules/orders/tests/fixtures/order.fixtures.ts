@@ -14,6 +14,7 @@ export function makeOrderItem(overrides: Partial<OrderItemEntity> = {}): OrderIt
     quantity: 2,
     unitPrice: 29.99,
     total: 59.98,
+    productSnapshot: null,
     ...overrides,
   }
 }
@@ -36,9 +37,10 @@ export function makeOrder(
     storeId: 's1',
     customerId: 'c1',
     orderNumber: 1001,
-    status: 'confirmed',
-    paymentStatus: 'paid',
-    fulfillmentStatus: 'unfulfilled',
+    status: 'ACTIVE',
+    paymentStatus: 'PENDING',
+    fulfillmentStatus: 'UNFULFILLED',
+    source: 'storefront',
     currency: 'RON',
     subtotal: 59.98,
     discountTotal: 0,
@@ -46,6 +48,10 @@ export function makeOrder(
     shippingTotal: 15,
     total: 74.98,
     shippingAddress: null,
+    stripePaymentIntentId: null,
+    stripeSessionId: null,
+    paymentEventAt: null,
+    version: 0,
     createdAt: new Date('2026-01-01T10:00:00Z'),
     updatedAt: new Date('2026-01-01T10:00:00Z'),
     customer: makeOrderCustomer(),
@@ -59,6 +65,7 @@ export function makeQueryRepo(): IOrderQueryRepository {
     list: vi.fn(),
     findById: vi.fn(),
     findByOrderNumber: vi.fn(),
+    findByStripePaymentIntentId: vi.fn(),
     findStripeSessionId: vi.fn(),
   }
 }

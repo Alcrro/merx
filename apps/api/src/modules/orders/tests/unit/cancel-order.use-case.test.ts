@@ -23,33 +23,33 @@ describe('CancelOrderUseCase', () => {
     await expect(useCase.execute('o1', 's1')).rejects.toMatchObject({ code: 'NOT_FOUND' })
   })
 
-  it('throws CONFLICT when already cancelled', async () => {
-    vi.mocked(queryRepo.findById).mockResolvedValue(makeOrder({ status: 'cancelled' }))
+  it('throws CONFLICT when already CANCELLED', async () => {
+    vi.mocked(queryRepo.findById).mockResolvedValue(makeOrder({ status: 'CANCELLED' }))
     await expect(useCase.execute('o1', 's1')).rejects.toMatchObject({ code: 'CONFLICT' })
   })
 
-  it('throws CONFLICT when order is completed', async () => {
-    vi.mocked(queryRepo.findById).mockResolvedValue(makeOrder({ status: 'completed' }))
+  it('throws CONFLICT when order is COMPLETED', async () => {
+    vi.mocked(queryRepo.findById).mockResolvedValue(makeOrder({ status: 'COMPLETED' }))
     await expect(useCase.execute('o1', 's1')).rejects.toMatchObject({ code: 'CONFLICT' })
   })
 
-  it('calls commandRepo.updateStatus with cancelled', async () => {
+  it('calls commandRepo.updateStatus with CANCELLED', async () => {
     vi.mocked(queryRepo.findById).mockResolvedValue(makeOrder())
-    vi.mocked(commandRepo.updateStatus).mockResolvedValue(makeOrder({ status: 'cancelled' }))
+    vi.mocked(commandRepo.updateStatus).mockResolvedValue(makeOrder({ status: 'CANCELLED' }))
     await useCase.execute('o1', 's1')
-    expect(commandRepo.updateStatus).toHaveBeenCalledWith('o1', 's1', 'cancelled')
+    expect(commandRepo.updateStatus).toHaveBeenCalledWith('o1', 's1', 'CANCELLED')
   })
 
   it('fires notifyCancel with the original order', async () => {
     const order = makeOrder()
     vi.mocked(queryRepo.findById).mockResolvedValue(order)
-    vi.mocked(commandRepo.updateStatus).mockResolvedValue(makeOrder({ status: 'cancelled' }))
+    vi.mocked(commandRepo.updateStatus).mockResolvedValue(makeOrder({ status: 'CANCELLED' }))
     await useCase.execute('o1', 's1')
     expect(notifyCancel).toHaveBeenCalledWith(order)
   })
 
   it('returns the cancelled order from commandRepo', async () => {
-    const cancelled = makeOrder({ status: 'cancelled' })
+    const cancelled = makeOrder({ status: 'CANCELLED' })
     vi.mocked(queryRepo.findById).mockResolvedValue(makeOrder())
     vi.mocked(commandRepo.updateStatus).mockResolvedValue(cancelled)
     const result = await useCase.execute('o1', 's1')

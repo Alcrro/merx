@@ -30,14 +30,14 @@ export class OrderService {
   async updatePaymentStatus(id: string, storeId: string, paymentStatus: PaymentStatus): Promise<Order> {
     const order = await this.queryRepo.findById(id, storeId)
     if (!order) throw OrderError.notFound('Order not found')
-    order.guardCanUpdatePayment()
+    order.guardCanChangePaymentStatus(paymentStatus)
     return this.commandRepo.updatePaymentStatus(id, storeId, paymentStatus)
   }
 
   async updateFulfillmentStatus(id: string, storeId: string, fulfillmentStatus: FulfillmentStatus): Promise<Order> {
     const order = await this.queryRepo.findById(id, storeId)
     if (!order) throw OrderError.notFound('Order not found')
-    order.guardCanUpdateFulfillment()
+    order.guardCanChangeFulfillmentStatus(fulfillmentStatus)
     return this.commandRepo.updateFulfillmentStatus(id, storeId, fulfillmentStatus)
   }
 }

@@ -1,8 +1,16 @@
 import { OrderError } from '../errors'
+import {
+  type OrderStatus,
+  type PaymentStatus,
+  type FulfillmentStatus,
+  canTransition,
+  validateCombination,
+  ORDER_TRANSITIONS,
+  PAYMENT_TRANSITIONS,
+  FULFILLMENT_TRANSITIONS,
+} from '../types'
 
-export type OrderStatus = 'pending' | 'confirmed' | 'cancelled' | 'completed'
-export type PaymentStatus = 'pending' | 'paid' | 'refunded' | 'partially_refunded'
-export type FulfillmentStatus = 'unfulfilled' | 'partially_fulfilled' | 'fulfilled'
+export type { OrderStatus, PaymentStatus, FulfillmentStatus }
 
 export interface OrderItemEntity {
   id: string
@@ -13,6 +21,7 @@ export interface OrderItemEntity {
   quantity: number
   unitPrice: number
   total: number
+  productSnapshot: Record<string, unknown> | null
 }
 
 export interface OrderCustomerEntity {
@@ -30,6 +39,7 @@ export class Order {
   readonly status: OrderStatus
   readonly paymentStatus: PaymentStatus
   readonly fulfillmentStatus: FulfillmentStatus
+  readonly source: string
   readonly currency: string
   readonly subtotal: number
   readonly discountTotal: number
@@ -37,6 +47,10 @@ export class Order {
   readonly shippingTotal: number
   readonly total: number
   readonly shippingAddress: Record<string, unknown> | null
+  readonly stripePaymentIntentId: string | null
+  readonly stripeSessionId: string | null
+  readonly paymentEventAt: Date | null
+  readonly version: number
   readonly createdAt: Date
   readonly updatedAt: Date
   readonly customer: OrderCustomerEntity | null
@@ -50,6 +64,7 @@ export class Order {
     status: OrderStatus
     paymentStatus: PaymentStatus
     fulfillmentStatus: FulfillmentStatus
+    source: string
     currency: string
     subtotal: number
     discountTotal: number
@@ -57,6 +72,10 @@ export class Order {
     shippingTotal: number
     total: number
     shippingAddress: Record<string, unknown> | null
+    stripePaymentIntentId: string | null
+    stripeSessionId: string | null
+    paymentEventAt: Date | null
+    version: number
     createdAt: Date
     updatedAt: Date
     customer: OrderCustomerEntity | null
@@ -69,6 +88,7 @@ export class Order {
     this.status = data.status
     this.paymentStatus = data.paymentStatus
     this.fulfillmentStatus = data.fulfillmentStatus
+    this.source = data.source
     this.currency = data.currency
     this.subtotal = data.subtotal
     this.discountTotal = data.discountTotal
@@ -76,6 +96,10 @@ export class Order {
     this.shippingTotal = data.shippingTotal
     this.total = data.total
     this.shippingAddress = data.shippingAddress
+    this.stripePaymentIntentId = data.stripePaymentIntentId
+    this.stripeSessionId = data.stripeSessionId
+    this.paymentEventAt = data.paymentEventAt
+    this.version = data.version
     this.createdAt = data.createdAt
     this.updatedAt = data.updatedAt
     this.customer = data.customer
@@ -83,25 +107,34 @@ export class Order {
   }
 
   guardCanChangeStatus(newStatus: OrderStatus): void {
-    if (this.status === 'cancelled') throw OrderError.conflict('Cannot change status of a cancelled order')
-    if (this.status === 'completed' && newStatus !== 'completed') throw OrderError.conflict('Cannot revert a completed order')
+    if (!canTransition(ORDER_TRANSITIONS, this.status, newStatus)) {
+      throw OrderError.conflict(`Invalid transition: ${this.status} → ${newStatus}`)
+    }
   }
 
-  guardCanUpdatePayment(): void {
-    if (this.status === 'cancelled') throw OrderError.conflict('Cannot update payment on a cancelled order')
+  guardCanChangePaymentStatus(newStatus: PaymentStatus): void {
+    if (!canTransition(PAYMENT_TRANSITIONS, this.paymentStatus, newStatus)) {
+      throw OrderError.conflict(`Invalid payment transition: ${this.paymentStatus} → ${newStatus}`)
+    }
+    validateCombination({ status: this.status, paymentStatus: newStatus, fulfillmentStatus: this.fulfillmentStatus })
   }
 
-  guardCanUpdateFulfillment(): void {
-    if (this.status === 'cancelled') throw OrderError.conflict('Cannot update fulfillment on a cancelled order')
+  guardCanChangeFulfillmentStatus(newStatus: FulfillmentStatus): void {
+    if (!canTransition(FULFILLMENT_TRANSITIONS, this.fulfillmentStatus, newStatus)) {
+      throw OrderError.conflict(`Invalid fulfillment transition: ${this.fulfillmentStatus} → ${newStatus}`)
+    }
+    validateCombination({ status: this.status, paymentStatus: this.paymentStatus, fulfillmentStatus: newStatus })
   }
 
   guardCanCancel(): void {
-    if (this.status === 'cancelled') throw OrderError.conflict('Order is already cancelled')
-    if (this.status === 'completed') throw OrderError.conflict('Cannot cancel a completed order')
+    if (!canTransition(ORDER_TRANSITIONS, this.status, 'CANCELLED')) {
+      throw OrderError.conflict(`Cannot cancel order in status: ${this.status}`)
+    }
   }
 
   guardCanRefund(): void {
-    if (this.paymentStatus === 'refunded') throw OrderError.conflict('Order is already refunded')
-    if (this.paymentStatus !== 'paid') throw OrderError.conflict('Only paid orders can be refunded')
+    if (!canTransition(PAYMENT_TRANSITIONS, this.paymentStatus, 'REFUND_PENDING')) {
+      throw OrderError.conflict(`Cannot refund order with payment status: ${this.paymentStatus}`)
+    }
   }
 }

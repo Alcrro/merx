@@ -1,6 +1,6 @@
 import type { IOrderQueryRepository } from '../ports'
 import type { IOrderCommandRepository } from '../../domain/ports/order-command.repository.port'
-import type { Order, PaymentStatus } from '../../domain/entities/order.entity'
+import type { Order } from '../../domain/entities/order.entity'
 import { OrderError } from '../../domain/errors'
 
 export type NotifyRefundFn = (order: Order, amount: number, isPartial: boolean) => Promise<void>
@@ -28,7 +28,7 @@ export class RefundOrderUseCase {
 
     await this.processRefund(id, storeId, refundAmount, isPartial)
 
-    const newPaymentStatus: PaymentStatus = isPartial ? 'partially_refunded' : 'refunded'
+    const newPaymentStatus = isPartial ? 'PARTIALLY_REFUNDED' : 'REFUND_PENDING'
     const updated = await this.commandRepo.updatePaymentStatus(id, storeId, newPaymentStatus)
     void this.notifyRefund(order, refundAmount, isPartial)
     return updated

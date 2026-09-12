@@ -1,9 +1,10 @@
 import type { Response, NextFunction } from 'express'
-import type { AuthenticatedRequest } from '../../../../middleware/authenticate'
+import type { AuthenticatedStoreRequest as AuthenticatedRequest } from '../../../../middleware/authenticate'
 import type { OrderQuery } from '../../application/queries/order.query'
 import type { OrderService } from '../../application/services/order.service'
 import type { CancelOrderUseCase } from '../../application/use-cases/cancel-order.use-case'
 import type { RefundOrderUseCase } from '../../application/use-cases/refund-order.use-case'
+import type { OrderEventRepository } from '../../infrastructure/db/order-event.repository'
 import { OrderError } from '../../domain/errors'
 import { orderValidator } from '../validators/order.validator'
 import { handleOrderError } from '../errors/order.errors'
@@ -14,9 +15,10 @@ export type OrderControllerDeps = {
   orderService: OrderService
   cancelOrderUseCase: CancelOrderUseCase
   refundOrderUseCase: RefundOrderUseCase
+  orderEventRepo: OrderEventRepository
 }
 
-export function createOrderController({ orderQuery, orderService, cancelOrderUseCase, refundOrderUseCase }: OrderControllerDeps) {
+export function createOrderController({ orderQuery, orderService, cancelOrderUseCase, refundOrderUseCase, orderEventRepo }: OrderControllerDeps) {
   return {
     list: async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
       try {
@@ -94,6 +96,16 @@ export function createOrderController({ orderQuery, orderService, cancelOrderUse
         const { amount } = orderValidator.refund.parse(req.body)
         const order = await refundOrderUseCase.execute(req.params.id, req.user.storeId, amount)
         res.json(toOrderResponse(order))
+      } catch (err) {
+        if (err instanceof OrderError) handleOrderError(err, res); else next(err)
+      }
+    },
+
+    getEvents: async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+      try {
+        await orderQuery.get(req.params.id, req.user.storeId)
+        const events = await orderEventRepo.findByOrderId(req.params.id)
+        res.json(events)
       } catch (err) {
         if (err instanceof OrderError) handleOrderError(err, res); else next(err)
       }
