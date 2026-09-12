@@ -57,14 +57,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         original._retry = true
 
         const refreshToken = tokens.getRefresh()
-        if (!refreshToken) {
+        const slug = tokens.getSlug()
+        if (!refreshToken || !slug) {
           if (!controller.signal.aborted) { setUnauthed(); tokens.clear() }
           return Promise.reject(error)
         }
 
         try {
-          const data = await authApi.refresh(refreshToken)
-          tokens.set(data.accessToken, data.refreshToken)
+          const data = await authApi.refresh({ refreshToken, slug })
+          tokens.set(data.accessToken, data.refreshToken, slug)
           original.headers.set('Authorization', `Bearer ${data.accessToken}`)
           return await apiClient(original)
         } catch {
@@ -76,18 +77,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Restore session
     const access = tokens.getAccess()
-    if (!access) {
-      setUnauthed()
-    } else {
+    const refresh = tokens.getRefresh()
+    const slug = tokens.getSlug()
+
+    if (access) {
       authApi
         .me()
-        .then(async ({ user, store }) => {
+        .then(async ({ user, stores }) => {
+          const store = slug ? (stores.find((s) => s.slug === slug) ?? stores[0] ?? null) : (stores[0] ?? null)
           const introCompleted = await fetchIntroCompleted(store).catch(() => null)
           if (!controller.signal.aborted) setAuthed(user, store, introCompleted)
         })
         .catch(() => {
           if (!controller.signal.aborted) { tokens.clear(); setUnauthed() }
         })
+    } else if (refresh && slug) {
+      authApi
+        .refresh({ refreshToken: refresh, slug })
+        .then(({ accessToken, refreshToken: newRefresh }) => {
+          tokens.set(accessToken, newRefresh, slug)
+          return authApi.me()
+        })
+        .then(async ({ user, stores }) => {
+          const store = stores.find((s) => s.slug === slug) ?? stores[0] ?? null
+          const introCompleted = await fetchIntroCompleted(store).catch(() => null)
+          if (!controller.signal.aborted) setAuthed(user, store, introCompleted)
+        })
+        .catch(() => {
+          if (!controller.signal.aborted) { tokens.clear(); setUnauthed() }
+        })
+    } else {
+      setUnauthed()
     }
 
     return () => {
@@ -100,15 +120,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     const data = await authApi.login({ email, password })
-    tokens.set(data.accessToken, data.refreshToken)
-    const introCompleted = await fetchIntroCompleted(data.store).catch(() => null)
-    setAuthed(data.user, data.store, introCompleted)
+
+    if (data.stores.length > 0) {
+      const store = data.stores[0]
+      const tokenData = await authApi.refresh({ refreshToken: data.refreshToken, slug: store.slug })
+      tokens.set(tokenData.accessToken, tokenData.refreshToken, store.slug)
+      const introCompleted = await fetchIntroCompleted(store).catch(() => null)
+      setAuthed(data.user, store, introCompleted)
+    } else {
+      tokens.setRefresh(data.refreshToken)
+      setAuthed(data.user, null, null)
+    }
   }
 
   const signup = async (email: string, password: string) => {
     const data = await authApi.signup({ email, password })
-    tokens.set(data.accessToken, data.refreshToken)
-    setAuthed(data.user, data.store, null)
+    tokens.setRefresh(data.refreshToken)
+    setAuthed(data.user, null, null)
   }
 
   const markIntroCompleted = () =>

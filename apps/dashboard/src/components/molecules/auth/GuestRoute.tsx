@@ -7,7 +7,7 @@ export function GuestRoute({ children }: { children: ReactNode }) {
 
   if (isLoading) return null
 
-  if (user) return <Navigate to={store ? '/dashboard' : '/marketplace'} replace />
+  if (user) return <Navigate to="/dashboard" replace />
 
   return <>{children}</>
 }

@@ -5,8 +5,12 @@ import { ProtectedRoute } from './components/molecules/auth/ProtectedRoute'
 import { GuestRoute } from './components/molecules/auth/GuestRoute'
 import { IntroRoute } from './components/molecules/auth/IntroRoute'
 import { DashboardLayout } from './components/templates/DashboardLayout'
+import { DocsLayout } from './components/templates/DocsLayout'
 import { LoginPage } from './pages/auth/LoginPage'
 import { SignupPage } from './pages/auth/SignupPage'
+import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage'
+import { ResetPasswordPage } from './pages/auth/ResetPasswordPage'
+import { SsoPage } from './pages/auth/SsoPage'
 import { DashboardPage } from './pages/dashboard/DashboardPage'
 import { StoreSettingsPage } from './pages/settings/StoreSettingsPage'
 import { ProductsListPage } from './pages/products/ProductsListPage'
@@ -22,13 +26,6 @@ import { AnalyticsPage } from './pages/analytics/AnalyticsPage'
 import { AIChatPage } from './pages/ai/AIChatPage'
 import { CustomersListPage } from './pages/customers/CustomersListPage'
 import { CustomerDetailPage } from './pages/customers/CustomerDetailPage'
-import { MarketplaceFeedPage } from './pages/marketplace/MarketplaceFeedPage'
-import { CreateListingPage } from './pages/marketplace/listings/CreateListingPage'
-import { MyListingsPage } from './pages/marketplace/listings/MyListingsPage'
-import { ListingDetailPage } from './pages/marketplace/listings/ListingDetailPage'
-import { ConnectOnboardPage } from './pages/marketplace/connect/ConnectOnboardPage'
-import { ConnectReturnPage } from './pages/marketplace/connect/ConnectReturnPage'
-import { ConnectRefreshPage } from './pages/marketplace/connect/ConnectRefreshPage'
 import { DiscountsPage } from './pages/discounts/DiscountsPage'
 import { AdminCatalogPage } from './pages/admin/AdminCatalogPage'
 import { AdminProductRequestsPage } from './pages/admin/AdminProductRequestsPage'
@@ -38,6 +35,9 @@ import { ThemeBuilderPage } from './pages/theme/ThemeBuilderPage'
 import { NotificationsPage } from './pages/notifications/NotificationsPage'
 import { SubscribePage } from './pages/subscribe/SubscribePage'
 import { IntroPage } from './pages/intro/IntroPage'
+import { MvpStatusPage } from './pages/mvp/MvpStatusPage'
+import { DocPage } from './pages/docs/DocPage'
+import { OverviewPage } from './pages/docs/OverviewPage'
 
 export default function App() {
   return (
@@ -62,6 +62,16 @@ export default function App() {
               </GuestRoute>
             }
           />
+          <Route
+            path="/forgot-password"
+            element={
+              <GuestRoute>
+                <ForgotPasswordPage />
+              </GuestRoute>
+            }
+          />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/sso" element={<SsoPage />} />
 
           <Route
             path="/intro"
@@ -74,8 +84,6 @@ export default function App() {
 
           {/* Public routes — no auth required */}
           <Route element={<DashboardLayout />}>
-            <Route path="/marketplace" element={<MarketplaceFeedPage />} />
-            <Route path="/marketplace/listings/:id" element={<ListingDetailPage />} />
             <Route path="/subscribe" element={<SubscribePage />} />
           </Route>
 
@@ -102,11 +110,6 @@ export default function App() {
             <Route path="/customers" element={<CustomersListPage />} />
             <Route path="/customers/:id" element={<CustomerDetailPage />} />
             <Route path="/settings/store" element={<StoreSettingsPage />} />
-            <Route path="/marketplace/listings/new" element={<CreateListingPage />} />
-            <Route path="/marketplace/listings/mine" element={<MyListingsPage />} />
-            <Route path="/marketplace/connect/onboard" element={<ConnectOnboardPage />} />
-            <Route path="/marketplace/connect/return" element={<ConnectReturnPage />} />
-            <Route path="/marketplace/connect/refresh" element={<ConnectRefreshPage />} />
             <Route path="/discounts" element={<DiscountsPage />} />
             <Route path="/admin/catalog" element={<AdminCatalogPage />} />
             <Route path="/admin/product-requests" element={<AdminProductRequestsPage />} />
@@ -114,6 +117,21 @@ export default function App() {
             <Route path="/admin/ai-criteria" element={<AdminAIToolCriteriaPage />} />
             <Route path="/theme" element={<ThemeBuilderPage />} />
             <Route path="/notifications" element={<NotificationsPage />} />
+          </Route>
+
+          {/* Docs routes */}
+          <Route
+            element={
+              <ProtectedRoute>
+                <DocsLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/docs" element={<Navigate to="/docs/overview" replace />} />
+            <Route path="/docs/overview" element={<OverviewPage />} />
+            <Route path="/docs/mvp-status" element={<MvpStatusPage />} />
+            <Route path="/docs/:section" element={<DocPage />} />
+            <Route path="/docs/:section/:issueNumber" element={<DocPage />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />

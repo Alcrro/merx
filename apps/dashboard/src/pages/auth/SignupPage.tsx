@@ -7,6 +7,7 @@ export function SignupPage() {
     <AuthLayout
       title="Creează un cont"
       subtitle="Lansează-ți magazinul în câteva minute"
+      variant="security"
       footer={
         <>
           Ai deja cont?{' '}

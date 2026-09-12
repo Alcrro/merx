@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { Input } from '../../atoms/Input'
 import { Button } from '../../atoms/Button'
 import { useAuth } from '../../../hooks/useAuth'
@@ -65,14 +65,21 @@ export function LoginForm() {
         autoComplete="email"
         autoFocus
       />
-      <Input
-        label="Parolă"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        error={errors.password}
-        autoComplete="current-password"
-      />
+      <div className="space-y-1">
+        <Input
+          label="Parolă"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          error={errors.password}
+          autoComplete="current-password"
+        />
+        <div className="text-right">
+          <Link to="/forgot-password" className="text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+            Ai uitat parola?
+          </Link>
+        </div>
+      </div>
 
       {errors.server && (
         <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{errors.server}</p>
