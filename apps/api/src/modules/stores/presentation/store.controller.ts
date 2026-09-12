@@ -1,5 +1,5 @@
 import type { Response, NextFunction } from 'express'
-import type { AuthenticatedRequest } from '../../../middleware/authenticate'
+import type { AuthenticatedStoreRequest as AuthenticatedRequest } from '../../../middleware/authenticate'
 import { StoreService, StoreError } from '../application/store.service'
 import { StoreRepository } from '../infrastructure/store.repository'
 import { updateStoreSchema } from './store.schema'

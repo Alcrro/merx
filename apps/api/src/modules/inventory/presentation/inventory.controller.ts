@@ -1,5 +1,5 @@
 import type { Response, NextFunction } from 'express'
-import type { AuthenticatedRequest } from '../../../middleware/authenticate'
+import type { AuthenticatedStoreRequest as AuthenticatedRequest } from '../../../middleware/authenticate'
 import { InventoryService, InventoryError } from '../application/inventory.service'
 import { InventoryRepository } from '../infrastructure/inventory.repository'
 import { listInventorySchema, adjustSchema, reorderPointSchema, setStockSchema, setStatusSchema } from './inventory.schema'

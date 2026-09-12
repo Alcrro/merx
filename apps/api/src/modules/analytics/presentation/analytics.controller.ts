@@ -1,5 +1,5 @@
 import type { Response } from 'express'
-import type { AuthenticatedRequest } from '../../../middleware/authenticate'
+import type { AuthenticatedStoreRequest as AuthenticatedRequest } from '../../../middleware/authenticate'
 import { AnalyticsService } from '../application/analytics.service'
 import { analyticsRepository } from '../infrastructure/analytics.repository'
 import { createAnalyticsQueue } from '../infrastructure/metrics.job'

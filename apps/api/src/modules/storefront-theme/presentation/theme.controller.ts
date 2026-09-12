@@ -1,5 +1,5 @@
 import type { Response, NextFunction } from 'express'
-import type { AuthenticatedRequest } from '../../../middleware/authenticate'
+import type { AuthenticatedStoreRequest as AuthenticatedRequest } from '../../../middleware/authenticate'
 import { themeService } from '../application/theme.service'
 import { ThemeError } from '../domain/entities'
 import { applyPatchSchema, publishSchema } from './theme.schema'

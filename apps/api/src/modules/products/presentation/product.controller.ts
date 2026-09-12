@@ -1,5 +1,5 @@
 import type { Response, NextFunction } from 'express'
-import type { AuthenticatedRequest } from '../../../middleware/authenticate'
+import type { AuthenticatedStoreRequest as AuthenticatedRequest } from '../../../middleware/authenticate'
 import { ProductService, ProductError } from '../application/product.service'
 import { ProductImageService } from '../application/product-image.service'
 import { ProductRepository } from '../infrastructure/product.repository'

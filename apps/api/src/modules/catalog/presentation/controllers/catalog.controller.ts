@@ -1,5 +1,5 @@
 import type { Response, NextFunction } from 'express'
-import type { AuthenticatedRequest } from '../../../../middleware/authenticate'
+import type { AuthenticatedStoreRequest as AuthenticatedRequest } from '../../../../middleware/authenticate'
 import type { CatalogProductQuery } from '../../application/queries/catalog-product.query'
 import type { CatalogCategoryQuery } from '../../application/queries/catalog-category.query'
 import type { StoreProductService } from '../../application/services/store-product.service'
