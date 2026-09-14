@@ -58,22 +58,36 @@ describe('AuthRepository (integration)', () => {
     })
   })
 
-  describe('createStore / findStoreByOwnerId', () => {
-    it('creates a store and finds it by ownerId', async () => {
+  describe('findStoreBySlug / findStoresByOwnerId', () => {
+    it('finds store by slug and returns meta (ownerId, status)', async () => {
       const user = await repo.createUser({ email: TEST_EMAIL, password: 'hashed' })
-      const store = await repo.createStore({ ownerId: user.id, name: "Test's Store", slug: 'test-store-abc' })
+      await prisma.store.create({ data: { ownerId: user.id, name: "Test's Store", slug: 'test-store-abc', currency: 'RON' } })
 
-      expect(store.name).toBe("Test's Store")
-      expect(store.slug).toBe('test-store-abc')
-
-      const found = await repo.findStoreByOwnerId(user.id)
+      const found = await repo.findStoreBySlug('test-store-abc')
       expect(found).not.toBeNull()
-      expect(found!.id).toBe(store.id)
+      expect(found!.slug).toBe('test-store-abc')
+      expect(found!.ownerId).toBe(user.id)
+      expect(found!.status).toBe('active')
     })
 
-    it('returns null when no store for owner', async () => {
-      const result = await repo.findStoreByOwnerId('00000000-0000-0000-0000-000000000000')
+    it('returns null when slug does not exist', async () => {
+      const result = await repo.findStoreBySlug('nonexistent-slug')
       expect(result).toBeNull()
+    })
+
+    it('finds all stores by ownerId', async () => {
+      const user = await repo.createUser({ email: TEST_EMAIL, password: 'hashed' })
+      await prisma.store.create({ data: { ownerId: user.id, name: 'Store A', slug: 'store-a-xyz', currency: 'RON' } })
+      await prisma.store.create({ data: { ownerId: user.id, name: 'Store B', slug: 'store-b-xyz', currency: 'EUR' } })
+
+      const stores = await repo.findStoresByOwnerId(user.id)
+      expect(stores).toHaveLength(2)
+      expect(stores.map(s => s.slug).sort()).toEqual(['store-a-xyz', 'store-b-xyz'])
+    })
+
+    it('returns empty array when user has no stores', async () => {
+      const stores = await repo.findStoresByOwnerId('00000000-0000-0000-0000-000000000000')
+      expect(stores).toEqual([])
     })
   })
 

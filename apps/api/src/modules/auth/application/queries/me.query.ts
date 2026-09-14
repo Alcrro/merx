@@ -9,11 +9,11 @@ export class MeQuery {
     private readonly storeRepo: IStoreRepository
   ) {}
 
-  async execute(userId: string): Promise<{ user: AuthUser; store: AuthStore | null }> {
+  async execute(userId: string): Promise<{ user: AuthUser; stores: AuthStore[] }> {
     const user = await this.userRepo.findUserById(userId)
     if (!user) throw AuthError.notFound('User not found')
 
-    const store = await this.storeRepo.findStoreByOwnerId(userId)
-    return { user, store: store ?? null }
+    const stores = await this.storeRepo.findStoresByOwnerId(userId)
+    return { user, stores }
   }
 }

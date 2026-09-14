@@ -13,7 +13,7 @@ export class RefreshUseCase {
     private readonly tokens: ITokenService
   ) {}
 
-  async execute(refreshToken: string): Promise<AuthTokens> {
+  async execute(refreshToken: string, slug: string): Promise<AuthTokens> {
     const tokenHash = this.tokens.hashToken(refreshToken)
     const token = await this.tokenRepo.findRefreshToken(tokenHash)
 
@@ -26,24 +26,28 @@ export class RefreshUseCase {
 
     if (token.isExpired()) throw AuthError.unauthorized('Refresh token expired')
 
-    const [user, store] = await Promise.all([
-      this.userRepo.findUserById(token.userId),
-      this.storeRepo.findStoreByOwnerId(token.userId),
-    ])
-
-    if (!user) throw AuthError.notFound('User not found')
+    const store = await this.storeRepo.findStoreBySlug(slug)
     if (!store) throw AuthError.notFound('Store not found')
 
-    const accessToken = this.tokens.signAccessToken({
-      sub: user.id,
-      storeId: store.id,
-      role: user.role as 'owner' | 'member',
-    })
+    if (store.ownerId !== token.userId) throw AuthError.forbidden()
+
+    if (store.status === 'blocked') throw AuthError.forbidden('Store is blocked')
+
+    const user = await this.userRepo.findUserById(token.userId)
+    if (!user) throw AuthError.notFound('User not found')
+
+    const accessToken = this.tokens.signStoreToken({ sub: user.id, storeId: store.id, type: 'store' })
     const rawRefresh = this.tokens.generateRefreshToken()
     const newTokenHash = this.tokens.hashToken(rawRefresh)
     const expiresAt = this.tokens.refreshTokenExpiresAt()
 
-    await this.tokenRepo.rotateRefreshToken(token.id, { userId: token.userId, tokenHash: newTokenHash, expiresAt })
+    await this.tokenRepo.rotateRefreshToken(token.id, {
+      userId: token.userId,
+      tokenHash: newTokenHash,
+      expiresAt,
+      userAgent: token.userAgent ?? undefined,
+      ip: token.ip ?? undefined,
+    })
 
     return { accessToken, refreshToken: rawRefresh }
   }

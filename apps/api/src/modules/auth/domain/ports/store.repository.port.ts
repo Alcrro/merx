@@ -1,6 +1,6 @@
-import type { AuthStore } from '../types'
+import type { AuthStore, AuthStoreWithMeta } from '../types'
 
 export interface IStoreRepository {
-  findStoreByOwnerId(ownerId: string): Promise<AuthStore | null>
-  createStore(data: { ownerId: string; name: string; slug: string }): Promise<AuthStore>
+  findStoreBySlug(slug: string): Promise<AuthStoreWithMeta | null>
+  findStoresByOwnerId(ownerId: string): Promise<AuthStore[]>
 }

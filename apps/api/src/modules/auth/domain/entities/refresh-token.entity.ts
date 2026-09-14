@@ -3,7 +3,9 @@ export class RefreshToken {
     readonly id: string,
     readonly userId: string,
     readonly expiresAt: Date,
-    readonly used: boolean
+    readonly used: boolean,
+    readonly userAgent: string | null = null,
+    readonly ip: string | null = null
   ) {}
 
   isExpired(): boolean {

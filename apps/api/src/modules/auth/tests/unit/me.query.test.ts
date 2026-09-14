@@ -20,28 +20,28 @@ describe('MeQuery', () => {
     await expect(query.execute('user1')).rejects.toMatchObject({ code: 'NOT_FOUND' })
   })
 
-  it('returns store: null when user has no store', async () => {
+  it('returns empty stores array when user has no stores', async () => {
     vi.mocked(userRepo.findUserById).mockResolvedValue(makeAuthUser())
-    vi.mocked(storeRepo.findStoreByOwnerId).mockResolvedValue(null)
+    vi.mocked(storeRepo.findStoresByOwnerId).mockResolvedValue([])
     const result = await query.execute('user1')
-    expect(result).toEqual({ user: makeAuthUser(), store: null })
+    expect(result).toEqual({ user: makeAuthUser(), stores: [] })
   })
 
-  it('returns user and store', async () => {
+  it('returns user and stores', async () => {
     const user = makeAuthUser()
     const store = makeAuthStore()
     vi.mocked(userRepo.findUserById).mockResolvedValue(user)
-    vi.mocked(storeRepo.findStoreByOwnerId).mockResolvedValue(store)
+    vi.mocked(storeRepo.findStoresByOwnerId).mockResolvedValue([store])
 
     const result = await query.execute('user1')
-    expect(result).toEqual({ user, store })
+    expect(result).toEqual({ user, stores: [store] })
   })
 
-  it('looks up store by the correct userId', async () => {
+  it('looks up stores by the correct userId', async () => {
     vi.mocked(userRepo.findUserById).mockResolvedValue(makeAuthUser({ id: 'u42' }))
-    vi.mocked(storeRepo.findStoreByOwnerId).mockResolvedValue(makeAuthStore())
+    vi.mocked(storeRepo.findStoresByOwnerId).mockResolvedValue([])
 
     await query.execute('u42')
-    expect(storeRepo.findStoreByOwnerId).toHaveBeenCalledWith('u42')
+    expect(storeRepo.findStoresByOwnerId).toHaveBeenCalledWith('u42')
   })
 })

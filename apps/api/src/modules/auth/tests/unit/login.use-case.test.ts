@@ -1,24 +1,28 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { LoginUseCase } from '../../application/use-cases/login.use-case'
-import { makeAuthUser, makeAuthStore, makeAuthTokens, makeUserRepo, makeStoreRepo, makePasswordHasher, makeSessionService } from '../fixtures/auth.fixtures'
+import { makeAuthUser, makeAuthStore, makeUserRepo, makeStoreRepo, makeRefreshTokenRepo, makePasswordHasher, makeTokenService } from '../fixtures/auth.fixtures'
 import type { IUserRepository } from '../../domain/ports/user.repository.port'
 import type { IStoreRepository } from '../../domain/ports/store.repository.port'
+import type { IRefreshTokenRepository } from '../../domain/ports/refresh-token.repository.port'
 import type { IPasswordHasher } from '../../application/ports/password-hasher.port'
-import type { SessionService } from '../../application/services/session.service'
+import type { ITokenService } from '../../application/ports/token-service.port'
 
 describe('LoginUseCase', () => {
   let userRepo: IUserRepository
   let storeRepo: IStoreRepository
+  let tokenRepo: IRefreshTokenRepository
   let hasher: IPasswordHasher
-  let session: SessionService
+  let tokens: ITokenService
   let useCase: LoginUseCase
 
   beforeEach(() => {
     userRepo = makeUserRepo()
     storeRepo = makeStoreRepo()
+    tokenRepo = makeRefreshTokenRepo()
     hasher = makePasswordHasher()
-    session = makeSessionService()
-    useCase = new LoginUseCase(userRepo, storeRepo, hasher, session)
+    tokens = makeTokenService()
+    useCase = new LoginUseCase(userRepo, storeRepo, tokenRepo, hasher, tokens)
+    vi.mocked(tokenRepo.createRefreshToken).mockResolvedValue(undefined)
   })
 
   it('throws UNAUTHORIZED when user not found', async () => {
@@ -32,34 +36,67 @@ describe('LoginUseCase', () => {
     await expect(useCase.execute('test@example.com', 'wrong')).rejects.toMatchObject({ code: 'UNAUTHORIZED' })
   })
 
-  it('throws NOT_FOUND when store missing', async () => {
-    vi.mocked(userRepo.findUserByEmail).mockResolvedValue({ ...makeAuthUser(), password: 'hash' })
-    vi.mocked(hasher.compare).mockResolvedValue(true)
-    vi.mocked(storeRepo.findStoreByOwnerId).mockResolvedValue(null)
-    await expect(useCase.execute('test@example.com', 'pass')).rejects.toMatchObject({ code: 'NOT_FOUND' })
-  })
-
-  it('returns tokens, user without password, and store', async () => {
+  it('returns platformToken, refreshToken, user without password, and stores', async () => {
     const user = makeAuthUser()
     const store = makeAuthStore()
-    const tokens = makeAuthTokens()
-
     vi.mocked(userRepo.findUserByEmail).mockResolvedValue({ ...user, password: 'hash' })
     vi.mocked(hasher.compare).mockResolvedValue(true)
-    vi.mocked(storeRepo.findStoreByOwnerId).mockResolvedValue(store)
-    vi.mocked(session.generate).mockResolvedValue(tokens)
+    vi.mocked(storeRepo.findStoresByOwnerId).mockResolvedValue([store])
+    vi.mocked(tokens.signPlatformToken).mockReturnValue('pt')
+    vi.mocked(tokens.generateRefreshToken).mockReturnValue('raw-rt')
 
     const result = await useCase.execute('test@example.com', 'pass')
-    expect(result).toEqual({ tokens, user, store })
+    expect(result).toEqual({ platformToken: 'pt', refreshToken: 'raw-rt', user, stores: [store] })
     expect(result.user).not.toHaveProperty('password')
   })
 
-  it('generates session with userId, storeId and real role', async () => {
-    vi.mocked(userRepo.findUserByEmail).mockResolvedValue({ ...makeAuthUser({ id: 'u1', role: 'owner' }), password: 'hash' })
+  it('returns empty stores array when user has no stores', async () => {
+    vi.mocked(userRepo.findUserByEmail).mockResolvedValue({ ...makeAuthUser(), password: 'hash' })
     vi.mocked(hasher.compare).mockResolvedValue(true)
-    vi.mocked(storeRepo.findStoreByOwnerId).mockResolvedValue(makeAuthStore({ id: 's1' }))
+    vi.mocked(storeRepo.findStoresByOwnerId).mockResolvedValue([])
+
+    const result = await useCase.execute('test@example.com', 'pass')
+    expect(result.stores).toEqual([])
+  })
+
+  it('signs platformToken with sub and type:platform', async () => {
+    vi.mocked(userRepo.findUserByEmail).mockResolvedValue({ ...makeAuthUser({ id: 'u1' }), password: 'hash' })
+    vi.mocked(hasher.compare).mockResolvedValue(true)
+    vi.mocked(storeRepo.findStoresByOwnerId).mockResolvedValue([])
 
     await useCase.execute('test@example.com', 'pass')
-    expect(session.generate).toHaveBeenCalledWith('u1', 's1', 'owner')
+    expect(tokens.signPlatformToken).toHaveBeenCalledWith({ sub: 'u1', type: 'platform' })
+  })
+
+  it('never signs a store-scoped token at login', async () => {
+    vi.mocked(userRepo.findUserByEmail).mockResolvedValue({ ...makeAuthUser(), password: 'hash' })
+    vi.mocked(hasher.compare).mockResolvedValue(true)
+    vi.mocked(storeRepo.findStoresByOwnerId).mockResolvedValue([makeAuthStore()])
+
+    await useCase.execute('test@example.com', 'pass')
+    expect(tokens.signStoreToken).not.toHaveBeenCalled()
+  })
+
+  it('stores refresh token as hash, not raw', async () => {
+    vi.mocked(userRepo.findUserByEmail).mockResolvedValue({ ...makeAuthUser({ id: 'u1' }), password: 'hash' })
+    vi.mocked(hasher.compare).mockResolvedValue(true)
+    vi.mocked(storeRepo.findStoresByOwnerId).mockResolvedValue([])
+    vi.mocked(tokens.generateRefreshToken).mockReturnValue('raw-rt')
+    vi.mocked(tokens.hashToken).mockReturnValue('hashed-rt')
+    const expiresAt = new Date('2027-01-01')
+    vi.mocked(tokens.refreshTokenExpiresAt).mockReturnValue(expiresAt)
+
+    await useCase.execute('test@example.com', 'pass')
+    expect(tokens.hashToken).toHaveBeenCalledWith('raw-rt')
+    expect(tokenRepo.createRefreshToken).toHaveBeenCalledWith({ userId: 'u1', tokenHash: 'hashed-rt', expiresAt })
+  })
+
+  it('fetches stores by the authenticated user id', async () => {
+    vi.mocked(userRepo.findUserByEmail).mockResolvedValue({ ...makeAuthUser({ id: 'u1' }), password: 'hash' })
+    vi.mocked(hasher.compare).mockResolvedValue(true)
+    vi.mocked(storeRepo.findStoresByOwnerId).mockResolvedValue([])
+
+    await useCase.execute('test@example.com', 'pass')
+    expect(storeRepo.findStoresByOwnerId).toHaveBeenCalledWith('u1')
   })
 })

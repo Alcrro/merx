@@ -6,10 +6,10 @@ export const requireAdmin: RequestHandler = async (req, res, next) => {
   const authReq = req as AuthenticatedRequest
   const user = await prisma.user.findUnique({
     where: { id: authReq.user.userId },
-    select: { role: true },
+    select: { platformRole: true },
   })
 
-  if (user?.role !== 'admin') {
+  if (user?.platformRole !== 'admin') {
     res.status(403).json({ error: 'Admin access required' })
     return
   }

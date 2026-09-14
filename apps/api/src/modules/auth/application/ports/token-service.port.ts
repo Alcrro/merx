@@ -1,8 +1,9 @@
-import type { AccessTokenPayload } from '../../domain/types'
+import type { PlatformTokenPayload, StoreTokenPayload, TokenPayload } from '../../domain/types'
 
 export interface ITokenService {
-  signAccessToken(payload: AccessTokenPayload): string
-  verifyAccessToken(token: string): AccessTokenPayload
+  signPlatformToken(payload: PlatformTokenPayload): string
+  signStoreToken(payload: StoreTokenPayload): string
+  verifyToken(token: string): TokenPayload
   generateRefreshToken(): string
   hashToken(token: string): string
   refreshTokenExpiresAt(): Date

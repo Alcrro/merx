@@ -1,20 +1,25 @@
 import jwt from 'jsonwebtoken'
 import crypto from 'crypto'
 import type { ITokenService } from '../../application/ports/token-service.port'
-import type { AccessTokenPayload } from '../../domain/types'
+import type { PlatformTokenPayload, StoreTokenPayload, TokenPayload } from '../../domain/types'
 import { config } from '../../../../config'
 
 const ACCESS_SECRET = config.auth.jwtSecret
-const ACCESS_TTL = '15m' as const
+const PLATFORM_TOKEN_TTL = '5m'
+const STORE_TOKEN_TTL = '15m'
 const REFRESH_TTL_DAYS = 30
 
 export class JwtTokenService implements ITokenService {
-  signAccessToken(payload: AccessTokenPayload): string {
-    return jwt.sign(payload, ACCESS_SECRET, { expiresIn: ACCESS_TTL, algorithm: 'HS256' })
+  signPlatformToken(payload: PlatformTokenPayload): string {
+    return jwt.sign(payload, ACCESS_SECRET, { expiresIn: PLATFORM_TOKEN_TTL, algorithm: 'HS256' })
   }
 
-  verifyAccessToken(token: string): AccessTokenPayload {
-    return jwt.verify(token, ACCESS_SECRET, { algorithms: ['HS256'] }) as AccessTokenPayload
+  signStoreToken(payload: StoreTokenPayload): string {
+    return jwt.sign(payload, ACCESS_SECRET, { expiresIn: STORE_TOKEN_TTL, algorithm: 'HS256' })
+  }
+
+  verifyToken(token: string): TokenPayload {
+    return jwt.verify(token, ACCESS_SECRET, { algorithms: ['HS256'] }) as TokenPayload
   }
 
   generateRefreshToken(): string {
