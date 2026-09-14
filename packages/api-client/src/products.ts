@@ -1,9 +1,11 @@
-import type { Product, ProductVariant, ProductCategory, PaginatedResponse, ProductStatus } from '@merx/types'
-import { apiClient } from './index'
+import type { Product, ProductImage, ProductVariant, ProductCategory, Brand, Tag, ProductAnalytics, PaginatedResponse, ProductStatus } from '@merx/types'
+import { apiClient } from './client'
 
 export interface ListProductsParams {
   status?: ProductStatus
   categoryId?: string
+  brandId?: string
+  tagIds?: string
   page?: number
   limit?: number
 }
@@ -13,8 +15,19 @@ export interface CreateProductInput {
   description?: string | null
   status?: ProductStatus
   categoryId?: string | null
+  brandId?: string | null
   productType?: string | null
-  vendor?: string | null
+  tagIds?: string[]
+}
+
+export interface CreateBrandInput {
+  name: string
+  logoUrl?: string | null
+}
+
+export interface CreateTagInput {
+  name: string
+  type?: string
 }
 
 export interface CreateVariantInput {
@@ -51,9 +64,50 @@ export const productApi = {
   deleteVariant: (productId: string, variantId: string) =>
     apiClient.delete(`/products/${productId}/variants/${variantId}`),
 
+  getAnalytics: (id: string) =>
+    apiClient.get<ProductAnalytics>(`/products/${id}/analytics`).then((r) => r.data),
+
   listCategories: () =>
     apiClient.get<ProductCategory[]>('/product-categories').then((r) => r.data),
 
-  createCategory: (name: string) =>
-    apiClient.post<ProductCategory>('/product-categories', { name }).then((r) => r.data),
+  createCategory: (data: { name: string; parentId?: string | null }) =>
+    apiClient.post<ProductCategory>('/product-categories', data).then((r) => r.data),
+
+  deleteCategory: (id: string) =>
+    apiClient.delete(`/product-categories/${id}`),
+
+  listBrands: () =>
+    apiClient.get<Brand[]>('/brands').then((r) => r.data),
+
+  createBrand: (data: CreateBrandInput) =>
+    apiClient.post<Brand>('/brands', data).then((r) => r.data),
+
+  updateBrand: (id: string, data: Partial<CreateBrandInput>) =>
+    apiClient.put<Brand>(`/brands/${id}`, data).then((r) => r.data),
+
+  deleteBrand: (id: string) =>
+    apiClient.delete(`/brands/${id}`),
+
+  listTags: (type?: string) =>
+    apiClient.get<Tag[]>('/tags', { params: { type } }).then((r) => r.data),
+
+  createTag: (data: CreateTagInput) =>
+    apiClient.post<Tag>('/tags', data).then((r) => r.data),
+
+  deleteTag: (id: string) =>
+    apiClient.delete(`/tags/${id}`),
+
+  uploadImage: (productId: string, file: File) => {
+    const form = new FormData()
+    form.append('image', file)
+    return apiClient.post<ProductImage>(`/products/${productId}/images`, form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }).then((r) => r.data)
+  },
+
+  deleteImage: (productId: string, imageId: string) =>
+    apiClient.delete(`/products/${productId}/images/${imageId}`),
+
+  reorderImages: (productId: string, ids: string[]) =>
+    apiClient.patch(`/products/${productId}/images/reorder`, { ids }),
 }

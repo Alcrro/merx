@@ -1,23 +1,27 @@
 import type { FulfillmentStatus } from '@merx/types'
+import { FULFILLMENT_STATUS_LABELS } from '../../../lib/orders.constants'
 
-const STYLES: Record<FulfillmentStatus, string> = {
-  unfulfilled: 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400',
-  partially_fulfilled: 'bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400',
-  fulfilled: 'bg-green-100 dark:bg-green-950 text-green-700 dark:text-green-400',
+const STATUS_STYLES: Record<FulfillmentStatus, string> = {
+  UNFULFILLED:       'badge-neutral',
+  PROCESSING:        'badge-info',
+  SHIPPED:           'badge-info',
+  LOST_IN_TRANSIT:   'badge-warning',
+  DELIVERED:         'badge-success',
+  FULFILLED:         'badge-success',
+  RETURN_IN_TRANSIT: 'badge-warning',
+  RETURNED:          'badge-purple',
 }
 
-const LABELS: Record<FulfillmentStatus, string> = {
-  unfulfilled: 'Neexpediat',
-  partially_fulfilled: 'Parțial expediat',
-  fulfilled: 'Expediat',
+interface FulfillmentStatusBadgeProps {
+  status: FulfillmentStatus
 }
 
-export function FulfillmentStatusBadge({ status }: { status: FulfillmentStatus }) {
+function FulfillmentStatusBadge({ status }: FulfillmentStatusBadgeProps) {
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STYLES[status]}`}>
-      {LABELS[status]}
+    <span className={STATUS_STYLES[status]}>
+      {FULFILLMENT_STATUS_LABELS[status]}
     </span>
   )
 }
 
-export { LABELS as FULFILLMENT_STATUS_LABELS }
+export default FulfillmentStatusBadge

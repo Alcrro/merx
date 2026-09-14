@@ -80,13 +80,13 @@ export function ProductForm({ initial, categories, onSave, isLoading }: ProductF
         <Select
           label="Status"
           value={status}
-          onChange={(e) => setStatus(e.target.value as ProductStatus)}
+          onChange={(v) => setStatus(v as ProductStatus)}
           options={STATUS_OPTIONS}
         />
         <Select
           label="Categorie"
           value={categoryId}
-          onChange={(e) => setCategoryId(e.target.value)}
+          onChange={setCategoryId}
           options={categoryOptions}
         />
       </div>

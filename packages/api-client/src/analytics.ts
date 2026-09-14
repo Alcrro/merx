@@ -1,5 +1,5 @@
 import type { AnalyticsOverview, RevenueChartPoint, TopProduct } from '@merx/types'
-import { apiClient } from './index'
+import { apiClient } from './client'
 
 export const analyticsApi = {
   overview: (days = 30) =>

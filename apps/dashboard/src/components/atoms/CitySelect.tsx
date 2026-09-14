@@ -1,4 +1,6 @@
-import { useRef, useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+import { DropdownBase } from '../primitives/DropdownBase'
+import { IconButton, XIcon } from '../primitives/IconButton'
 
 const CITIES_BY_COUNTRY: Record<string, string[]> = {
   RO: [
@@ -99,38 +101,19 @@ interface CitySelectProps {
 export function CitySelect({ countryCode, value, onChange, placeholder = 'Oraș' }: CitySelectProps) {
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
 
   const cities = useMemo(() => CITIES_BY_COUNTRY[countryCode] ?? [], [countryCode])
   const hasCities = cities.length > 0
-
   const filtered = useMemo(
     () => query ? cities.filter((c) => c.toLowerCase().includes(query.toLowerCase())) : cities,
     [cities, query],
   )
 
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false)
-        setQuery('')
-      }
-    }
-    document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
-  }, [])
+  useEffect(() => { if (!hasCities) setOpen(false) }, [hasCities])
 
-  function select(city: string) {
-    onChange(city)
-    setOpen(false)
-    setQuery('')
-  }
-
-  function clear(e: React.MouseEvent) {
-    e.stopPropagation()
-    onChange('')
-    setQuery('')
-  }
+  function handleOpenChange(next: boolean) { setOpen(next); if (!next) setQuery('') }
+  function select(city: string) { onChange(city); setOpen(false); setQuery('') }
+  function clear(e: React.MouseEvent) { e.stopPropagation(); onChange(''); setQuery('') }
 
   if (!hasCities) {
     return (
@@ -139,80 +122,60 @@ export function CitySelect({ countryCode, value, onChange, placeholder = 'Oraș'
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+        className="input-base"
       />
     )
   }
 
   return (
-    <div className="relative" ref={ref}>
-      <button
-        type="button"
-        onClick={() => { setOpen((o) => !o); setQuery('') }}
-        className={[
-          'w-full flex items-center justify-between gap-2 rounded-lg border px-3 py-2 text-sm transition-colors outline-none',
-          open
-            ? 'border-indigo-500 ring-2 ring-indigo-500/20'
-            : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600',
-          'bg-white dark:bg-gray-800',
-        ].join(' ')}
-      >
-        <span className={value ? 'text-gray-900 dark:text-gray-100' : 'text-gray-400 dark:text-gray-500'}>
-          {value || placeholder}
-        </span>
-        <div className="flex items-center gap-1 shrink-0">
+    <DropdownBase
+      open={open}
+      onOpenChange={handleOpenChange}
+      trigger={
+        <>
+          <span className={['truncate', value ? 'text-fg-primary' : 'text-fg-muted'].join(' ')}>
+            {value || placeholder}
+          </span>
           {value && (
-            <span role="button" onClick={clear} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-0.5 rounded transition-colors">
-              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-              </svg>
-            </span>
+            <IconButton label="Șterge" onClick={clear} className="ml-auto shrink-0">
+              <XIcon />
+            </IconButton>
           )}
-          <svg
-            className={['h-4 w-4 text-gray-400 transition-transform', open ? 'rotate-180' : ''].join(' ')}
-            fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="m19 9-7 7-7-7" />
-          </svg>
-        </div>
-      </button>
-
-      {open && (
-        <div className="absolute left-0 top-full mt-1.5 w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg z-50 overflow-hidden">
-          <div className="p-2 border-b border-gray-100 dark:border-gray-800">
-            <input
-              autoFocus
-              type="text"
-              placeholder="Caută oraș..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="w-full bg-transparent text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none"
-            />
-          </div>
-          <ul className="max-h-56 overflow-y-auto py-1">
-            {filtered.length === 0 ? (
-              <li className="px-3 py-4 text-sm text-gray-400 text-center">Niciun oraș găsit</li>
-            ) : (
-              filtered.map((city) => (
-                <li key={city}>
-                  <button
-                    type="button"
-                    onClick={() => select(city)}
-                    className={[
-                      'w-full text-left px-3 py-2 text-sm transition-colors',
-                      city === value
-                        ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 font-medium'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800',
-                    ].join(' ')}
-                  >
-                    {city}
-                  </button>
-                </li>
-              ))
-            )}
-          </ul>
-        </div>
-      )}
-    </div>
+        </>
+      }
+    >
+      <div className="dropdown-search">
+        <input
+          autoFocus
+          type="text"
+          placeholder="Caută oraș..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="w-full bg-transparent text-sm text-fg-primary placeholder:text-fg-muted outline-none"
+        />
+      </div>
+      <ul className="max-h-56 overflow-y-auto py-1">
+        {filtered.length === 0 ? (
+          <li className="px-3 py-4 text-sm text-fg-muted text-center">Niciun oraș găsit</li>
+        ) : (
+          filtered.map((city) => (
+            <li key={city}>
+              <button
+                type="button"
+                onClick={() => select(city)}
+                className={[
+                  'w-full text-left px-3 py-2 text-sm transition-colors',
+                  city === value
+                    ? 'bg-brand-subtle text-brand-text font-medium'
+                    : 'text-fg-secondary hover:bg-surface-hover',
+                ].join(' ')}
+              >
+                {city}
+              </button>
+            </li>
+          ))
+        )}
+      </ul>
+    </DropdownBase>
   )
 }

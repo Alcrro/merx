@@ -352,8 +352,8 @@ function GeneralSection() {
           data-tour-side="bottom"
           className="grid grid-cols-2 gap-4"
         >
-          <Select label="Monedă" value={currency} onChange={(e) => setCurrency(e.target.value)} options={CURRENCIES} />
-          <Select label="Limbă" value={locale} onChange={(e) => setLocale(e.target.value)} options={LOCALES} />
+          <Select label="Monedă" value={currency} onChange={setCurrency} options={CURRENCIES} />
+          <Select label="Limbă" value={locale} onChange={setLocale} options={LOCALES} />
         </div>
 
         <div
@@ -362,7 +362,7 @@ function GeneralSection() {
           data-tour-description="Afectează rapoartele de analytics și orele afișate pentru comenzile primite."
           data-tour-side="bottom"
         >
-          <Select label="Fus orar" value={timezone} onChange={(e) => setTimezone(e.target.value)} options={TIMEZONES} />
+          <Select label="Fus orar" value={timezone} onChange={setTimezone} options={TIMEZONES} />
         </div>
 
         <div

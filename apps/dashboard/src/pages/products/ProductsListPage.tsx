@@ -21,7 +21,7 @@ export function ProductsListPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Produsele mele</h1>
-        <Button onClick={() => navigate('/products/catalog')}>+ Adaugă din catalog</Button>
+        <Button to="/products/catalog">+ Adaugă din catalog</Button>
       </div>
 
       <div className="mb-4">
@@ -43,7 +43,7 @@ export function ProductsListPage() {
               {search ? 'Niciun produs găsit.' : 'Nu ai adăugat încă niciun produs în store.'}
             </p>
             {!search && (
-              <Button variant="outline" size="sm" onClick={() => navigate('/products/catalog')}>
+              <Button variant="outline" size="sm" to="/products/catalog">
                 Explorează catalogul
               </Button>
             )}

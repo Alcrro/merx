@@ -1,5 +1,5 @@
-import type { InventoryItem, InventoryMovement, PaginatedResponse } from '@merx/types'
-import { apiClient } from './index'
+import type { InventoryItem, InventoryMovement, PaginatedResponse, StoreInventoryItem, PaginatedStoreInventory } from '@merx/types'
+import { apiClient } from './client'
 
 export interface ListInventoryParams {
   page?: number
@@ -27,4 +27,15 @@ export const inventoryApi = {
 
   listMovements: (variantId: string) =>
     apiClient.get<InventoryMovement[]>(`/inventory/${variantId}/movements`).then((r) => r.data),
+}
+
+export const storeInventoryApi = {
+  list: (params?: { page?: number; limit?: number }) =>
+    apiClient.get<PaginatedStoreInventory>('/inventory/store', { params }).then((r) => r.data),
+
+  setStock: (variantId: string, type: 'in' | 'out' | 'adjustment', quantity: number) =>
+    apiClient.patch<StoreInventoryItem>(`/inventory/store/${variantId}/stock`, { type, quantity }).then((r) => r.data),
+
+  setStatus: (variantId: string, isActive: boolean) =>
+    apiClient.patch<StoreInventoryItem>(`/inventory/store/${variantId}/status`, { isActive }).then((r) => r.data),
 }

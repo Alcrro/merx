@@ -60,7 +60,7 @@ export function InventoryAdjustPanel({ item, onClose }: { item: InventoryItem; o
           label="Tip ajustare"
           value={type}
           options={ADJUST_TYPE_OPTIONS}
-          onChange={(e) => setType(e.target.value as typeof type)}
+          onChange={(v) => setType(v as typeof type)}
         />
         <Input
           label={type === 'adjustment' ? 'Cantitate nouă (total)' : 'Cantitate'}

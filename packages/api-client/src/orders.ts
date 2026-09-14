@@ -5,7 +5,7 @@ import type {
   FulfillmentStatus,
   PaginatedResponse,
 } from '@merx/types'
-import { apiClient } from './index'
+import { apiClient } from './client'
 
 export interface ListOrdersParams {
   status?: OrderStatus
@@ -56,4 +56,7 @@ export const orderApi = {
 
   cancel: (id: string) =>
     apiClient.post<Order>(`/orders/${id}/cancel`).then((r) => r.data),
+
+  refund: (id: string, amount?: number) =>
+    apiClient.post<Order>(`/orders/${id}/refund`, { ...(amount != null ? { amount } : {}) }).then((r) => r.data),
 }

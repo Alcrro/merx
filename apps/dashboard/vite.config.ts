@@ -4,6 +4,7 @@ import path from 'path'
 
 export default defineConfig({
   plugins: [react()],
+  envDir: __dirname,
   resolve: {
     alias: {
       '@merx/types': path.resolve(__dirname, '../../packages/types/src'),

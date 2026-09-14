@@ -326,20 +326,6 @@ export function DashboardLayout() {
         <div className="flex items-center gap-6">
           <span className="text-lg font-bold text-gray-900 dark:text-gray-100 tracking-tight">Merx</span>
           <nav className="flex items-center gap-1">
-            <NavLink
-              to="/marketplace"
-              className={({ isActive }) =>
-                [
-                  'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition',
-                  isActive
-                    ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900',
-                ].join(' ')
-              }
-            >
-              Marketplace
-            </NavLink>
-
             {user && !store && (
               <NavLink
                 to="/subscribe"
@@ -414,7 +400,7 @@ export function DashboardLayout() {
                   )}
                 </NavLink>
 
-                {user.role === 'admin' && (
+                {user.platformRole === 'admin' && (
                   <>
                     <div className="mx-1 h-4 w-px bg-gray-200 dark:bg-gray-700" />
                     <AdminDropdown />

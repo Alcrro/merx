@@ -5,14 +5,14 @@ import { useAnalyticsOverview } from '../../hooks/useAnalytics'
 import { useOrders } from '../../hooks/useOrders'
 import { useInventory } from '../../hooks/useInventory'
 import { OverviewCards } from '../../components/organisms/dashboard/OverviewCards'
-import { RecentOrdersTable } from '../../components/organisms/orders/RecentOrdersTable'
+import RecentOrdersTable from '../../components/organisms/orders/RecentOrdersTable'
 import { LowStockAlerts } from '../../components/organisms/dashboard/LowStockAlerts'
 import { AIInsightsWidget } from '../../components/organisms/dashboard/AIInsightsWidget'
 
 export function DashboardPage() {
   const { user, store } = useAuth()
 
-  if (!store) return <Navigate to="/marketplace" replace />
+  if (!store) return <Navigate to="/intro" replace />
   const fmt = useMemo(
     () => new Intl.NumberFormat('ro-RO', { style: 'currency', currency: store?.currency ?? 'EUR', maximumFractionDigits: 0 }),
     [store?.currency]
@@ -35,7 +35,7 @@ export function DashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <RecentOrdersTable orders={ordersData?.data} fmt={fmt} isLoading={loadingOrders} />
+          <RecentOrdersTable orders={ordersData?.data} isLoading={loadingOrders} />
         </div>
         <div className="flex flex-col gap-6">
           <AIInsightsWidget />

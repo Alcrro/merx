@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 import type { CustomerOrder } from '@merx/types'
 import { orderSlug } from '../../../lib/orderSlug'
-import { OrderStatusBadge } from '../../molecules/orders/OrderStatusBadge'
-import { PaymentStatusBadge } from '../../molecules/orders/PaymentStatusBadge'
-import { FulfillmentStatusBadge } from '../../molecules/orders/FulfillmentStatusBadge'
+import OrderStatusBadge from '../../molecules/orders/OrderStatusBadge'
+import PaymentStatusBadge from '../../molecules/orders/PaymentStatusBadge'
+import FulfillmentStatusBadge from '../../molecules/orders/FulfillmentStatusBadge'
 
 interface Props {
   orders: CustomerOrder[]
@@ -46,9 +46,9 @@ export function CustomerOrdersTable({ orders, fmt }: Props) {
                 >
                   <td className="px-4 py-3 font-mono text-gray-700 dark:text-gray-300">#{order.orderNumber}</td>
                   <td className="px-4 py-3 text-gray-500 dark:text-gray-400">{order.items.length}</td>
-                  <td className="px-4 py-3"><OrderStatusBadge status={order.status as never} /></td>
-                  <td className="px-4 py-3"><PaymentStatusBadge status={order.paymentStatus as never} /></td>
-                  <td className="px-4 py-3"><FulfillmentStatusBadge status={order.fulfillmentStatus as never} /></td>
+                  <td className="px-4 py-3"><OrderStatusBadge status={order.status} /></td>
+                  <td className="px-4 py-3"><PaymentStatusBadge status={order.paymentStatus} /></td>
+                  <td className="px-4 py-3"><FulfillmentStatusBadge status={order.fulfillmentStatus} /></td>
                   <td className="px-4 py-3 font-semibold tabular-nums text-gray-900 dark:text-gray-100">
                     {fmt.format(order.total)}
                   </td>

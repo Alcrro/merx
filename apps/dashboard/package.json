@@ -16,6 +16,7 @@
     "@merx/types": "*",
     "@stripe/react-stripe-js": "^6.8.1",
     "@stripe/stripe-js": "^9.13.0",
+    "@tailwindcss/typography": "^0.5.20",
     "@tanstack/react-query": "^5.51.23",
     "axios": "^1.7.4",
     "driver.js": "^1.8.0",
@@ -24,6 +25,7 @@
     "react-markdown": "^10.1.0",
     "react-router-dom": "^6.26.1",
     "recharts": "^3.10.1",
+    "remark-gfm": "^4.0.1",
     "zustand": "^5.0.15"
   },
   "devDependencies": {
