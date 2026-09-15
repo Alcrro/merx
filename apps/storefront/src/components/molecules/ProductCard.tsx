@@ -1,21 +1,21 @@
+'use client'
+
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Badge } from '../atoms/Badge'
-import { useCart } from '../../contexts/CartContext'
-import type { PublicProduct } from '../../lib/api'
+import { useCart } from '@/contexts/CartContext'
+import { formatPrice } from '@/lib/api'
+import type { PublicProduct } from '@/lib/api'
 
 interface ProductCardProps {
   product: PublicProduct
   currency: string
 }
 
-function formatPrice(amount: number, currency: string) {
-  return new Intl.NumberFormat(undefined, { style: 'currency', currency }).format(amount)
-}
-
 export function ProductCard({ product, currency }: ProductCardProps) {
   const { addItem } = useCart()
-  const navigate = useNavigate()
+  const router = useRouter()
   const [added, setAdded] = useState(false)
 
   const defaultVariant = product.variants[0]
@@ -25,10 +25,9 @@ export function ProductCard({ product, currency }: ProductCardProps) {
 
   function handleQuickAdd() {
     if (hasMultipleVariants) {
-      navigate(`/products/${product.id}`)
+      router.push(`/products/${product.id}`)
       return
     }
-    if (!defaultVariant) return
     addItem({
       variantId: defaultVariant.id,
       productId: product.id,
@@ -44,7 +43,7 @@ export function ProductCard({ product, currency }: ProductCardProps) {
 
   return (
     <div className="group flex flex-col rounded-lg border border-gray-200 bg-white overflow-hidden hover:shadow-md transition-shadow">
-      <Link to={`/products/${product.id}`} className="block">
+      <Link href={`/products/${product.id}`} className="block">
         <div className="aspect-square bg-gray-100 flex items-center justify-center">
           <span className="text-4xl text-gray-300">📦</span>
         </div>
@@ -56,7 +55,7 @@ export function ProductCard({ product, currency }: ProductCardProps) {
             {product.category.name}
           </span>
         )}
-        <Link to={`/products/${product.id}`}>
+        <Link href={`/products/${product.id}`}>
           <h3 className="font-medium text-gray-900 group-hover:text-gray-600 transition-colors line-clamp-2">
             {product.title}
           </h3>
@@ -66,7 +65,7 @@ export function ProductCard({ product, currency }: ProductCardProps) {
         )}
         <div className="mt-auto flex items-center gap-2">
           <span className="font-semibold text-gray-900">{formatPrice(minPrice, currency)}</span>
-          {defaultVariant?.compareAtPrice && defaultVariant.compareAtPrice > defaultVariant.price && (
+          {defaultVariant.compareAtPrice && defaultVariant.compareAtPrice > defaultVariant.price && (
             <span className="text-sm text-gray-400 line-through">
               {formatPrice(defaultVariant.compareAtPrice, currency)}
             </span>
@@ -79,10 +78,10 @@ export function ProductCard({ product, currency }: ProductCardProps) {
           className="mt-1 w-full rounded border border-gray-900 py-1.5 text-xs font-medium text-gray-900 transition-colors hover:bg-gray-900 hover:text-white"
         >
           {added
-            ? '✓ Added'
+            ? '✓ Adăugat'
             : hasMultipleVariants
-            ? `Choose options (${product.variants.length})`
-            : 'Add to cart'}
+              ? `Alege opțiuni (${product.variants.length})`
+              : 'Adaugă în coș'}
         </button>
       </div>
     </div>

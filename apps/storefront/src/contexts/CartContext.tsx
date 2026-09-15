@@ -1,3 +1,5 @@
+'use client'
+
 import { createContext, useContext, useEffect, useReducer } from 'react'
 import type { ReactNode } from 'react'
 
@@ -33,7 +35,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
           items: state.items.map((i) =>
             i.variantId === action.item.variantId
               ? { ...i, quantity: i.quantity + action.item.quantity }
-              : i
+              : i,
           ),
         }
       }
@@ -47,7 +49,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       }
       return {
         items: state.items.map((i) =>
-          i.variantId === action.variantId ? { ...i, quantity: action.quantity } : i
+          i.variantId === action.variantId ? { ...i, quantity: action.quantity } : i,
         ),
       }
     case 'CLEAR':
@@ -56,8 +58,6 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       return state
   }
 }
-
-const STORAGE_KEY = 'merx_cart'
 
 interface CartContextValue {
   items: CartItem[]
@@ -71,21 +71,23 @@ interface CartContextValue {
 
 const CartContext = createContext<CartContextValue | null>(null)
 
-export function CartProvider({ children }: { children: ReactNode }) {
+export function CartProvider({ slug, children }: { slug: string; children: ReactNode }) {
+  // Separate cart per store slug so visiting multiple stores doesn't mix items
+  const storageKey = `merx_cart_${slug}`
   const [state, dispatch] = useReducer(cartReducer, { items: [] })
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) dispatch({ type: 'HYDRATE', items: JSON.parse(stored) })
+      const stored = localStorage.getItem(storageKey)
+      if (stored) dispatch({ type: 'HYDRATE', items: JSON.parse(stored) as CartItem[] })
     } catch {
       // ignore malformed storage
     }
-  }, [])
+  }, [storageKey])
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items))
-  }, [state.items])
+    localStorage.setItem(storageKey, JSON.stringify(state.items))
+  }, [state.items, storageKey])
 
   const count = state.items.reduce((s, i) => s + i.quantity, 0)
   const subtotal = state.items.reduce((s, i) => s + i.price * i.quantity, 0)

@@ -2,29 +2,25 @@
   "name": "@merx/storefront",
   "version": "0.0.1",
   "private": true,
-  "type": "module",
   "scripts": {
-    "dev": "vite --port 3002",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "lint": "eslint src --ext .ts,.tsx",
+    "dev": "next dev --port 3002",
+    "build": "next build",
+    "start": "next start --port 3002",
+    "lint": "next lint",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@merx/types": "*",
-    "@tanstack/react-query": "^5.101.4",
-    "autoprefixer": "^10.5.4",
-    "postcss": "^8.5.26",
+    "next": "^15.0.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.1",
-    "tailwindcss": "^3.4.19"
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@types/node": "^22.0.0",
     "@types/react": "^18.3.4",
     "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.1",
-    "typescript": "^5.5.4",
-    "vite": "^5.4.1"
+    "autoprefixer": "^10.5.4",
+    "postcss": "^8.5.26",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.5.4"
   }
 }

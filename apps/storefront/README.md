@@ -84,17 +84,17 @@ src/context/
 
 ## Status MVP
 
-**Verdict:** Basic+ (~70%). Fluxul complet funcționează (browse → cart → checkout → confirmare).
+**Verdict:** Basic+ (~70%). Fluxul complet funcționează (browse → cart → checkout → confirmare). Blocantele rămase sunt cosmetic + search.
 
 | Feature | Status |
 |---|---|
 | 404 page, empty state cart, footer | ✅ |
 | SEO meta + schema.org JSON-LD pe product detail | ✅ |
 | Discount code la checkout | ✅ |
+| Loading skeletons pe products + product detail | ✅ `loading.tsx` per rută; component generic lipsă |
+| Product images | ⚠️ API există (`/products/:id/images`); storefront afișează prima imagine dacă e returnată |
 | Shipping display real (cost din store settings) | ❌ afișat „calculat de Stripe", nu suma reală |
 | Tax display la checkout | ❌ lipsă |
 | Empty state products listing (categorie goală) | ❌ lipsă |
-| Search bar | ❌ lipsă |
+| Search bar | ❌ lipsă (API fără ILIKE/FTS) |
 | Order tracking page `/orders/[orderId]` | ❌ lipsă |
-| Product images | ❌ depinde de API product images endpoint |
-| Loading skeletons generalizate | ❌ skeleton pe products page, dar nu component generic |
