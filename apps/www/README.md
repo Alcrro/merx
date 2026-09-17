@@ -70,6 +70,47 @@ CTA-urile (butoane „Încearcă gratis", „Start free") citesc `NEXT_PUBLIC_DA
 
 ---
 
+## Positioning & Messaging
+
+Merx se încadrează în categoria **Agentic Commerce** — nu e-commerce platform, ci commerce operator.
+
+**Frame de bază:**
+- Shopify = platformă cu unelte. Tu operezi.
+- Merx = AI care operează. Tu dai direcția.
+
+**Tagline (neschimbat):** *"Tell us what you sell. We'll run the store."*
+
+**Nu folosi în copy:** "Shopify mai bun", "alternativă la Shopify", "Shopify clone". Shopify apare doar ca referință de context, nu ca rival de features.
+
+---
+
+## TODO — www content (Agentic Commerce narrative)
+
+### Hero
+- [ ] Hero headline să conțină categoria: *"The first Agentic Commerce platform"* sau *"Your AI-powered store operator"*
+- [ ] Sub-headline să explice modelul de operare, nu feature lista: *"Tell us what you sell. We'll run the store — inventory, orders, analytics, all of it."*
+- [ ] Înlocuiește orice referință la "e-commerce platform" cu "commerce operator" sau "agentic commerce"
+
+### Secțiune "How it works" (lipsă)
+- [ ] 3 pași simpli: **1. Adaugi produsele → 2. AI analizează și operează → 3. Tu aprobi deciziile mari**
+- [ ] Vizual: contrast direct Shopify model (tu faci totul) vs Merx model (AI face, tu aprobi)
+
+### Secțiune "Why Merx" (poziționare explicită)
+- [ ] Card: *"Shopify îți dă unelte. Merx îți dă un operator."*
+- [ ] Card: *"Nu mai analiza dashboarduri. Primești decizii, nu date."*
+- [ ] Card: *"AI cu permisiuni — tu decizi ce poate face agentul."*
+
+### Social proof
+- [ ] Testimoniale reale sau placeholdere realiste (merchant mic, 1-3 persoane, fără echipă de marketing)
+- [ ] Stat: *"X merchants, Y produse gestionate automat"* (even if placeholder at launch)
+
+### SEO & meta
+- [ ] `og:title`: *"Merx — Agentic Commerce Platform"*
+- [ ] `og:description`: *"Tell us what you sell. We'll run the store. AI-powered commerce operator for small merchants."*
+- [ ] Keywords: agentic commerce, AI commerce operator, AI ecommerce, autonomous store management
+
+---
+
 ## Status MVP
 
 **Verdict:** Alpha+ (~55%).

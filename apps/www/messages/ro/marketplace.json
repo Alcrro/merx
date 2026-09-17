@@ -1,0 +1,74 @@
+{
+  "seo": {
+    "title": "Marketplace",
+    "description": "Cumpără și vinde cu alți merchant Merx. Feed B2B cu produse verificate, plăți Stripe, scor de risc transparent pe fiecare listing.",
+    "ogTitle": "Marketplace | Merx",
+    "schemaDescription": "Feed B2B integrat în platforma Merx — vendori verificați, plăți Stripe, scor de risc transparent.",
+    "offerDescription": "Acces inclus în orice plan Merx."
+  },
+  "hero": {
+    "badge": "Merx Marketplace",
+    "title": "Vinde și cumpără cu",
+    "titleHighlight": "alți merchant",
+    "description": "Un feed B2B unde merchant-ii Merx cumpără și vând între ei. Produse verificate, plăți Stripe, scor de risc transparent pe fiecare listing.",
+    "ctaPrimary": "Deschide Marketplace-ul",
+    "ctaSecondary": "Creează cont gratuit"
+  },
+  "stats": [
+    { "value": "1.240+", "label": "listinguri active" },
+    { "value": "380+", "label": "vendori verificați" },
+    { "value": "< 48h", "label": "timp mediu livrare" },
+    { "value": "2%", "label": "comision platformă" }
+  ],
+  "howItWorks": {
+    "title": "Cum funcționează",
+    "description": "De la produs la plată — totul în trei pași simpli.",
+    "steps": [
+      {
+        "step": "01",
+        "title": "Listezi produsele",
+        "body": "Produsele tale din dashboard apar automat în marketplace. Setezi prețul, categoria și disponibilitatea."
+      },
+      {
+        "step": "02",
+        "title": "Alți merchant cumpără",
+        "body": "Merchant-ii verificați Merx descoperă produsele tale în feed și plasează comenzi direct."
+      },
+      {
+        "step": "03",
+        "title": "Stripe gestionează plata",
+        "body": "Plata e procesată securizat prin Stripe. Tu primești suma minus comisionul platformei (2%)."
+      }
+    ]
+  },
+  "features": {
+    "title": "Tot ce ai nevoie, într-un singur loc",
+    "description": "Marketplace-ul Merx e integrat direct în dashboard-ul tău. Zero setup extra — produsele tale sunt deja acolo.",
+    "items": [
+      "Produsele tale listate automat din dashboard",
+      "Cumpără stoc direct de la alți vendori verificați",
+      "Scor de risc transparent pe fiecare listing",
+      "Plăți securizate prin Stripe",
+      "Negociere directă pentru comenzi mari"
+    ],
+    "cta": "Explorează Marketplace-ul",
+    "tableProduct": "Produs",
+    "tablePrice": "Preț",
+    "tableAction": "Acțiune",
+    "listingCount": "1.240 listinguri active",
+    "seeAll": "Vezi tot →",
+    "buyButton": "Cumpără",
+    "rows": [
+      { "name": "MacBook Air M3", "meta": "Fizic · alcrro's Store", "price": "7.299,00 EUR" },
+      { "name": "iPhone 15 Pro", "meta": "Fizic · techsupply.ro", "price": "5.999,00 EUR" },
+      { "name": "Ceas Smart X200", "meta": "Fizic · gadgeturi.eu", "price": "899,00 EUR" },
+      { "name": "Servicii SEO Pro", "meta": "Servicii · digital-craft.ro", "price": "349,00 EUR" }
+    ]
+  },
+  "cta": {
+    "title": "Gata să vinzi pe Marketplace?",
+    "description": "Creează-ți contul Merx gratuit și produsele tale apar pe marketplace în câteva minute.",
+    "ctaPrimary": "Începe gratuit",
+    "ctaSecondary": "Deschide Marketplace-ul"
+  }
+}

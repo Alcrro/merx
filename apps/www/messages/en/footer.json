@@ -1,0 +1,26 @@
+{
+  "tagline": "Your online store, operated by AI.",
+  "newsletter": {
+    "title": "Be the first to know",
+    "description": "Launches, new features and exclusive offers — straight to your inbox."
+  },
+  "copyright": "All rights reserved.",
+  "columns": {
+    "product": "Product",
+    "resources": "Resources",
+    "legal": "Legal"
+  },
+  "links": {
+    "features": "Features",
+    "pricing": "Pricing",
+    "marketplace": "Marketplace",
+    "changelog": "Changelog",
+    "docs": "Documentation",
+    "merchantGuide": "Merchant guide",
+    "contact": "Contact",
+    "status": "Status",
+    "privacy": "Privacy Policy",
+    "terms": "Terms & Conditions",
+    "cookies": "Cookie Policy"
+  }
+}

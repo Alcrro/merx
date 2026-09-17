@@ -1,0 +1,81 @@
+{
+  "hero": {
+    "title": "How can we help?",
+    "description": "Fill in the form or write directly to the right address — real people reply."
+  },
+  "form": {
+    "name": "Name",
+    "email": "Email",
+    "subject": "Subject",
+    "subjectPlaceholder": "Choose a subject...",
+    "message": "Message",
+    "messagePlaceholder": "Briefly describe what you need...",
+    "submit": "Send message",
+    "submitting": "Sending...",
+    "successTitle": "Message sent!",
+    "successWithTime": "We'll get back to you within {time}.",
+    "successFallback": "We'll get back to you as soon as possible.",
+    "sendTitle": "Send a message"
+  },
+  "channels": {
+    "heading": "Or write directly",
+    "items": {
+      "sales": {
+        "label": "Sales",
+        "description": "Questions about plans, trial or Enterprise.",
+        "responseTime": "< 4h on business days"
+      },
+      "support": {
+        "label": "Technical support",
+        "description": "Issues with the platform or your store.",
+        "responseTime": "< 8h on business days"
+      },
+      "legal": {
+        "label": "Legal",
+        "description": "Terms, privacy, GDPR, official requests.",
+        "responseTime": "< 2 business days"
+      },
+      "press": {
+        "label": "Press",
+        "description": "Media, partnerships, collaborations.",
+        "responseTime": "< 2 business days"
+      }
+    }
+  },
+  "faq": {
+    "heading": "Frequently asked questions",
+    "items": [
+      {
+        "q": "I have an urgent issue with my store.",
+        "a": "Write to support@merx.com with subject [URGENT]. We prioritize these requests and respond within 2 hours during business hours."
+      },
+      {
+        "q": "Can I schedule a demo?",
+        "a": "Yes. Send an email to hello@merx.com with \"Demo\" in the subject and we'll suggest a slot within 24 hours."
+      },
+      {
+        "q": "Where do I report a security vulnerability?",
+        "a": "Send details to security@merx.com. Please don't publicly disclose vulnerabilities before receiving confirmation that we've resolved the issue."
+      }
+    ]
+  },
+  "trial": {
+    "title": "Prefer to try before writing?",
+    "cta": "Start free trial",
+    "ctaSecondary": "Compare plans →"
+  },
+  "topics": {
+    "sales": "Sales",
+    "support": "Technical support",
+    "legal": "Legal / GDPR",
+    "press": "Press / Partnerships",
+    "other": "Other subject"
+  },
+  "trustSignals": [
+    "200+ active merchants",
+    "Response within 4h",
+    "No long-term contract",
+    "14-day free trial"
+  ],
+  "trialPerks": ["14 days free", "No card required", "5-min setup"]
+}

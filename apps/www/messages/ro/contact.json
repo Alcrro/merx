@@ -1,0 +1,81 @@
+{
+  "hero": {
+    "title": "Cum te putem ajuta?",
+    "description": "Completează formularul sau scrie direct la adresa potrivită — răspundem de la oameni reali."
+  },
+  "form": {
+    "name": "Nume",
+    "email": "Email",
+    "subject": "Subiect",
+    "subjectPlaceholder": "Alege un subiect...",
+    "message": "Mesaj",
+    "messagePlaceholder": "Descrie pe scurt ce ai nevoie...",
+    "submit": "Trimite mesajul",
+    "submitting": "Se trimite...",
+    "successTitle": "Mesaj trimis!",
+    "successWithTime": "Îți răspundem în {time}.",
+    "successFallback": "Îți răspundem în cel mai scurt timp posibil.",
+    "sendTitle": "Trimite un mesaj"
+  },
+  "channels": {
+    "heading": "Sau scrie direct",
+    "items": {
+      "sales": {
+        "label": "Vânzări",
+        "description": "Întrebări despre planuri, trial sau Enterprise.",
+        "responseTime": "< 4 ore în zilele lucrătoare"
+      },
+      "support": {
+        "label": "Suport tehnic",
+        "description": "Probleme cu platforma sau magazinul tău.",
+        "responseTime": "< 8 ore în zilele lucrătoare"
+      },
+      "legal": {
+        "label": "Legal",
+        "description": "Termeni, confidențialitate, GDPR, solicitări oficiale.",
+        "responseTime": "< 2 zile lucrătoare"
+      },
+      "press": {
+        "label": "Presă",
+        "description": "Media, parteneriate, colaborări.",
+        "responseTime": "< 2 zile lucrătoare"
+      }
+    }
+  },
+  "faq": {
+    "heading": "Întrebări frecvente",
+    "items": [
+      {
+        "q": "Am o problemă urgentă cu magazinul meu.",
+        "a": "Scrie la support@merx.com cu subiectul [URGENT]. Prioritizăm aceste solicitări și răspundem în maxim 2 ore în orele de program."
+      },
+      {
+        "q": "Pot să programez un demo?",
+        "a": "Da. Trimite un email la hello@merx.com cu \"Demo\" în subiect și îți propunem un slot în maxim 24 de ore."
+      },
+      {
+        "q": "Unde raportez o vulnerabilitate de securitate?",
+        "a": "Trimite detaliile la security@merx.com. Nu posta public vulnerabilitățile înainte să primești confirmarea că am remediat problema."
+      }
+    ]
+  },
+  "trial": {
+    "title": "Preferi să testezi înainte să scrii?",
+    "cta": "Începe trial gratuit",
+    "ctaSecondary": "Compară planurile →"
+  },
+  "topics": {
+    "sales": "Vânzări",
+    "support": "Suport tehnic",
+    "legal": "Legal / GDPR",
+    "press": "Presă / Parteneriate",
+    "other": "Alt subiect"
+  },
+  "trustSignals": [
+    "+200 merchant activi",
+    "Răspuns în max 4h",
+    "Fără contract pe termen lung",
+    "Trial 14 zile gratuit"
+  ],
+  "trialPerks": ["14 zile gratuit", "Fără card", "Setup în 5 min"]
+}

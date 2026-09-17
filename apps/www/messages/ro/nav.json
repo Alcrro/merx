@@ -1,0 +1,24 @@
+{
+  "features": "Features",
+  "pricing": "Prețuri",
+  "about": "Despre",
+  "contact": "Contact",
+  "login": "Login",
+  "logout": "Deconectare",
+  "account": "Contul meu",
+  "startFree": "Începe gratuit",
+  "featureLabels": {
+    "aiAgent": "AI Agent",
+    "analytics": "Analytics",
+    "inventory": "Inventar",
+    "storefront": "Storefront",
+    "marketplace": "Marketplace"
+  },
+  "featureDescriptions": {
+    "aiAgent": "Operează magazinul automat, 24/7",
+    "analytics": "Insights și rapoarte în timp real",
+    "inventory": "Stoc și reaprovizionare automată",
+    "storefront": "Magazin online cu SEO complet",
+    "marketplace": "Vinde și cumpără cu alți merchant Merx"
+  }
+}

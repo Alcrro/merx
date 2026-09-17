@@ -1,0 +1,24 @@
+{
+  "features": "Features",
+  "pricing": "Pricing",
+  "about": "About",
+  "contact": "Contact",
+  "login": "Login",
+  "logout": "Log out",
+  "account": "My account",
+  "startFree": "Get started",
+  "featureLabels": {
+    "aiAgent": "AI Agent",
+    "analytics": "Analytics",
+    "inventory": "Inventory",
+    "storefront": "Storefront",
+    "marketplace": "Marketplace"
+  },
+  "featureDescriptions": {
+    "aiAgent": "Operate your store automatically, 24/7",
+    "analytics": "Real-time insights and reports",
+    "inventory": "Stock and automatic restocking",
+    "storefront": "Online store with full SEO",
+    "marketplace": "Buy and sell with other Merx merchants"
+  }
+}

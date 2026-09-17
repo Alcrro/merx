@@ -1,0 +1,74 @@
+{
+  "seo": {
+    "title": "Marketplace",
+    "description": "Buy and sell with other Merx merchants. B2B feed with verified products, Stripe payments, transparent risk score on every listing.",
+    "ogTitle": "Marketplace | Merx",
+    "schemaDescription": "B2B feed integrated into the Merx platform — verified vendors, Stripe payments, transparent risk score.",
+    "offerDescription": "Included in every Merx plan."
+  },
+  "hero": {
+    "badge": "Merx Marketplace",
+    "title": "Buy and sell with",
+    "titleHighlight": "other merchants",
+    "description": "A B2B feed where Merx merchants buy and sell between each other. Verified products, Stripe payments, transparent risk score on every listing.",
+    "ctaPrimary": "Open Marketplace",
+    "ctaSecondary": "Create free account"
+  },
+  "stats": [
+    { "value": "1,240+", "label": "active listings" },
+    { "value": "380+", "label": "verified vendors" },
+    { "value": "< 48h", "label": "avg. delivery time" },
+    { "value": "2%", "label": "platform commission" }
+  ],
+  "howItWorks": {
+    "title": "How it works",
+    "description": "From product to payment — three simple steps.",
+    "steps": [
+      {
+        "step": "01",
+        "title": "List your products",
+        "body": "Your dashboard products appear automatically on the marketplace. Set the price, category, and availability."
+      },
+      {
+        "step": "02",
+        "title": "Other merchants buy",
+        "body": "Verified Merx merchants discover your products in the feed and place orders directly."
+      },
+      {
+        "step": "03",
+        "title": "Stripe handles payment",
+        "body": "Payment is processed securely via Stripe. You receive the amount minus the platform commission (2%)."
+      }
+    ]
+  },
+  "features": {
+    "title": "Everything you need, in one place",
+    "description": "Merx Marketplace is integrated directly into your dashboard. Zero extra setup — your products are already there.",
+    "items": [
+      "Your products automatically listed from the dashboard",
+      "Buy stock directly from other verified vendors",
+      "Transparent risk score on every listing",
+      "Secure payments via Stripe",
+      "Direct negotiation for large orders"
+    ],
+    "cta": "Explore Marketplace",
+    "tableProduct": "Product",
+    "tablePrice": "Price",
+    "tableAction": "Action",
+    "listingCount": "1,240+ active listings",
+    "seeAll": "See all →",
+    "buyButton": "Buy",
+    "rows": [
+      { "name": "MacBook Air M3", "meta": "Physical · alcrro's Store", "price": "7,299.00 EUR" },
+      { "name": "iPhone 15 Pro", "meta": "Physical · techsupply.ro", "price": "5,999.00 EUR" },
+      { "name": "Smart Watch X200", "meta": "Physical · gadgeturi.eu", "price": "899.00 EUR" },
+      { "name": "SEO Pro Services", "meta": "Services · digital-craft.ro", "price": "349.00 EUR" }
+    ]
+  },
+  "cta": {
+    "title": "Ready to sell on Marketplace?",
+    "description": "Create your free Merx account and your products appear on the marketplace in minutes.",
+    "ctaPrimary": "Get started free",
+    "ctaSecondary": "Open Marketplace"
+  }
+}

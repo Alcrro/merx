@@ -1,0 +1,26 @@
+{
+  "tagline": "Magazinul tău online, operat de AI.",
+  "newsletter": {
+    "title": "Fii primul care află noutățile",
+    "description": "Lansări, features noi și oferte exclusive — direct în inbox."
+  },
+  "copyright": "Toate drepturile rezervate.",
+  "columns": {
+    "product": "Produs",
+    "resources": "Resurse",
+    "legal": "Legal"
+  },
+  "links": {
+    "features": "Funcționalități",
+    "pricing": "Prețuri",
+    "marketplace": "Marketplace",
+    "changelog": "Changelog",
+    "docs": "Documentație",
+    "merchantGuide": "Ghid merchant",
+    "contact": "Contact",
+    "status": "Status",
+    "privacy": "Privacy Policy",
+    "terms": "Termeni și condiții",
+    "cookies": "Cookie Policy"
+  }
+}
