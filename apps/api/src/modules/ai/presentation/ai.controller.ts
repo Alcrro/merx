@@ -1,5 +1,5 @@
 import type { Response } from 'express'
-import type { AuthenticatedRequest } from '../../../middleware/authenticate'
+import type { AuthenticatedStoreRequest as AuthenticatedRequest } from '../../../middleware/authenticate'
 import { AgentService, AIError, StoreContext } from '../application/agent.service'
 import { aiRepository } from '../infrastructure/ai.repository'
 import { OpenAIProvider } from '@merx/llm-provider'
@@ -127,8 +127,8 @@ export const aiController = {
     const { quantity } = restockSchema.parse(req.body)
     const insightId = req.params.insightId!
 
-    const insight = await prisma.aIInsight.findUnique({ where: { id: insightId } })
-    if (!insight || insight.storeId !== req.user.storeId) {
+    const insight = await prisma.aIInsight.findFirst({ where: { id: insightId, storeId: req.user.storeId } })
+    if (!insight) {
       res.status(404).json({ error: 'Insight not found' })
       return
     }
