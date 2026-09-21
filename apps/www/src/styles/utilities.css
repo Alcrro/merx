@@ -1,0 +1,28 @@
+.bg-primary         { background-color: var(--color-primary); }
+.bg-primary-hover   { background-color: var(--color-primary-hover); }
+.bg-primary-subtle  { background-color: var(--color-primary-subtle); }
+.text-primary-fg    { color: var(--color-primary-fg); }
+.text-primary       { color: var(--color-primary); }
+
+.bg-surface         { background-color: var(--color-surface); }
+.bg-surface-subtle  { background-color: var(--color-surface-subtle); }
+.bg-surface-elevated { background-color: var(--color-surface-elevated); }
+
+.text-fg            { color: var(--color-fg); }
+.text-fg-muted      { color: var(--color-fg-muted); }
+.text-fg-subtle     { color: var(--color-fg-subtle); }
+.text-fg-inverted   { color: var(--color-fg-inverted); }
+
+.border-line        { border-color: var(--color-stroke); }
+.border-line-strong { border-color: var(--color-stroke-strong); }
+
+.ring-ring          { --tw-ring-color: var(--color-ring); }
+
+.text-error         { color: var(--color-error); }
+.text-success       { color: var(--color-success); }
+.text-warning       { color: var(--color-warning); }
+
+.hover\:bg-primary-hover:hover  { background-color: var(--color-primary-hover); }
+.hover\:bg-surface-subtle:hover { background-color: var(--color-surface-subtle); }
+.hover\:bg-surface-elevated:hover { background-color: var(--color-surface-elevated); }
+.hover\:text-fg:hover           { color: var(--color-fg); }

@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+Disallow: /login
+Disallow: /signup
+Disallow: /account
+Disallow: /ro/login
+Disallow: /ro/signup
+Disallow: /ro/account
+Disallow: /api/
+
+Sitemap: https://merx.com/sitemap.xml
