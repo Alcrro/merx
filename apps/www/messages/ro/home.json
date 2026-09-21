@@ -1,0 +1,194 @@
+{
+  "hero": {
+    "badge": "Acum în beta privată",
+    "title": "Magazinul tău online,",
+    "titleHighlight": "operat de AI",
+    "description": "Merx îți gestionează comenzile, stocul și clienții automat. Tu te ocupi de produse — restul îl face AI-ul.",
+    "ctaSecondary": "Vezi planurile",
+    "disclaimer": "Fără card necesar · Anulezi oricând"
+  },
+  "about": {
+    "title": "De ce Merx?",
+    "description": "Am construit Merx pentru antreprenorii care vor să vândă online fără să devină experți în tech sau logistică. Platforma face tot — tu te concentrezi pe produs.",
+    "cards": [
+      { "title": "Setup în minute", "body": "Contul tău, magazinul tău online și primul produs — live în mai puțin de 5 minute." },
+      { "title": "Zero mentenanță", "body": "Update-uri, securitate, backup — totul e gestionat de noi. Tu nu instalezi nimic." },
+      { "title": "Scalează cu tine", "body": "De la 10 la 10.000 de comenzi pe lună — infrastructura crește fără să schimbi nimic." }
+    ]
+  },
+  "cta": {
+    "badge": "Gratuit pe planul Starter — zero comisioane",
+    "title": "Gata să vinzi?",
+    "description": "Magazin online live, AI activ și primele produse listate — în mai puțin de 5 minute.",
+    "ctaSecondary": "Compară planurile",
+    "disclaimer": "Fără card necesar · Anulezi oricând · Date protejate GDPR",
+    "benefits": ["Setup în 5 minute", "Fără card necesar", "Anulezi oricând"]
+  },
+  "stats": [
+    { "value": "< 5 min", "label": "setup complet" },
+    { "value": "24/7", "label": "agent activ" },
+    { "value": "0 cod", "label": "necesar" },
+    { "value": "100%", "label": "automatizat" }
+  ],
+  "features": [
+    {
+      "badge": "AI Agent",
+      "headline": "Magazinul tău, operat automat",
+      "sub": "Un agent AI îți gestionează comenzile, răspunde clienților și ia decizii în timp real — fără intervenție umană.",
+      "items": [
+        "Procesare comenzi 24/7, fără personal",
+        "Răspunsuri automate la întrebări frecvente",
+        "Escaladare inteligentă la situații complexe",
+        "Rapoarte zilnice generate automat"
+      ]
+    },
+    {
+      "badge": "Conversie",
+      "headline": "Fiecare pagină de produs, gândită să vândă",
+      "sub": "Nu generăm doar un site. Analizăm businessul tău, înțelegem journey-ul cumpărătorului și construim structura paginilor în jurul unui singur scop: conversia.",
+      "items": [
+        "SEO complet per produs — schema.org JSON-LD, meta tags, indexabil Google",
+        "CTA-uri poziționate pe baza conversion psychology, nu pe preferințe vizuale",
+        "Structura paginii generată după tipul de produs și audiență",
+        "Analytics loop: vede ce nu convertește și recomandă ajustări"
+      ]
+    },
+    {
+      "badge": "Analytics",
+      "headline": "Datele tale, în timp real",
+      "sub": "Dashboard complet cu toate metricile importante — vânzări, conversii, clienți noi, produse top. Fără configurare.",
+      "items": [
+        "Revenue zilnic, săptămânal, lunar",
+        "Rata de conversie per canal",
+        "Clienți noi vs. recurenți",
+        "Top produse și categorii"
+      ]
+    },
+    {
+      "badge": "Inventar",
+      "headline": "Stoc mereu la zi",
+      "sub": "Merx urmărește fiecare produs și îți semnalează când e nevoie de reaprovizionare, înainte să rămâi fără stoc.",
+      "items": [
+        "Alertă automată la stoc critic",
+        "Istoric mișcări per produs",
+        "Variante (mărime, culoare, etc.)",
+        "Import CSV pentru cataloage mari"
+      ]
+    },
+    {
+      "badge": "Comenzi",
+      "headline": "Toate comenzile, la un loc",
+      "sub": "Vizualizezi, filtrezi și procesezi comenzile din dashboard — cu statusuri clare, timeline complet și fulfillment în câteva click-uri.",
+      "items": [
+        "Status în timp real: plasat → procesat → expediat → livrat",
+        "Timeline complet per comandă",
+        "Filtrare după dată, status, client, valoare",
+        "Notificare automată client la fiecare schimbare de status"
+      ]
+    },
+    {
+      "badge": "Clienți",
+      "headline": "Cunoaște-ți clienții",
+      "sub": "CRM integrat direct în platformă — profil complet per client, valoare totală cheltuită, istoricul comenzilor și segmentare new vs. returning.",
+      "items": [
+        "Profil client cu toate comenzile și valoarea LTV",
+        "Filtrare new vs. clienți recurenți",
+        "Căutare rapidă după email sau nume",
+        "Date pentru remarketing și fidelizare"
+      ]
+    },
+    {
+      "badge": "Reduceri",
+      "headline": "Campanii și coduri promo",
+      "sub": "Creezi coduri promoționale în câteva secunde — reducere procentuală sau fixă, limită de utilizări, valoare minimă a coșului. Clientul le aplică direct la checkout.",
+      "items": [
+        "Cod promoțional cu reducere % sau fixă (lei)",
+        "Număr maxim de utilizări per cod",
+        "Valoare minimă a coșului pentru activare",
+        "Raport utilizări — câți clienți au folosit codul"
+      ]
+    }
+  ],
+  "logos": {
+    "label": "Se integrează cu toolurile pe care le folosești deja"
+  },
+  "testimonials": {
+    "title": "De încredere pentru fondatori care vând online",
+    "description": "Rezultate reale de la antreprenori care au trecut la Merx.",
+    "items": [
+      {
+        "quote": "Am redus cu 3 ore pe zi timpul pierdut pe comenzi. AI-ul le procesează automat — clienții primesc notificări instant și eu mă ocup de produse noi.",
+        "name": "Andrei Moise",
+        "role": "CEO",
+        "company": "ModaUrbana.ro",
+        "metric": "−3h/zi",
+        "initials": "AM"
+      },
+      {
+        "quote": "Setup-ul a durat 4 minute. Aveam magazin live cu produse listate înainte să termin cafeaua. Nu mă așteptam să fie atât de rapid.",
+        "name": "Raluca Ionescu",
+        "role": "Fondator",
+        "company": "NaturalBox.ro",
+        "metric": "Live în 4 min",
+        "initials": "RI"
+      },
+      {
+        "quote": "Alertele de stoc mi-au schimbat modul de lucru. Merx îmi semnalează înainte să rămân fără marfă — am evitat două rupturi de stoc luna asta. Era revenue pierdut.",
+        "name": "Bogdan Tănase",
+        "role": "CEO",
+        "company": "TechGadget.eu",
+        "metric": "0 rupturi / 3 luni",
+        "initials": "BT"
+      },
+      {
+        "quote": "Eram sceptic că AI-ul poate rula magazinul meu. După două săptămâni am oprit verificările manuale — funcționează pur și simplu. Comenzi procesate, clienți notificați, stoc actualizat.",
+        "name": "Diana Florescu",
+        "role": "Fondator",
+        "company": "CasaDecor.ro",
+        "metric": "100% automatizat",
+        "initials": "DF"
+      },
+      {
+        "quote": "CRM-ul singur merită banii. Văd istoricul complet al fiecărui client, LTV, ce a cumpărat — date pe care nu le aveam înainte. Remarketingul a devenit simplu.",
+        "name": "Mihai Stan",
+        "role": "CEO",
+        "company": "FitSupply.ro",
+        "metric": "+34% recurenți",
+        "initials": "MS"
+      },
+      {
+        "quote": "Trecerea de la WooCommerce a fost cea mai bună decizie. Fără plugin-uri, fără mentenanță, fără probleme de hosting. Totul pur și simplu merge.",
+        "name": "Ioana Popa",
+        "role": "Fondator",
+        "company": "KidsBoutique.ro",
+        "metric": "0 mentenanță",
+        "initials": "IP"
+      }
+    ]
+  },
+  "marketplace": {
+    "badge": "Nou · Marketplace",
+    "title": "Vinde și cumpără cu alți merchant Merx",
+    "description": "Merx Marketplace conectează toți vendorii din platformă într-un singur feed B2B. Produsele tale devin vizibile pentru mii de alți merchant — fără configurare extra.",
+    "ctaPrimary": "Deschide Marketplace-ul",
+    "ctaSecondary": "Află mai mult",
+    "tableProduct": "Produs",
+    "tablePrice": "Preț",
+    "tableAction": "Acțiune",
+    "listingCount": "1.240 listinguri active",
+    "seeAll": "Vezi tot →",
+    "buyButton": "Cumpără",
+    "features": [
+      "Produsele tale listate automat din dashboard",
+      "Cumpără stoc direct de la alți vendor verificați",
+      "Scor de risc transparent pe fiecare listing",
+      "Plăți securizate prin Stripe — zero comision manual"
+    ],
+    "rows": [
+      { "name": "MacBook Air M3", "meta": "Fizic · alcrro's Store" },
+      { "name": "iPhone 15 Pro", "meta": "Fizic · techsupply.ro" },
+      { "name": "Ceas Smart X200", "meta": "Fizic · gadgeturi.eu" },
+      { "name": "Servicii SEO Pro", "meta": "Servicii · digital-craft.ro" }
+    ]
+  }
+}
