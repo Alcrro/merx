@@ -1,0 +1,67 @@
+:root {
+  /* ── Foreground / text ─────────────────────────────────────────── */
+  --color-fg:          theme('colors.gray.900');
+  --color-fg-muted:    theme('colors.gray.500');
+  --color-fg-subtle:   theme('colors.gray.400');
+  --color-fg-inverted: theme('colors.white');
+
+  /* ── Surfaces ──────────────────────────────────────────────────── */
+  --color-surface:           theme('colors.white');
+  --color-surface-subtle:    theme('colors.gray.50');
+  --color-surface-recessed:  color-mix(in srgb, var(--color-surface-subtle) 50%, var(--color-surface-elevated) 50%);
+  --color-surface-elevated:  theme('colors.white');
+  --color-surface-overlay:   rgba(0, 0, 0, 0.45);
+  --color-surface-nav:       #fbfeff;
+
+  /* ── Borders ───────────────────────────────────────────────────── */
+  --color-stroke:        theme('colors.gray.100');
+  --color-stroke-strong: theme('colors.gray.200');
+
+  /* ── Primary / CTA ─────────────────────────────────────────────── */
+  --color-primary:        theme('colors.indigo.600');
+  --color-primary-hover:  theme('colors.indigo.700');
+  --color-primary-subtle: theme('colors.indigo.50');
+  --color-primary-fg:     theme('colors.white');
+
+  /* ── Focus ─────────────────────────────────────────────────────── */
+  --color-ring: theme('colors.indigo.500');
+
+  /* ── Feedback ──────────────────────────────────────────────────── */
+  --color-error:   theme('colors.red.700');
+  --color-success: theme('colors.green.700');
+  --color-warning: theme('colors.amber.600');
+}
+
+.dark {
+  /* ── Foreground / text ─────────────────────────────────────────── */
+  --color-fg:          theme('colors.gray.50');
+  --color-fg-muted:    theme('colors.gray.400');
+  --color-fg-subtle:   theme('colors.gray.500');
+  --color-fg-inverted: theme('colors.gray.900');
+
+  /* ── Surfaces ──────────────────────────────────────────────────── */
+  --color-surface:           theme('colors.gray.950');
+  --color-surface-subtle:    theme('colors.gray.900');
+  --color-surface-recessed:  color-mix(in srgb, var(--color-surface-subtle) 50%, var(--color-surface-elevated) 50%);
+  --color-surface-elevated:  theme('colors.gray.800');
+  --color-surface-nav:       #0d1b2a;
+  --color-surface-overlay:  rgba(0, 0, 0, 0.7);
+
+  /* ── Borders ───────────────────────────────────────────────────── */
+  --color-stroke:        theme('colors.gray.800');
+  --color-stroke-strong: theme('colors.gray.700');
+
+  /* ── Primary / CTA ─────────────────────────────────────────────── */
+  --color-primary:        theme('colors.indigo.500');
+  --color-primary-hover:  theme('colors.indigo.400');
+  --color-primary-subtle: theme('colors.indigo.950');
+  --color-primary-fg:     theme('colors.white');
+
+  /* ── Focus ─────────────────────────────────────────────────────── */
+  --color-ring: theme('colors.indigo.400');
+
+  /* ── Feedback ──────────────────────────────────────────────────── */
+  --color-error:   theme('colors.red.400');
+  --color-success: theme('colors.green.400');
+  --color-warning: theme('colors.amber.400');
+}
