@@ -1,0 +1,113 @@
+{
+  "hero": {
+    "title": "Prețuri simple, fără surprize",
+    "description": "Începe cu un trial de 14 zile pe Starter — fără card. Schimbi planul oricând."
+  },
+  "plansSection": {
+    "ariaLabel": "Planuri de prețuri"
+  },
+  "socialProof": {
+    "headline": "Alătură-te celor 200+ merchant care vând cu Merx",
+    "stats": [
+      { "value": "200+", "label": "merchant activi" },
+      { "value": "€2M+", "label": "vânzări procesate" },
+      { "value": "4.9/5", "label": "rating mediu" }
+    ]
+  },
+  "guarantees": [
+    "Plată securizată prin Stripe",
+    "Garanție rambursare 30 de zile",
+    "Date protejate GDPR",
+    "Anulezi oricând, fără penalizări"
+  ],
+  "trialPerks": ["14 zile gratuit", "Fără card necesar", "Anulezi oricând"],
+  "faq": {
+    "heading": "Întrebări frecvente",
+    "subheading": "Tot ce trebuie să știi înainte să începi.",
+    "items": [
+      {
+        "q": "Ce se întâmplă după trial?",
+        "a": "La finalul celor 14 zile, magazinul tău se suspendă automat dacă nu adaugi o metodă de plată. Nu ești taxat fără să confirmi."
+      },
+      {
+        "q": "Pot schimba planul oricând?",
+        "a": "Da. Upgrade-ul e activ imediat. Downgrade-ul intră în vigoare la sfârșitul perioadei de facturare curente."
+      },
+      {
+        "q": "Ce înseamnă \"AI mesaje\"?",
+        "a": "Fiecare mesaj pe care tu sau agenții tăi îl trimiți agentului AI din dashboard contează ca un mesaj. Răspunsurile AI nu se contorizează."
+      },
+      {
+        "q": "Există costuri ascunse?",
+        "a": "Nu. Prețul afișat e singurul cost al platformei. Procesatorul de plăți (Stripe) aplică propriile comisioane direct tranzacțiilor tale — acestea nu trec prin Merx."
+      },
+      {
+        "q": "Ce include planul Enterprise?",
+        "a": "Onboarding dedicat, SLA garantat, integrări custom și negociere de volum. Scrie-ne la hello@merx.com și stabilim detaliile."
+      }
+    ]
+  },
+  "plans": {
+    "starter": {
+      "description": "Ideal pentru primele comenzi online. Testezi platforma fără niciun risc.",
+      "trial": "14 zile gratuit",
+      "cta": "Începe trial",
+      "features": [
+        { "label": "Comenzi / lună", "value": "200" },
+        { "label": "Produse", "value": "500" },
+        { "label": "AI mesaje / lună", "value": "500" },
+        { "label": "Analytics", "value": "Basic" },
+        { "label": "Suport", "value": "Email" }
+      ]
+    },
+    "pro": {
+      "description": "Pentru magazine în creștere cu volum ridicat și nevoi avansate de AI.",
+      "cta": "Alege Pro",
+      "features": [
+        { "label": "Comenzi / lună", "value": "2.000" },
+        { "label": "Produse", "value": "Nelimitat" },
+        { "label": "AI mesaje / lună", "value": "3.000" },
+        { "label": "Analytics", "value": "Full" },
+        { "label": "Suport", "value": "Email + chat" }
+      ]
+    },
+    "scale": {
+      "description": "Operațiuni la scară mare, fără limite de comenzi sau produse.",
+      "cta": "Alege Scale",
+      "features": [
+        { "label": "Comenzi / lună", "value": "Nelimitat" },
+        { "label": "Produse", "value": "Nelimitat" },
+        { "label": "AI mesaje / lună", "value": "Nelimitat" },
+        { "label": "Analytics", "value": "Full + export CSV" },
+        { "label": "Suport", "value": "Prioritar" }
+      ]
+    },
+    "enterprise": {
+      "description": "Soluție personalizată cu SLA garantat, integrări custom și suport dedicat.",
+      "cta": "Contactează-ne",
+      "features": [
+        { "label": "Comenzi / lună", "value": "Nelimitat" },
+        { "label": "Produse", "value": "Nelimitat" },
+        { "label": "AI mesaje / lună", "value": "Nelimitat" },
+        { "label": "Analytics", "value": "Custom" },
+        { "label": "Suport", "value": "Dedicated SLA" }
+      ]
+    }
+  },
+  "card": {
+    "recommended": "Recomandat",
+    "perMonth": "/lună",
+    "contactUs": "Contact",
+    "ctaAriaLabel": "{label} — planul {name}",
+    "currentPlan": "Planul tău curent",
+    "changePlan": "Schimbă planul",
+    "processing": "Se procesează..."
+  },
+  "cta": {
+    "badge": "Trial gratuit",
+    "title": "Nicio decizie necesară acum",
+    "description": "Testezi platforma 14 zile fără nicio obligație. Dacă nu e pentru tine, nu ești taxat.",
+    "cta": "Începe trial gratuit",
+    "ctaSecondary": "Vorbește cu echipa →"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "hero": {
+    "title": "Simple pricing, no surprises",
+    "description": "Start with a 14-day Starter trial — no card required. Change plans anytime."
+  },
+  "plansSection": {
+    "ariaLabel": "Pricing plans"
+  },
+  "socialProof": {
+    "headline": "Join 200+ merchants selling with Merx",
+    "stats": [
+      { "value": "200+", "label": "active merchants" },
+      { "value": "€2M+", "label": "sales processed" },
+      { "value": "4.9/5", "label": "average rating" }
+    ]
+  },
+  "guarantees": [
+    "Secure payment via Stripe",
+    "30-day money-back guarantee",
+    "GDPR-protected data",
+    "Cancel anytime, no penalties"
+  ],
+  "trialPerks": ["14 days free", "No card required", "Cancel anytime"],
+  "faq": {
+    "heading": "Frequently asked questions",
+    "subheading": "Everything you need to know before getting started.",
+    "items": [
+      {
+        "q": "What happens after the trial?",
+        "a": "At the end of the 14 days, your store is automatically suspended if you don't add a payment method. You won't be charged without confirming."
+      },
+      {
+        "q": "Can I change plans anytime?",
+        "a": "Yes. Upgrades take effect immediately. Downgrades take effect at the end of the current billing period."
+      },
+      {
+        "q": "What counts as an \"AI message\"?",
+        "a": "Every message you or your agents send to the AI agent in the dashboard counts as one message. AI responses don't count."
+      },
+      {
+        "q": "Are there any hidden costs?",
+        "a": "No. The displayed price is the only platform cost. The payment processor (Stripe) applies its own fees directly to your transactions — these don't go through Merx."
+      },
+      {
+        "q": "What's included in the Enterprise plan?",
+        "a": "Dedicated onboarding, guaranteed SLA, custom integrations, and volume negotiation. Email us at hello@merx.com and we'll work out the details."
+      }
+    ]
+  },
+  "plans": {
+    "starter": {
+      "description": "Ideal for your first online orders. Test the platform with zero risk.",
+      "trial": "14 days free",
+      "cta": "Start trial",
+      "features": [
+        { "label": "Orders / month", "value": "200" },
+        { "label": "Products", "value": "500" },
+        { "label": "AI messages / month", "value": "500" },
+        { "label": "Analytics", "value": "Basic" },
+        { "label": "Support", "value": "Email" }
+      ]
+    },
+    "pro": {
+      "description": "For growing stores with high volume and advanced AI needs.",
+      "cta": "Choose Pro",
+      "features": [
+        { "label": "Orders / month", "value": "2,000" },
+        { "label": "Products", "value": "Unlimited" },
+        { "label": "AI messages / month", "value": "3,000" },
+        { "label": "Analytics", "value": "Full" },
+        { "label": "Support", "value": "Email + chat" }
+      ]
+    },
+    "scale": {
+      "description": "Large-scale operations with no limits on orders or products.",
+      "cta": "Choose Scale",
+      "features": [
+        { "label": "Orders / month", "value": "Unlimited" },
+        { "label": "Products", "value": "Unlimited" },
+        { "label": "AI messages / month", "value": "Unlimited" },
+        { "label": "Analytics", "value": "Full + CSV export" },
+        { "label": "Support", "value": "Priority" }
+      ]
+    },
+    "enterprise": {
+      "description": "Custom solution with guaranteed SLA, custom integrations, and dedicated support.",
+      "cta": "Contact us",
+      "features": [
+        { "label": "Orders / month", "value": "Unlimited" },
+        { "label": "Products", "value": "Unlimited" },
+        { "label": "AI messages / month", "value": "Unlimited" },
+        { "label": "Analytics", "value": "Custom" },
+        { "label": "Support", "value": "Dedicated SLA" }
+      ]
+    }
+  },
+  "card": {
+    "recommended": "Recommended",
+    "perMonth": "/month",
+    "contactUs": "Contact",
+    "ctaAriaLabel": "{label} — {name} plan",
+    "currentPlan": "Your current plan",
+    "changePlan": "Change plan",
+    "processing": "Processing..."
+  },
+  "cta": {
+    "badge": "Free trial",
+    "title": "No decision needed now",
+    "description": "Try the platform for 14 days with no obligation. If it's not for you, you won't be charged.",
+    "cta": "Start free trial",
+    "ctaSecondary": "Talk to the team →"
+  }
+}
