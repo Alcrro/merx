@@ -1,0 +1,31 @@
+{
+  "planChange": {
+    "backToPricing": "← Înapoi la prețuri",
+    "comparisonTitle": "Comparație planuri",
+    "currentPlan": "Planul curent",
+    "newPlan": "Noul plan",
+    "summary": "Rezumat",
+    "cancel": "Anulează",
+    "processing": "Se procesează...",
+    "trust": "Poți schimba planul oricând din contul tău.",
+    "upgrade": {
+      "title": "Upgrade la {plan}",
+      "subtitle": "Upgrade-ul este efectiv imediat. Vei fi facturat pentru diferența proratată.",
+      "cta": "Confirmă upgrade-ul",
+      "effectiveLabel": "Efectiv",
+      "effectiveValue": "Imediat",
+      "costLabel": "Cost suplimentar",
+      "prorationNote": "Vei fi facturat imediat pentru zilele rămase din perioada curentă."
+    },
+    "downgrade": {
+      "title": "Treci la {plan}",
+      "subtitle": "Downgrade-ul intră în vigoare pe {date}. Planul {current} rămâne activ până atunci.",
+      "cta": "Confirmă downgrade-ul",
+      "effectiveLabel": "Activ pe",
+      "savingsLabel": "Economisești",
+      "note": "Nu se acordă rambursări pentru perioada rămasă pe planul curent.",
+      "warningTitle": "Vei pierde accesul la:",
+      "keepPlan": "Păstrează {plan}"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "planChange": {
+    "backToPricing": "← Back to pricing",
+    "comparisonTitle": "Plan comparison",
+    "currentPlan": "Current plan",
+    "newPlan": "New plan",
+    "summary": "Summary",
+    "cancel": "Cancel",
+    "processing": "Processing...",
+    "trust": "You can change your plan anytime from your account.",
+    "upgrade": {
+      "title": "Upgrade to {plan}",
+      "subtitle": "The upgrade takes effect immediately. You'll be invoiced for the prorated difference.",
+      "cta": "Confirm upgrade",
+      "effectiveLabel": "Effective",
+      "effectiveValue": "Immediately",
+      "costLabel": "Additional cost",
+      "prorationNote": "You'll be charged immediately for the remaining days in the current period."
+    },
+    "downgrade": {
+      "title": "Switch to {plan}",
+      "subtitle": "The downgrade takes effect on {date}. Your {current} plan stays active until then.",
+      "cta": "Confirm downgrade",
+      "effectiveLabel": "Active from",
+      "savingsLabel": "You save",
+      "note": "No refunds are issued for the remaining time on your current plan.",
+      "warningTitle": "You'll lose access to:",
+      "keepPlan": "Keep {plan}"
+    }
+  }
+}
