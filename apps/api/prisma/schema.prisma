@@ -9,19 +9,63 @@ datasource db {
 
 // ─── AUTH ────────────────────────────────────────────────────────────────────
 
-model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  name      String?
-  role      String   @default("user")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+enum PlatformRole {
+  admin
+  user
+}
 
-  stores        Store[]
-  refreshTokens RefreshToken[]
-  aiSessions    AISession[]
-  intro         UserIntro?
+enum StoreStatus {
+  active
+  suspended
+  blocked
+}
+
+enum PlanStatus {
+  trial
+  active
+  past_due
+  cancelled
+  expired
+}
+
+model User {
+  id               String       @id @default(uuid())
+  email            String       @unique
+  password         String?
+  name             String?
+  avatarUrl        String?      @map("avatar_url")
+  preferredLocale  String       @default("ro") @map("preferred_locale")
+  authProvider     String       @default("email") @map("auth_provider")
+  googleId         String?      @unique @map("google_id")
+  emailVerified    Boolean      @default(false) @map("email_verified")
+  platformRole     PlatformRole @default(user) @map("platform_role")
+
+  // Trial & subscription
+  planStatus       PlanStatus   @default(trial) @map("plan_status")
+  planId           String?      @map("plan_id")
+  trialStartedAt   DateTime     @default(now()) @map("trial_started_at")
+  trialEndsAt      DateTime     @default(dbgenerated("now() + interval '14 days'")) @map("trial_ends_at")
+  stripeCustomerId String?      @unique @map("stripe_customer_id")
+
+  // Data export
+  lastDataExportAt DateTime?    @map("last_data_export_at")
+
+  // SSO handoff
+  ssoCode          String?      @map("sso_code")
+  ssoCodeExpiresAt DateTime?    @map("sso_code_expires_at")
+
+  // Soft delete
+  deletedAt        DateTime?    @map("deleted_at")
+
+  createdAt        DateTime     @default(now()) @map("created_at")
+  updatedAt        DateTime     @updatedAt @map("updated_at")
+
+  stores                 Store[]
+  refreshTokens          RefreshToken[]
+  passwordResetTokens    PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
+  aiSessions             AISession[]
+  intro                  UserIntro?
 
   @@map("users")
 }
@@ -44,12 +88,42 @@ model RefreshToken {
   token     String   @unique
   expiresAt DateTime @map("expires_at")
   used      Boolean  @default(false)
+  userAgent String?  @map("user_agent")
+  ip        String?  @map("ip")
   createdAt DateTime @default(now()) @map("created_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@map("refresh_tokens")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+model EmailVerificationToken {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("email_verification_tokens")
 }
 
 // ─── STORE ───────────────────────────────────────────────────────────────────
@@ -63,16 +137,14 @@ model Store {
   locale    String    @default("en")
   timezone  String    @default("Europe/Bucharest")
   settings                     Json      @default("{}")
-  stripeConnectedAccountId     String?   @unique @map("stripe_connected_account_id")
-  stripeConnectedAccountStatus String?   @map("stripe_connected_account_status")
-  listingCountMonth            Int       @default(0) @map("listing_count_month")
   themePublishedId             String?   @map("theme_published_id")
-  customDomain                 String?   @unique @map("custom_domain")
-  customDomainStatus           String?   @map("custom_domain_status")
-  canonicalHost                String?   @map("canonical_host")
-  deletedAt                    DateTime? @map("deleted_at")
-  createdAt                    DateTime  @default(now()) @map("created_at")
-  updatedAt                    DateTime  @updatedAt @map("updated_at")
+  customDomain                 String?     @unique @map("custom_domain")
+  customDomainStatus           String?     @map("custom_domain_status")
+  canonicalHost                String?     @map("canonical_host")
+  status                       StoreStatus @default(active)
+  deletedAt                    DateTime?   @map("deleted_at")
+  createdAt                    DateTime    @default(now()) @map("created_at")
+  updatedAt                    DateTime    @updatedAt @map("updated_at")
 
   owner               User                  @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   categories          ProductCategory[]
@@ -89,8 +161,6 @@ model Store {
   aiActions           AIAction[]
   aiInsights          AIInsight[]
   auditLogs           AuditLog[]
-  marketplaceMatches   MarketplaceMatch[]
-  marketplaceListings  MarketplaceListing[]
   discountCodes        DiscountCode[]
   storeProducts        StoreProduct[]
   productRequests      ProductRequest[]
@@ -100,6 +170,7 @@ model Store {
   shippingMethods      ShippingMethod[]
 
   @@index([ownerId])
+  @@index([status])
   @@map("stores")
 }
 
@@ -193,11 +264,11 @@ model ProductVariant {
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @updatedAt @map("updated_at")
 
-  product             Product              @relation(fields: [productId], references: [id], onDelete: Cascade)
-  inventoryItem       InventoryItem?
-  orderItems          OrderItem[]
-  inventoryMovements  InventoryMovement[]
-  marketplaceListings MarketplaceListing[]
+  product               Product                @relation(fields: [productId], references: [id], onDelete: Cascade)
+  inventoryItem         InventoryItem?
+  orderItems            OrderItem[]
+  inventoryMovements    InventoryMovement[]
+  inventoryReservations InventoryReservation[]
 
   @@unique([productId, sku])
   @@index([productId])
@@ -275,50 +346,100 @@ model Customer {
 }
 
 model Order {
-  id                String   @id @default(uuid())
-  storeId              String    @map("store_id")
-  customerId           String?   @map("customer_id")
-  orderNumber          Int       @default(autoincrement()) @map("order_number")
-  status               String    @default("pending")
-  paymentStatus        String    @default("pending") @map("payment_status")
-  fulfillmentStatus    String    @default("unfulfilled") @map("fulfillment_status")
-  currency             String
-  subtotal             Decimal   @db.Decimal(10, 2)
-  discountTotal        Decimal   @default(0) @db.Decimal(10, 2) @map("discount_total")
-  discountCodeId       String?   @map("discount_code_id")
-  discountCodeSnapshot String?   @map("discount_code_snapshot")
-  taxTotal             Decimal   @default(0) @db.Decimal(10, 2) @map("tax_total")
-  shippingTotal        Decimal   @default(0) @db.Decimal(10, 2) @map("shipping_total")
-  total                Decimal   @db.Decimal(10, 2)
-  shippingAddress      Json?     @map("shipping_address")
-  metadata             Json      @default("{}")
-  createdAt            DateTime  @default(now()) @map("created_at")
-  updatedAt            DateTime  @updatedAt @map("updated_at")
+  id                      String    @id @default(uuid())
+  storeId                 String    @map("store_id")
+  customerId              String?   @map("customer_id")
+  orderNumber             Int       @default(autoincrement()) @map("order_number")
+  status                  String    @default("ACTIVE")
+  paymentStatus           String    @default("PENDING")      @map("payment_status")
+  fulfillmentStatus       String    @default("UNFULFILLED")  @map("fulfillment_status")
+  source                  String    @default("storefront")
+  currency                String
+  subtotal                Decimal   @db.Decimal(10, 2)
+  discountTotal           Decimal   @default(0) @db.Decimal(10, 2) @map("discount_total")
+  discountCodeId          String?   @map("discount_code_id")
+  discountCodeSnapshot    String?   @map("discount_code_snapshot")
+  taxTotal                Decimal   @default(0) @db.Decimal(10, 2) @map("tax_total")
+  shippingTotal           Decimal   @default(0) @db.Decimal(10, 2) @map("shipping_total")
+  total                   Decimal   @db.Decimal(10, 2)
+  shippingAddress         Json?     @map("shipping_address")
+  metadata                Json      @default("{}")
+  stripePaymentIntentId   String?   @unique @map("stripe_payment_intent_id")
+  stripeSessionId         String?   @map("stripe_session_id")
+  paymentEventAt          DateTime? @map("payment_event_at")
+  version                 Int       @default(0)
+  createdAt               DateTime  @default(now()) @map("created_at")
+  updatedAt               DateTime  @updatedAt @map("updated_at")
 
-  store        Store         @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  customer     Customer?     @relation(fields: [customerId], references: [id], onDelete: SetNull)
-  items        OrderItem[]
-  discountCode DiscountCode? @relation(fields: [discountCodeId], references: [id], onDelete: SetNull)
+  store               Store                @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  customer            Customer?            @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  items               OrderItem[]
+  discountCode        DiscountCode?        @relation(fields: [discountCodeId], references: [id], onDelete: SetNull)
+  events              OrderEvent[]
+  inventoryReservation InventoryReservation?
 
   @@index([storeId])
+  @@index([storeId, status])
   @@index([storeId, fulfillmentStatus])
   @@map("orders")
 }
 
 model OrderItem {
-  id        String   @id @default(uuid())
-  orderId   String   @map("order_id")
-  variantId String?  @map("variant_id")
-  title     String
-  sku       String?
-  quantity  Int
-  unitPrice Decimal  @db.Decimal(10, 2) @map("unit_price")
-  total     Decimal  @db.Decimal(10, 2)
+  id              String   @id @default(uuid())
+  orderId         String   @map("order_id")
+  variantId       String?  @map("variant_id")
+  title           String
+  sku             String?
+  quantity        Int
+  unitPrice       Decimal  @db.Decimal(10, 2) @map("unit_price")
+  total           Decimal  @db.Decimal(10, 2)
+  productSnapshot Json?    @map("product_snapshot")
 
   order   Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
   variant ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
 
   @@map("order_items")
+}
+
+model InventoryReservation {
+  id          String    @id @default(uuid())
+  orderId     String    @unique @map("order_id")
+  variantId   String?   @map("variant_id")
+  quantity    Int
+  expiresAt   DateTime  @map("expires_at")
+  confirmedAt DateTime? @map("confirmed_at")
+  releasedAt  DateTime? @map("released_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  order   Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variant ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+
+  @@index([variantId, expiresAt])
+  @@map("inventory_reservations")
+}
+
+model ProcessedWebhook {
+  stripeEventId String   @id @map("stripe_event_id")
+  processedAt   DateTime @default(now()) @map("processed_at")
+
+  @@map("processed_webhooks")
+}
+
+model OrderEvent {
+  id        String   @id @default(uuid())
+  orderId   String   @map("order_id")
+  eventType String   @map("event_type")
+  fromState String?  @map("from_state")
+  toState   String?  @map("to_state")
+  actorType String   @map("actor_type")
+  actorId   String?  @map("actor_id")
+  metadata  Json     @default("{}")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId, createdAt(sort: Desc)])
+  @@map("order_events")
 }
 
 // ─── ANALYTICS ───────────────────────────────────────────────────────────────
@@ -664,61 +785,6 @@ model ArchiveCriteria {
   @@map("archive_criteria")
 }
 
-// ─── MARKETPLACE ─────────────────────────────────────────────────────────────
-
-model MarketplaceListing {
-  id          String    @id @default(uuid())
-  storeId     String    @map("store_id")
-  variantId   String?   @map("variant_id")
-  title       String
-  description String?
-  price       Decimal   @db.Decimal(10, 2)
-  currency    String    @default("EUR")
-  negotiable   Boolean   @default(false)
-  condition    String    @default("new")
-  quantity     Int       @default(1)
-  category     String    @default("physical")
-  city         String?
-  country      String?
-  deliveryDays  Int?     @map("delivery_days")
-  shippingCost  Decimal  @default(0) @db.Decimal(10, 2) @map("shipping_cost")
-  severity     String    @default("LOW")
-  status       String    @default("active")
-  isFeatured  Boolean   @default(false) @map("is_featured")
-  expiresAt   DateTime  @map("expires_at")
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
-
-  store   Store          @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  variant ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
-
-  @@index([storeId])
-  @@index([status])
-  @@index([status, expiresAt])
-  @@index([category, status])
-  @@index([condition, status])
-  @@index([country, status])
-  @@map("marketplace_listings")
-}
-
-model MarketplaceMatch {
-  id        String   @id @default(uuid())
-  buyerId   String   @map("buyer_id")
-  sellerId  String   @map("seller_id")
-  amount    Decimal  @db.Decimal(10, 2)
-  currency  String   @default("EUR")
-  status    String   @default("pending_payment")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  seller      Store                   @relation(fields: [sellerId], references: [id], onDelete: Restrict)
-  transaction MarketplaceTransaction?
-
-  @@index([buyerId])
-  @@index([sellerId])
-  @@map("marketplace_matches")
-}
-
 // ─── STOREFRONT THEME ────────────────────────────────────────────────────────
 
 model ThemeVersion {
@@ -779,33 +845,6 @@ model Notification {
   @@index([storeId, createdAt(sort: Desc)])
   @@index([storeId, readAt])
   @@map("notifications")
-}
-
-model MarketplaceTransaction {
-  id                    String    @id @default(uuid())
-  matchId               String    @unique @map("match_id")
-  buyerId               String    @map("buyer_id")
-  sellerId              String    @map("seller_id")
-  amount                Decimal   @db.Decimal(10, 2)
-  currency              String
-  stripeFee             Decimal   @db.Decimal(10, 2) @map("stripe_fee")
-  merxCommission        Decimal   @db.Decimal(10, 2) @map("merx_commission")
-  sellerPayout          Decimal   @db.Decimal(10, 2) @map("seller_payout")
-  stripePaymentIntentId String    @unique @map("stripe_payment_intent_id")
-  stripeTransferId      String?   @map("stripe_transfer_id")
-  status                String    @default("escrow")
-  holdUntil             DateTime  @map("hold_until")
-  releasedAt            DateTime? @map("released_at")
-  refundedAt            DateTime? @map("refunded_at")
-  createdAt             DateTime  @default(now()) @map("created_at")
-  updatedAt             DateTime  @updatedAt @map("updated_at")
-
-  match MarketplaceMatch @relation(fields: [matchId], references: [id], onDelete: Restrict)
-
-  @@index([buyerId])
-  @@index([sellerId])
-  @@index([status])
-  @@map("marketplace_transactions")
 }
 
 // ─── SHIPPING ────────────────────────────────────────────────────────────────
