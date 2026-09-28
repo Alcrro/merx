@@ -1,9 +1,19 @@
+export type StoreStatus = 'active' | 'suspended' | 'blocked'
+
 export interface AuthUser {
   id: string
   email: string
   name: string | null
-  role: string
+  platformRole: 'admin' | 'user'
+  emailVerified: boolean
   createdAt: Date
+}
+
+/** Existing account matched during Google sign-in (by googleId first, then email). */
+export interface GoogleSignInCandidate extends AuthUser {
+  googleId: string | null
+  hasPassword: boolean
+  deleted: boolean
 }
 
 export interface AuthStore {
@@ -13,11 +23,23 @@ export interface AuthStore {
   currency: string
 }
 
-export interface AccessTokenPayload {
+export interface AuthStoreWithMeta extends AuthStore {
+  ownerId: string
+  status: StoreStatus
+}
+
+export interface PlatformTokenPayload {
+  sub: string
+  type: 'platform'
+}
+
+export interface StoreTokenPayload {
   sub: string
   storeId: string
-  role: string
+  type: 'store'
 }
+
+export type TokenPayload = PlatformTokenPayload | StoreTokenPayload
 
 export interface AuthTokens {
   accessToken: string

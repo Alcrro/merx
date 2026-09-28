@@ -12,6 +12,11 @@ export const config = {
     port: process.env.PORT ?? '3001',
     dashboardUrl: process.env.DASHBOARD_URL ?? 'http://localhost:3000',
     storefrontUrl: process.env.STOREFRONT_URL ?? 'http://localhost:3002',
+    wwwUrl: process.env.WWW_URL ?? 'http://localhost:3003',
+  },
+  google: {
+    clientId: process.env.GOOGLE_CLIENT_ID ?? '',
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
   },
   db: {
     url: requireEnv('DATABASE_URL'),
@@ -23,7 +28,15 @@ export const config = {
     secretKey: requireEnv('STRIPE_SECRET_KEY'),
     webhookSecret: requireEnv('STRIPE_WEBHOOK_SECRET'),
     connectWebhookSecret: process.env.STRIPE_CONNECT_WEBHOOK_SECRET ?? requireEnv('STRIPE_WEBHOOK_SECRET'),
+    // Each Stripe endpoint has its own signing secret; the fallback covers local `stripe listen` (one secret for all).
+    billingWebhookSecret: process.env.STRIPE_BILLING_WEBHOOK_SECRET ?? requireEnv('STRIPE_WEBHOOK_SECRET'),
+    ordersWebhookSecret: process.env.STRIPE_ORDERS_WEBHOOK_SECRET ?? '',
     publishableKey: process.env.STRIPE_PUBLISHABLE_KEY ?? '',
+    prices: {
+      starter: process.env.STRIPE_PRICE_ID_STARTER ?? '',
+      pro: process.env.STRIPE_PRICE_ID_PRO ?? '',
+      scale: process.env.STRIPE_PRICE_ID_SCALE ?? '',
+    },
   },
   storage: {
     endpoint: process.env.STORAGE_ENDPOINT ?? '',
@@ -42,6 +55,6 @@ export const config = {
   email: {
     apiKey: process.env.RESEND_API_KEY ?? '',
     from: process.env.EMAIL_FROM ?? 'noreply@merx.com',
-    appUrl: process.env.APP_URL ?? 'http://localhost:3000',
+    appUrl: process.env.APP_URL ?? 'http://localhost:3003',
   },
 } as const
