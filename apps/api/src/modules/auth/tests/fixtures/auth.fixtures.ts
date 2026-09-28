@@ -1,6 +1,6 @@
 import { vi } from 'vitest'
 import { RefreshToken } from '../../domain/entities/refresh-token.entity'
-import type { AuthUser, AuthStore, AuthTokens } from '../../domain/types'
+import type { AuthUser, AuthStore, AuthTokens, AuthStoreWithMeta } from '../../domain/types'
 import type { IUserRepository } from '../../domain/ports/user.repository.port'
 import type { IStoreRepository } from '../../domain/ports/store.repository.port'
 import type { IRefreshTokenRepository } from '../../domain/ports/refresh-token.repository.port'
@@ -13,7 +13,8 @@ export function makeAuthUser(overrides: Partial<AuthUser> = {}): AuthUser {
     id: 'user1',
     email: 'test@example.com',
     name: 'Test User',
-    role: 'owner',
+    platformRole: 'user',
+    emailVerified: false,
     createdAt: new Date('2026-01-01T10:00:00Z'),
     ...overrides,
   }
@@ -25,6 +26,18 @@ export function makeAuthStore(overrides: Partial<AuthStore> = {}): AuthStore {
     name: "Test User's Store",
     slug: 'test-user-abc12',
     currency: 'RON',
+    ...overrides,
+  }
+}
+
+export function makeAuthStoreWithMeta(overrides: Partial<AuthStoreWithMeta> = {}): AuthStoreWithMeta {
+  return {
+    id: 'store1',
+    name: "Test User's Store",
+    slug: 'test-user-abc12',
+    currency: 'RON',
+    ownerId: 'user1',
+    status: 'active',
     ...overrides,
   }
 }
@@ -56,13 +69,20 @@ export function makeUserRepo(): IUserRepository {
     findUserByEmail: vi.fn(),
     findUserById: vi.fn(),
     createUser: vi.fn(),
+    findUserForGoogleSignIn: vi.fn(),
+    createGoogleUser: vi.fn(),
+    linkGoogleAccount: vi.fn(),
+    setSsoCode: vi.fn(),
+    consumeSsoCode: vi.fn(),
+    updateUserPassword: vi.fn(),
+    updateEmailVerified: vi.fn(),
   }
 }
 
 export function makeStoreRepo(): IStoreRepository {
   return {
-    findStoreByOwnerId: vi.fn(),
-    createStore: vi.fn(),
+    findStoreBySlug: vi.fn(),
+    findStoresByOwnerId: vi.fn(),
   }
 }
 
@@ -72,6 +92,7 @@ export function makeRefreshTokenRepo(): IRefreshTokenRepository {
     createRefreshToken: vi.fn(),
     rotateRefreshToken: vi.fn(),
     markRefreshTokenUsed: vi.fn(),
+    extendRefreshToken: vi.fn(),
     deleteRefreshToken: vi.fn(),
     deleteAllUserRefreshTokens: vi.fn(),
   }
@@ -86,8 +107,9 @@ export function makePasswordHasher(): IPasswordHasher {
 
 export function makeTokenService(): ITokenService {
   return {
-    signAccessToken: vi.fn().mockReturnValue('access-token'),
-    verifyAccessToken: vi.fn(),
+    signPlatformToken: vi.fn().mockReturnValue('platform-token'),
+    signStoreToken: vi.fn().mockReturnValue('store-token'),
+    verifyToken: vi.fn(),
     generateRefreshToken: vi.fn().mockReturnValue('raw-refresh-token'),
     hashToken: vi.fn().mockReturnValue('hashed-token'),
     refreshTokenExpiresAt: vi.fn().mockReturnValue(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)),
@@ -96,7 +118,6 @@ export function makeTokenService(): ITokenService {
 
 export function makeSessionService(): SessionService {
   return {
-    generate: vi.fn().mockResolvedValue(makeAuthTokens()),
     revoke: vi.fn().mockResolvedValue(undefined),
   } as unknown as SessionService
 }
