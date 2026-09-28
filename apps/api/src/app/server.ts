@@ -7,6 +7,9 @@ import { authRouter } from '../modules/auth/auth.router'
 import { storeRouter } from '../modules/stores/presentation/store.router'
 import { productRouter, categoryRouter } from '../modules/products/presentation/product.router'
 import { orderRouter } from '../modules/orders/order.router'
+import { orderWebhookRouter } from '../modules/orders/order-webhook.router'
+import { startExpirePendingPaymentWorker } from '../modules/orders/infrastructure/queue/expire-pending-payment.job'
+import { inventoryReservationService, orderEventRepo } from '../modules/orders/container'
 import { inventoryRouter } from '../modules/inventory/presentation/inventory.router'
 import { analyticsRouter } from '../modules/analytics/presentation/analytics.router'
 import { startAnalyticsWorker } from '../modules/analytics/infrastructure/metrics.job'
@@ -14,11 +17,6 @@ import { startInsightsWorker } from '../modules/ai/infrastructure/insights.job'
 import { aiRouter } from '../modules/ai/presentation/ai.router'
 import { storefrontRouter, webhookRouter } from '../modules/storefront/presentation/storefront.router'
 import { customerRouter } from '../modules/customers/presentation/customer.router'
-import { paymentsRouter, paymentsWebhookRouter } from '../modules/payments/payments.router'
-import { startPaymentsWorkers } from '../modules/payments/container'
-import { marketplaceRouter } from '../modules/marketplace/presentation/marketplace.router'
-import { startExpireListingsWorker } from '../modules/marketplace/infrastructure/expire-listings.job'
-import { startResetQuotaWorker } from '../modules/marketplace/infrastructure/reset-quota.job'
 import { discountRouter } from '../modules/discounts/presentation/discount.router'
 import { startReleaseOrphansWorker } from '../modules/discounts/infrastructure/release-orphans.job'
 import { catalogRouter, adminCatalogRouter } from '../modules/catalog/catalog.router'
@@ -33,6 +31,9 @@ import { notificationRouter } from '../modules/notifications/presentation/notifi
 import { NotificationService } from '../modules/notifications/application/notification.service'
 import { NotificationRepository } from '../modules/notifications/infrastructure/notification.repository'
 import { introRouter } from '../modules/profile/profile.router'
+import { meRouter } from '../modules/profile/me.router'
+import { billingRouter } from '../modules/billing/billing.router'
+import { billingWebhookRouter } from '../modules/billing/billing-webhook.router'
 import { errorHandler } from '../middleware/error-handler'
 
 const app = express()
@@ -42,14 +43,16 @@ app.set('trust proxy', 1)
 app.use(helmet())
 app.use(
   cors({
-    origin: [config.server.dashboardUrl, config.server.storefrontUrl],
+    origin: [config.server.dashboardUrl, config.server.storefrontUrl, config.server.wwwUrl],
     credentials: true,
   })
 )
 
 // Raw body for Stripe webhooks — must come before express.json()
+// Billing first: more specific path than the generic /api/v1/webhooks mount.
+app.use('/api/v1/webhooks/billing', express.raw({ type: 'application/json' }), billingWebhookRouter)
 app.use('/api/v1/webhooks', express.raw({ type: 'application/json' }), webhookRouter)
-app.use('/api/v1/payments/webhooks', express.raw({ type: 'application/json' }), paymentsWebhookRouter)
+app.use('/api/v1/orders/webhooks', express.raw({ type: 'application/json' }), orderWebhookRouter)
 
 app.use(express.json())
 
@@ -71,8 +74,6 @@ app.use('/api/v1/analytics', analyticsRouter)
 app.use('/api/v1/ai/sessions', aiRouter)
 app.use('/api/v1/storefront', storefrontRouter)
 app.use('/api/v1/customers', customerRouter)
-app.use('/api/v1/payments', paymentsRouter)
-app.use('/api/v1/marketplace', marketplaceRouter)
 app.use('/api/v1/discounts', discountRouter)
 app.use('/api/v1/catalog', catalogRouter)
 app.use('/api/v1/product-requests', productRequestRouter)
@@ -83,6 +84,8 @@ app.use('/api/v1/theme', themeRouter)
 app.use('/api/v1/shipping-methods', shippingRouter)
 app.use('/api/v1/stores/:storeId/notifications', notificationRouter)
 app.use('/api/v1/users/intro', introRouter)
+app.use('/api/v1/me', meRouter)
+app.use('/api/v1/billing', billingRouter)
 
 app.use(errorHandler)
 
@@ -91,13 +94,13 @@ if (process.env.NODE_ENV !== 'test') app.listen(Number(PORT), () => {
   // Workers dezactivate temporar — Upstash free tier epuizat
   // startAnalyticsWorker()
   // startInsightsWorker()
-  // startPaymentsWorkers()
   // startExpireListingsWorker()
   // startResetQuotaWorker()
   // startReleaseOrphansWorker()
   // startModerateContentWorker()
   // startAutoArchiveWorker()
   // startGenerateCatalogProductWorker()
+  // startExpirePendingPaymentWorker(inventoryReservationService, orderEventRepo)
   // const notificationService = new NotificationService(new NotificationRepository())
   // void notificationService.deleteOlderThan(30)
   // setInterval(() => void notificationService.deleteOlderThan(30), 24 * 60 * 60 * 1000)
