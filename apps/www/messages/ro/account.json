@@ -1,0 +1,188 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "profile": "Profil",
+    "security": "Securitate",
+    "subscription": "Abonament",
+    "billing": "Facturare",
+    "settings": "Setări"
+  },
+  "emailVerification": {
+    "banner": "Emailul tău nu a fost verificat. Verifică-ți inbox-ul sau retrimite link-ul de confirmare.",
+    "resend": "Retrimite",
+    "resending": "Se trimite...",
+    "resent": "Email trimis!",
+    "resendFailed": "Nu s-a putut trimite. Încearcă din nou."
+  },
+  "settings": {
+    "title": "Setări",
+    "subtitle": "Actualizează informațiile tale și gestionează contul",
+    "profile": {
+      "title": "Informații personale"
+    },
+    "appearance": {
+      "title": "Aspect",
+      "subtitle": "Alege cum arată interfața pentru tine",
+      "light": "Luminos",
+      "dark": "Întunecat"
+    }
+  },
+  "trial": {
+    "active": "Trial: {days} zile rămase — Upgrade →",
+    "warning": "Trialul expiră în {days} zile — Upgrade →",
+    "urgent": "Contul expiră mâine — Upgrade acum →",
+    "expired": "Trialul tău a expirat — Fă upgrade pentru a continua →"
+  },
+  "profile": {
+    "title": "Profil",
+    "subtitle": "Actualizează informațiile tale personale",
+    "avatar": {
+      "label": "Fotografie profil",
+      "change": "Schimbă foto",
+      "remove": "Elimină",
+      "hint": "JPG, PNG sau WebP. Maxim 2MB."
+    },
+    "fields": {
+      "name": "Nume complet",
+      "namePlaceholder": "Numele tău",
+      "email": "Email",
+      "language": "Limbă preferată",
+      "languageRo": "Română",
+      "languageEn": "Engleză"
+    },
+    "emailPending": {
+      "badge": "Verificare în așteptare",
+      "cancel": "Anulează schimbarea"
+    },
+    "save": "Salvează modificările",
+    "saving": "Se salvează...",
+    "saved": "Salvat",
+    "export": {
+      "title": "Exportă datele tale",
+      "description": "Descarcă o copie a datelor tale (profil, comenzi, facturi) în format ZIP. Vei primi un link de descărcare pe email în maxim 24 de ore.",
+      "button": "Exportă datele mele",
+      "requested": "Export solicitat — verifică email-ul",
+      "alreadyRequested": "Deja solicitat azi"
+    },
+    "danger": {
+      "title": "Zonă periculoasă",
+      "description": "Ștergerea contului blochează accesul imediat. Datele tale vor fi eliminate definitiv după 30 de zile. Comenzile și facturile sunt păstrate conform cerințelor legale.",
+      "deleteTitle": "Șterge contul",
+      "irreversible": "Această acțiune nu poate fi anulată",
+      "button": "Șterge contul",
+      "modal": {
+        "title": "Șterge contul",
+        "description": "Această acțiune nu poate fi anulată. Scrie adresa ta de email pentru a confirma.",
+        "emailLabel": "Confirmă email-ul",
+        "emailPlaceholder": "email@tau.com",
+        "passwordLabel": "Parola curentă",
+        "passwordPlaceholder": "••••••••",
+        "cancel": "Anulează",
+        "confirm": "Șterge definitiv"
+      }
+    }
+  },
+  "security": {
+    "title": "Securitate",
+    "subtitle": "Gestionează parola și device-urile conectate",
+    "password": {
+      "title": "Parolă",
+      "hasPassword": "Schimbă parola curentă",
+      "noPassword": "Te-ai înregistrat cu Google. Adaugă o parolă pentru a activa loginul cu email.",
+      "current": "Parola curentă",
+      "new": "Parolă nouă",
+      "confirm": "Confirmă parola nouă",
+      "hint": "Minimum 8 caractere",
+      "save": "Actualizează parola",
+      "set": "Setează parola",
+      "saving": "Se actualizează...",
+      "success": "Parolă actualizată. Celelalte device-uri au fost deconectate."
+    },
+    "connected": {
+      "title": "Conturi conectate",
+      "email": "Email și parolă",
+      "google": "Google",
+      "linked": "Conectat",
+      "unlink": "Deconectează",
+      "unlinkDisabled": "Nu poți deconecta — setează mai întâi o parolă"
+    },
+    "sessions": {
+      "title": "Device-urile tale",
+      "current": "Acest device",
+      "revoke": "Deconectează",
+      "revokeAll": "Deconectează toate celelalte device-uri",
+      "lastActive": "Ultima activitate",
+      "noOther": "Nu există alte device-uri conectate"
+    }
+  },
+  "billing": {
+    "title": "Facturare",
+    "subtitle": "Metodele tale de plată și istoricul facturilor.",
+    "paymentMethod": {
+      "title": "Metodă de plată",
+      "manage": "Gestionează carduri",
+      "noCard": "Nu ai niciun card salvat. Adaugă sau gestionează cardurile din portalul de plăți.",
+      "defaultBadge": "Implicit",
+      "expires": "Expiră {month}/{year}"
+    },
+    "acceptedCards": "Carduri acceptate:",
+    "invoices": {
+      "title": "Facturi",
+      "empty": "Nu există facturi încă.",
+      "status": {
+        "paid": "Plătită",
+        "open": "Deschisă",
+        "void": "Anulată",
+        "uncollectible": "Necolectabilă"
+      }
+    }
+  },
+  "subscription": {
+    "title": "Abonament",
+    "subtitle": "Planul tău curent și opțiunile de upgrade",
+    "activePlan": {
+      "badge": "Activ",
+      "daysRemaining": "{days, plural, =1 {1 zi rămasă} other {{days} zile rămase}}",
+      "renews": "Reînnoire pe {date}",
+      "expires": "Expiră pe {date}",
+      "success": "Plata a fost procesată. Contul tău a fost activat!",
+      "errorPlanNotConfigured": "Planul selectat nu este configurat momentan. Contactează suportul.",
+      "periodUnavailable": "Detaliile perioadei de facturare se sincronizează."
+    },
+    "currentPlan": {
+      "trial": "Trial gratuit",
+      "starter": "Starter",
+      "pro": "Pro",
+      "daysLeft": "{days} zile rămase",
+      "expiresOn": "Se reînnoiește pe {date}",
+      "expired": "Expirat",
+      "limits": "Maxim 10 produse · Fără funcții AI"
+    },
+    "upgrade": {
+      "title": "Alege un plan",
+      "recommended": "Recomandat",
+      "cta": "Alege planul",
+      "current": "Planul curent"
+    },
+    "actions": {
+      "changePlan": "Schimbă planul →",
+      "processing": "Se procesează...",
+      "confirmTitle": "Ești sigur că vrei să anulezi?",
+      "confirmDescription": "Abonamentul rămâne activ până pe {date}, după care accesul expiră.",
+      "confirmYes": "Da, anulează",
+      "keepPlan": "Păstrează abonamentul",
+      "undoCancel": "Revocă anularea",
+      "cancellingOn": "Abonamentul expiră pe {date}."
+    },
+    "cancel": {
+      "link": "Anulează abonamentul",
+      "modal": {
+        "title": "Anulează abonamentul",
+        "description": "Contul tău rămâne activ până pe {date}. După aceea, accesul la dashboard va fi blocat.",
+        "losing": "Vei pierde accesul la:",
+        "confirm": "Anulează abonamentul",
+        "keep": "Păstrează abonamentul"
+      }
+    }
+  }
+}

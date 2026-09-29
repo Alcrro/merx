@@ -1,0 +1,188 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "security": "Security",
+    "subscription": "Subscription",
+    "billing": "Billing",
+    "settings": "Settings"
+  },
+  "emailVerification": {
+    "banner": "Your email hasn't been verified. Check your inbox or resend the confirmation link.",
+    "resend": "Resend",
+    "resending": "Sending...",
+    "resent": "Email sent!",
+    "resendFailed": "Could not send. Please try again."
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Update your information and manage your account",
+    "profile": {
+      "title": "Personal information"
+    },
+    "appearance": {
+      "title": "Appearance",
+      "subtitle": "Choose how the interface looks for you",
+      "light": "Light",
+      "dark": "Dark"
+    }
+  },
+  "trial": {
+    "active": "Trial: {days} days left — Upgrade →",
+    "warning": "Trial expires in {days} days — Upgrade →",
+    "urgent": "Account expires tomorrow — Upgrade now →",
+    "expired": "Your trial has expired — Upgrade to continue →"
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Update your personal information",
+    "avatar": {
+      "label": "Profile photo",
+      "change": "Change photo",
+      "remove": "Remove",
+      "hint": "JPG, PNG or WebP. Max 2MB."
+    },
+    "fields": {
+      "name": "Full name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "language": "Preferred language",
+      "languageRo": "Romanian",
+      "languageEn": "English"
+    },
+    "emailPending": {
+      "badge": "Verification pending",
+      "cancel": "Cancel change"
+    },
+    "save": "Save changes",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "export": {
+      "title": "Export your data",
+      "description": "Download a copy of your data (profile, orders, invoices) as a ZIP file. You will receive a download link by email within 24 hours.",
+      "button": "Export my data",
+      "requested": "Export requested — check your email",
+      "alreadyRequested": "Already requested today"
+    },
+    "danger": {
+      "title": "Danger zone",
+      "description": "Deleting your account will block access immediately. Your data will be permanently removed after 30 days. Orders and invoices are retained for legal compliance.",
+      "deleteTitle": "Delete account",
+      "irreversible": "This action cannot be undone",
+      "button": "Delete account",
+      "modal": {
+        "title": "Delete account",
+        "description": "This action cannot be undone. Type your email address to confirm.",
+        "emailLabel": "Confirm your email",
+        "emailPlaceholder": "your@email.com",
+        "passwordLabel": "Current password",
+        "passwordPlaceholder": "••••••••",
+        "cancel": "Cancel",
+        "confirm": "Delete permanently"
+      }
+    }
+  },
+  "security": {
+    "title": "Security",
+    "subtitle": "Manage your password and connected devices",
+    "password": {
+      "title": "Password",
+      "hasPassword": "Change your current password",
+      "noPassword": "You signed up with Google. Add a password to enable email login.",
+      "current": "Current password",
+      "new": "New password",
+      "confirm": "Confirm new password",
+      "hint": "Minimum 8 characters",
+      "save": "Update password",
+      "set": "Set password",
+      "saving": "Updating...",
+      "success": "Password updated. Other devices have been logged out."
+    },
+    "connected": {
+      "title": "Connected accounts",
+      "email": "Email & password",
+      "google": "Google",
+      "linked": "Linked",
+      "unlink": "Unlink",
+      "unlinkDisabled": "Cannot unlink — set a password first"
+    },
+    "sessions": {
+      "title": "Your devices",
+      "current": "This device",
+      "revoke": "Log out",
+      "revokeAll": "Log out all other devices",
+      "lastActive": "Last active",
+      "noOther": "No other devices connected"
+    }
+  },
+  "billing": {
+    "title": "Billing",
+    "subtitle": "Your payment methods and invoice history.",
+    "paymentMethod": {
+      "title": "Payment method",
+      "manage": "Manage cards",
+      "noCard": "No card saved. Add or manage your cards in the billing portal.",
+      "defaultBadge": "Default",
+      "expires": "Expires {month}/{year}"
+    },
+    "acceptedCards": "Accepted cards:",
+    "invoices": {
+      "title": "Invoices",
+      "empty": "No invoices yet.",
+      "status": {
+        "paid": "Paid",
+        "open": "Open",
+        "void": "Void",
+        "uncollectible": "Uncollectible"
+      }
+    }
+  },
+  "subscription": {
+    "title": "Subscription",
+    "subtitle": "Your current plan and available upgrades",
+    "activePlan": {
+      "badge": "Active",
+      "daysRemaining": "{days, plural, =1 {1 day remaining} other {{days} days remaining}}",
+      "renews": "Renews on {date}",
+      "expires": "Expires on {date}",
+      "success": "Payment processed. Your account has been activated!",
+      "errorPlanNotConfigured": "The selected plan is not configured. Please contact support.",
+      "periodUnavailable": "Billing period details are being synced."
+    },
+    "currentPlan": {
+      "trial": "Free Trial",
+      "starter": "Starter",
+      "pro": "Pro",
+      "daysLeft": "{days} days remaining",
+      "expiresOn": "Renews on {date}",
+      "expired": "Expired",
+      "limits": "Up to 10 products · No AI features"
+    },
+    "upgrade": {
+      "title": "Choose a plan",
+      "recommended": "Recommended",
+      "cta": "Choose plan",
+      "current": "Current plan"
+    },
+    "actions": {
+      "changePlan": "Change plan →",
+      "processing": "Processing...",
+      "confirmTitle": "Are you sure you want to cancel?",
+      "confirmDescription": "Your subscription remains active until {date}, after which access expires.",
+      "confirmYes": "Yes, cancel",
+      "keepPlan": "Keep subscription",
+      "undoCancel": "Undo cancellation",
+      "cancellingOn": "Subscription expires on {date}."
+    },
+    "cancel": {
+      "link": "Cancel subscription",
+      "modal": {
+        "title": "Cancel subscription",
+        "description": "Your account will remain active until {date}. After that, access to the dashboard will be blocked.",
+        "losing": "You will lose access to:",
+        "confirm": "Cancel subscription",
+        "keep": "Keep subscription"
+      }
+    }
+  }
+}
