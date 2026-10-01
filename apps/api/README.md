@@ -16,11 +16,11 @@ Backend monolitic modular pentru Merx. Expune două suprafețe REST:
 | Express | HTTP server |
 | Prisma ORM | Acces DB + migrations |
 | Zod | Validare request/response |
-| PostgreSQL (Supabase) | Baza de date principală |
+| PostgreSQL (Neon) | Baza de date principală |
 | Redis + BullMQ (Upstash) | Queue jobs + cache BI |
 | OpenAI GPT-4o | LLM via `packages/llm-provider` |
 | Stripe | Plăți + Connect (marketplace escrow) |
-| AWS S3 SDK | Upload imagini (Cloudflare R2 compatible) |
+| Supabase Storage (S3) | Upload imagini (bucket `merx`) |
 
 ---
 
@@ -65,17 +65,21 @@ src/modules/{domain}/
 |---|---|
 | `auth` | JWT access/refresh, bcrypt, multi-store |
 | `stores` | CRUD magazin, settings (currency, locale, timezone) |
-| `products` | Produse, variante, prețuri, SKU, categorii |
-| `inventory` | Stoc, ajustări, reorder points, mișcări |
+| `products` | Produse proprii, variante, prețuri, SKU, categorii, imagini |
+| `inventory` | Stoc InventoryItem (owned) + StoreVariantStock (marketplace), notificări |
 | `orders` | Comenzi, statusuri, fulfillment, Stripe checkout |
-| `customers` | Profile clienți, istoric comenzi, RFM calculator |
-| `analytics` | Read models, daily metrics (store/product/customer), BullMQ jobs |
-| `discounts` | Coduri promo, calculator, rezervări, release-orphans job |
-| `ai` | AI Gateway, Context Engine, Tool Registry, Approval Workflow |
-| `marketplace` | Listings B2B, matches, escrow, quota |
-| `payments` | Stripe Connect onboarding, webhooks, escrow release |
-| `catalog` | Catalog marketplace, moderare, AI generator, clasificare |
-| `storefront` | API public pentru produse, variante, checkout |
+| `customers` | Profile clienți, istoric comenzi, analytics per client |
+| `analytics` | Overview, revenue chart, top products, recalculate |
+| `discounts` | Coduri promo, calculator, validare storefront |
+| `notifications` | Notificări in-app per store (13 tipuri, polling, markRead) |
+| `ai` | AI Gateway, Context Engine, Tool Registry, Insights, SSE stream |
+| `ai-tool-criteria` | Criterii custom per tool AI (admin only) |
+| `marketplace` | Listings B2B, earnings preview, quota per vendor |
+| `payments` | Stripe Connect onboarding, escrow, refund, webhooks |
+| `catalog` | Catalog marketplace, moderare, AI generator, archive criteria |
+| `product-requests` | Cereri adăugare produse noi în catalog, aprobare admin |
+| `storefront` | API public: produse, categorii, checkout, theme, discount validate |
+| `storefront-theme` | Draft/publish/rollback temă vizuală, validare WCAG contrast |
 
 ---
 
@@ -144,16 +148,18 @@ SENTRY_DSN=
 
 ## Status MVP
 
-**Verdict:** Basic+ (~70%). Fundație solidă, dar niciun Tier 0 gap nu e rezolvat.
+**Verdict:** Basic+ (~78%). Tier 0 rezolvat; blocantele rămase sunt Tier 1+.
 
 | Tier | Feature | Status |
 |---|---|---|
-| 0 | Email notifications (Resend) | ❌ lipsă — zero modul |
-| 0 | Product images (upload + CDN) | ❌ lipsă — fără multer, R2, tabel ProductImage |
-| 1 | Shipping module | ❌ câmp `shippingTotal` există în schema, logica nu |
-| 1 | Tax engine | ❌ câmp `taxTotal` există în schema, logica nu |
-| 1 | Storefront search | ❌ fără ILIKE sau FTS |
-| 1 | Refunds | ❌ endpoint lipsă; enum `refunded` există în schema |
-| 2 | AI mutation tools | ❌ tool registry are exclusiv read tools |
+| 0 | Email order confirmation (Resend) | ✅ `src/modules/email/` — fire-and-forget, skip dacă `RESEND_API_KEY` lipsă |
+| 0 | Product images (owned products) | ✅ upload/delete/reorder pe `/products/:id/images` (Supabase Storage) |
+| 0 | Refunds | ✅ `POST /orders/:id/refund` — Stripe refund via session→payment_intent, partial/total |
+| 0 | Shipping/Tax settings | ✅ `settings.shipping` + `settings.tax` în Store JSON; merge în service |
+| 1 | Shipping/Tax engine la checkout | ❌ câmpuri există în schema, calcul la checkout lipsă |
+| 1 | Storefront search | ❌ fără ILIKE sau FTS în storefront module |
+| 1 | Inventory notificări manuale | ✅ STOCK_IN/STOCK_REMOVAL/STOCK_ADJUSTMENT cu lastMovementType |
+| 1 | Inventory notificări automate | ❌ STOCK_LOW/STOCK_OUT neconectate la fulfillment (release() lipsă) |
+| 2 | AI mutation tools | ❌ tool registry exclusiv read tools |
 | 2 | Abandoned cart job | ❌ BullMQ instalat, job lipsă |
 | 2 | Merchant webhooks | ❌ lipsă complet |

@@ -2,15 +2,19 @@
 
 > "Tell us what you sell. We'll run the store."
 
-Platformă de e-commerce **AI-native** în care agentul AI este interfața operațională principală — nu un chatbot peste un dashboard, ci un operator care analizează businessul, propune acțiuni și le poate executa cu aprobare.
+**Categorie: Agentic Commerce.**
 
-**Diferența față de Shopify:**
+Merx nu este o platformă de e-commerce. Este un **commerce operator** — AI-ul conduce magazinul, merchantul dă direcția. Nu un chatbot peste un dashboard, ci un agent care analizează businessul, propune acțiuni și le poate executa cu aprobare.
+
+**Poziționare:**
 ```
-Shopify:  Merchant → Tools → Business
-Merx:     Merchant → AI Agent → Business
+Shopify:  Merchant → Tools → Business   (tu operezi)
+Merx:     Merchant → AI Agent → Business (AI operează)
 ```
 
 Merchantul mic nu vrea să înțeleagă analytics, CRO, inventory management. Vrea să întrebe *"de ce au scăzut vânzările?"* și să primească un răspuns acționabil — sau să aprobe o acțiune pe care AI-ul a generat-o deja.
+
+**Nu e "Shopify mai bun".** Shopify dă unelte. Merx ia decizii.
 
 ---
 
@@ -116,7 +120,7 @@ src/modules/{domain}/
 └── presentation/    → route handlers, DTOs, validare Zod
 ```
 
-Module existente: `auth`, `stores`, `products`, `inventory`, `orders`, `customers`, `analytics`, `discounts`, `ai`, `marketplace`, `payments`, `catalog`, `storefront`.
+Module existente: `auth`, `stores`, `products`, `inventory`, `orders`, `customers`, `analytics`, `discounts`, `notifications`, `ai`, `ai-tool-criteria`, `marketplace`, `payments`, `catalog`, `product-requests`, `storefront`, `storefront-theme`.
 
 ---
 
@@ -203,9 +207,9 @@ npm run lint         # eslint pe tot
 
 | App | Verdict | Blocante principale |
 |---|---|---|
-| API | Basic+ (~70%) | Email notifications, product images, shipping/tax engine, refunds, storefront search |
-| Dashboard | Intermediate (~77%) | Image upload UI, refund modal, shipping/tax settings, AI write actions UI |
-| Storefront | Basic+ (~70%) | Tax display, search, order tracking, product images |
-| WWW | Alpha+ (~55%) | Footer, Privacy/Terms (GDPR), social proof |
+| API | Basic+ (~78%) | Shipping/tax engine la checkout, storefront search, inventory auto-notificări |
+| Dashboard | Intermediate (~85%) | Search server-side, bulk actions, AI write actions UI |
+| Storefront | Basic+ (~70%) | Shipping/tax display la checkout, search, order tracking |
+| WWW | Alpha+ (~55%) | Footer, Privacy/Terms (GDPR), social proof, SEO meta |
 
-**Tier 0 acum:** email + product images — fără ele un merchant nu poate opera platforma.
+**Tier 0 rezolvat:** email order confirmation, image upload, refund modal, shipping/tax settings. Următorul focus: Tier 1 (shipping/tax engine la checkout, search).
