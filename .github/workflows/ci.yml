@@ -31,6 +31,9 @@ jobs:
 
       - name: Build packages
         run: npm run build
+        env:
+          # www fails fast without it (inlined at build time); CI builds are never deployed
+          NEXT_PUBLIC_API_URL: http://localhost:3001
 
       - name: Type-check
         run: npm run type-check
