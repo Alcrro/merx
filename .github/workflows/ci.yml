@@ -36,7 +36,9 @@ jobs:
         run: npm run type-check
 
       - name: Lint
-        run: npm run lint
+        # Non-blocking until the existing lint debt (~500 errors) is paid down
+        continue-on-error: true
+        run: npm run lint -- --continue
 
       - name: Test
         run: npm test

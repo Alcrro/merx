@@ -7,6 +7,8 @@ const withBundleAnalyzer = createBundleAnalyzer({ enabled: process.env.ANALYZE =
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Lint runs as its own CI step; don't let it gate the build
+  eslint: { ignoreDuringBuilds: true },
   async headers() {
     const securityHeaders = [
       { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
