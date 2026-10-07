@@ -18,7 +18,7 @@ function ToolCriteriaPanel({ toolName }: { toolName: AIToolName }) {
   const [newText, setNewText] = useState('')
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
 
-  async function handleAdd(e: React.FormEvent) {
+  async function handleAdd(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
     if (!newText.trim()) return
     await addFollowUp.mutateAsync(newText.trim())

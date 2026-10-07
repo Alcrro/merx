@@ -18,7 +18,7 @@ export function DocsLayout() {
   const [search, setSearch] = useState('')
   const navigate = useNavigate()
 
-  function handleSearch(e: React.FormEvent) {
+  function handleSearch(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
     if (search.trim()) navigate(`/docs/search?q=${encodeURIComponent(search.trim())}`)
   }

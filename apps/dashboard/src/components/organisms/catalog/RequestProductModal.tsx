@@ -31,7 +31,7 @@ export function RequestProductModal({ onClose }: Props) {
     return true
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
     if (!validate()) return
     await submitRequest.mutateAsync({

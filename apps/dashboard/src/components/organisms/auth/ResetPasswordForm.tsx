@@ -27,7 +27,7 @@ export function ResetPasswordForm() {
 
   const token = searchParams.get('token') ?? ''
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     const errs = validate(password)
     if (Object.keys(errs).length) { setErrors(errs); return }

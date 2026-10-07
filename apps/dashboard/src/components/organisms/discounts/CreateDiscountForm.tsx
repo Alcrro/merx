@@ -31,7 +31,7 @@ export function CreateDiscountForm({ currency, onSubmit, onCancel, isLoading }: 
         : Math.min(numericValue, PREVIEW_AMOUNT)
       : 0
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError(null)
 

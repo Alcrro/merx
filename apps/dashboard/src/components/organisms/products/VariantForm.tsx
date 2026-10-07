@@ -19,7 +19,7 @@ export function VariantForm({ initial, onSave, onCancel, isLoading }: VariantFor
   const [cost, setCost] = useState(initial?.cost?.toString() ?? '')
   const [error, setError] = useState('')
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!sku || !title || !price) { setError('SKU, titlu și preț sunt obligatorii'); return }
     const priceNum = parseFloat(price)
