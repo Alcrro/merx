@@ -198,7 +198,7 @@ function AddVariantForm({ productId, productTitle, onClose }: AddVariantFormProp
     return Object.keys(e).length === 0
   }
 
-  async function handleManualSubmit(e: React.FormEvent) {
+  async function handleManualSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
     if (!validateManual()) return
     await addOne.mutateAsync({ title: mTitle.trim(), sku: mSku.trim(), suggestedPrice: parseFloat(mPrice) })

@@ -14,7 +14,7 @@ export function InventoryAdjustPanel({ item, onClose }: { item: InventoryItem; o
   const { mutateAsync: adjust, isPending } = useAdjustInventory(item.variantId)
   const { data: movements } = useInventoryMovements(item.variantId)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     const qty = parseInt(quantity, 10)
     if (isNaN(qty) || qty < 0) { setError('Introdu o cantitate validă'); return }

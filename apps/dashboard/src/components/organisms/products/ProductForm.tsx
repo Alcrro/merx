@@ -38,7 +38,7 @@ export function ProductForm({ initial, categories, onSave, isLoading }: ProductF
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initial?.id])
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!title.trim()) { setError('Titlul este obligatoriu'); return }
     setError('')

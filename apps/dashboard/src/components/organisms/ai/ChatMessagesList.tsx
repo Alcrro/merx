@@ -9,7 +9,7 @@ interface Props {
   streamContent: string
   activeTools: string[]
   errorMessage: string | null
-  bottomRef: RefObject<HTMLDivElement>
+  bottomRef: RefObject<HTMLDivElement | null>
 }
 
 export function ChatMessagesList({

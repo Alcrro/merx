@@ -29,7 +29,7 @@ export function AdminArchiveCriteriaPage() {
   const [runResult, setRunResult] = useState<number | null>(null)
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
 
-  async function handleCreate(e: React.FormEvent) {
+  async function handleCreate(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
     if (!name.trim()) return
     await createCriteria.mutateAsync({

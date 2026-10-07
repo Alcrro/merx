@@ -305,7 +305,7 @@ function GeneralSection() {
     </>
   )
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     run(updateStore({ name, currency, locale, timezone }))
   }
@@ -430,7 +430,7 @@ function BusinessSection() {
     </>
   )
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     run(updateStore({ settings: { business: { companyName, vatNumber, contactEmail, phone, address, city, country: country || undefined } } }))
   }
@@ -498,7 +498,7 @@ function ShippingSection() {
     setForm(modal === 'add' ? emptyMethodForm : methodToForm(modal))
   }, [modal])
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     setFormError('')
     if (!form.name.trim()) { setFormError('Numele este obligatoriu'); return }
